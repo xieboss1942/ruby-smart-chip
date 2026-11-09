@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#102b36" />
   <meta name="description" content="RUBY Smart Chip：26 套籌碼策略、本機中掛結算、週期鎖利與策略教學。" />
-  <title>RUBY Smart Chip｜兔寶寶籌碼計算機</title>
+  <title>RUBY Smart Chip｜Neon Edition</title>
   <style>
 :root{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI","Noto Sans TC",sans-serif;font-synthesis:none;color-scheme:dark;--bg:#0b2029;--rail:#102b36;--panel:#163743;--panel-hi:#1a424d;--stroke:#305763;--muted:#a2c0c8;--text:#e9f7f7;--accent:#71e1c7;--accent-deep:#216e69;--success:#73e3ba;--danger:#ff9a9c;--shadow:0 12px 34px rgba(0,0,0,.11)}
 body[data-theme="blue"]{--bg:#102334;--rail:#112c44;--panel:#173b53;--panel-hi:#204a63;--stroke:#3c6176;--muted:#b2ccdb;--text:#ecf5ff;--accent:#83d9ff;--accent-deep:#286d91;--success:#87e7ca;--danger:#ffa4aa}
@@ -33,6 +33,42 @@ html,body{min-width:320px}body{overflow-x:hidden}body.drawer-open{overflow:hidde
 @media(max-width:355px){.topbar{display:flex}.status-pill{font-size:10px}.quote-amount strong{font-size:24px}.ring-panel.compact .ring-labels small{font-size:10px}.drawer-scroll{padding:12px}.drawer .history-summary{gap:4px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.ring{filter:none}}
 
+
+/* V0.1.2 second-pass visual polish — fixed Neon RUBY theme. */
+body[data-theme="neon"]{--bg:#0b0620;--rail:#140a2a;--panel:#1e1040;--panel-hi:#281346;--stroke:#8540a2;--muted:#d1bfe8;--text:#fff6ff;--accent:#ff65da}
+.ambient::before{content:"";position:absolute;inset:-5%;background:var(--ruby-bg-art) center 28%/cover no-repeat;opacity:.09;filter:blur(9px) saturate(1.5);pointer-events:none}
+.ambient::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 23%,#f62eb133 0,transparent 30%),radial-gradient(circle at 78% 57%,#3ad6ff1e 0,transparent 24%),repeating-linear-gradient(135deg,transparent 0 55px,#d83dfa0b 56px,transparent 57px);pointer-events:none}
+.ring-panel{padding:15px 13px;border-color:#d756db;box-shadow:0 0 25px #da39c83d,inset 0 0 24px #3b1a5c60;background:linear-gradient(165deg,#29104fe8,#140b30ef)}
+.ring-panel:not(.compact) svg{width:clamp(235px,72vw,285px);height:clamp(235px,72vw,285px);filter:drop-shadow(0 0 9px #e950d161)}
+.ring-panel:not(.compact) .ring-number{font-size:32px;filter:drop-shadow(0 0 5px #62dfff)}
+.ring-panel.compact svg{width:103px;height:103px}
+.ring-panel.compact .ring-body{grid-template-columns:103px 1fr}
+.ring-panel .ring{stroke-width:10;filter:drop-shadow(0 0 7px currentColor)}
+.ring-panel::before{content:"";position:absolute;pointer-events:none;inset:0;background:radial-gradient(circle at 50% 22%,#ff4dbe1e,transparent 56%)}
+.ring-panel{position:relative}
+.info-btn{border:1px solid #9a54c0;background:#321747;color:#ffb6ed;min-width:31px;min-height:30px;display:inline-grid;place-items:center;border-radius:9px;font-size:18px;font-weight:700;cursor:pointer}
+.info-btn:focus-visible{outline:2px solid #67dafa}
+.info-row{display:flex;align-items:center;justify-content:space-between;gap:8px}.form-note{min-height:0}
+.info-backdrop{position:fixed;inset:0;z-index:80;background:#07031cc9;display:grid;place-items:center;padding:20px;backdrop-filter:blur(5px)}
+.info-modal{width:min(100%,420px);background:linear-gradient(150deg,#31144e,#170c31);padding:18px;border:1px solid #ee6bdf;border-radius:19px;box-shadow:0 0 32px #e93aca66}
+.info-modal p{white-space:pre-line;line-height:1.75;color:#e7d6fb;margin:6px 0}
+.sr-only{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important}
+.summary-panel{padding:9px 13px}.summary-panel .panel-title{margin:0}
+.font-controls{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.font-controls button{border-radius:11px;border:1px solid #70509c;padding:11px;background:#2e1b4f;color:#eedaf6;font-size:14px;cursor:pointer}
+.font-controls button.active{background:#703087;border-color:#ff84df;color:white;box-shadow:0 0 10px #ff35bf77}
+body[data-font-size="small"]{--font-multiplier:.90}body[data-font-size="medium"]{--font-multiplier:1}body[data-font-size="large"]{--font-multiplier:1.19}
+.panel-title strong,.drawer-head strong,.current-strategy strong{font-size:calc(15px * var(--font-multiplier,1))!important}
+.nav-brand strong,.info-modal strong{font-size:calc(17px * var(--font-multiplier,1))!important}
+.metrics span,.field span,.ring-labels small,.quote-amount small,.strategy-text small{font-size:calc(11px * var(--font-multiplier,1))!important}
+.button,.field input,.field select,.nav-item,.offer-row button,.history-panel td,.history-panel th{font-size:calc(13px * var(--font-multiplier,1))!important}
+.quote-amount strong{font-size:calc(31px * var(--font-multiplier,1))!important}.ring-number{font-size:calc(33px * var(--font-multiplier,1))!important}
+.offer{display:block;margin:8px 0 10px;background:#1b0f37;border:1px solid #78418a;padding:9px 11px;border-radius:13px}
+.offer .panel-title{margin-bottom:7px}.offer .panel-title strong{font-size:calc(12px * var(--font-multiplier,1))!important}
+.offer-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.offer-row button{min-width:0;min-height:42px;padding:8px 4px}
+.offer-row button:not(:disabled){border-color:#e264da;box-shadow:0 0 11px #e34dc65d;background:#49205d}
+.offer-row button:disabled{opacity:.3;filter:grayscale(.35);cursor:not-allowed;box-shadow:none}
+@media(max-width:355px){.ring-panel:not(.compact) svg{width:245px;height:245px}.ring-panel.compact .ring-body{grid-template-columns:91px 1fr}.ring-panel.compact svg{width:91px;height:91px}}
+
 </style>
 </head>
 <body data-theme="neon">
@@ -40,24 +76,24 @@ html,body{min-width:320px}body{overflow-x:hidden}body.drawer-open{overflow:hidde
 <div class="app-shell">
   <div id="drawer-backdrop" class="drawer-backdrop" aria-hidden="true"></div>
   <aside class="sidebar drawer" id="drawer-menu" role="dialog" aria-modal="true" aria-label="主選單" aria-hidden="true">
-    <div class="drawer-head"><div class="brand-mini"><span class="brand-symbol">R</span><div><strong>RUBY Smart Chip</strong><small>霓虹直立版 · V0.1.2 Test</small></div></div><button class="icon-btn close-drawer" aria-label="關閉主選單" type="button">×</button></div>
+    <div class="drawer-head"><div class="brand-mini"><span class="brand-symbol">R</span><div><strong>RUBY Smart Chip</strong><small>霓虹直立版 · V0.1.2</small></div></div><button class="icon-btn close-drawer" aria-label="關閉主選單" type="button">×</button></div>
     <div class="drawer-nav">
       <button type="button" class="nav-item active" data-tab="calculator"><span>▣</span> 籌碼計算機</button>
       <button type="button" class="nav-item" data-tab="strategies"><span>▤</span> 26 套策略中心</button>
       <button type="button" class="nav-item" data-tab="history"><span>◷</span> 結算紀錄</button>
       <button type="button" class="nav-item" data-tab="settings"><span>⚙</span> 系統設定</button>
     </div>
-    <div class="drawer-foot">本機試算 · 不提供自動下單<br>測試版不會修改你的 GitHub 正式網站</div>
+    <div class="drawer-foot">本機試算 · 不提供自動下單<br>資料僅存於使用者瀏覽器</div>
   </aside>
   <main class="main-view" id="main-content">
     <header class="topbar"><button type="button" class="icon-btn" id="open-menu" aria-label="開啟主選單">☰</button><div class="nav-brand"><strong>RUBY <span>Smart Chip</span></strong><small>兔寶寶籌碼計算機</small></div><button type="button" class="icon-btn" id="open-config" aria-label="開啟計畫參數">⚙</button></header>
     <div class="hero"><div class="hero-overlay"><small>RUBY · NEON PORTRAIT EDITION</small><h1 id="page-title">籌碼計算機</h1><p>策略 × 注碼 × 歷史 · 一頁掌握</p></div></div>
-    <div class="engine-row"><span id="engine-status" class="status-pill loading" role="status">計算核心載入中…</span><span id="session-label" class="soft-tag">未開始</span><span class="test-pill">V0.1.2 TEST · 未部署</span></div>
+    <div class="engine-row"><span id="engine-status" class="status-pill loading" role="status">計算核心載入中…</span><span id="session-label" class="soft-tag">未開始</span><button type="button" class="info-btn" data-info="RUBY Smart Chip V0.1.2：資料存於本機瀏覽器，歷史僅保留 3 天。" aria-label="版本說明">ⓘ</button></div>
     <div id="alert" class="alert hidden" role="alert"></div>
     <section class="view active" id="view-calculator" aria-labelledby="page-title">
       <button type="button" class="current-strategy neon-card" id="open-strategies" aria-label="開啟策略中心"><span class="strategy-accent">當前策略</span><span class="strategy-text"><strong id="strategy-active-name">#26 等分倍盈歸本法</strong><small id="strategy-active-meta">尚未開始 · 點擊選擇策略</small></span><span class="chevron">›</span></button>
-      <section id="ring-panel" class="ring-panel neon-card compact" aria-label="本次戰況">
-        <div class="panel-title"><strong>戰況光圈</strong><button type="button" id="ring-toggle" class="small-action" aria-expanded="false">展開光圈⌄</button></div>
+      <section id="ring-panel" class="ring-panel neon-card" aria-label="本次戰況">
+        <div class="panel-title"><strong>戰況光圈</strong><button type="button" id="ring-toggle" class="small-action" aria-expanded="true">收合光圈⌃</button></div>
         <div class="ring-body"><svg id="ring-svg" viewBox="0 0 220 220" width="220" height="220" role="img" aria-label="虧損、收益、命中率三層光圈">
           <circle class="track" cx="110" cy="110" r="96"/><circle id="ring-loss" class="ring red" cx="110" cy="110" r="96" transform="rotate(-90 110 110)"/>
           <circle class="track" cx="110" cy="110" r="76"/><circle id="ring-profit" class="ring cyan" cx="110" cy="110" r="76" transform="rotate(-90 110 110)"/>
@@ -73,21 +109,21 @@ html,body{min-width:320px}body{overflow-x:hidden}body.drawer-open{overflow:hidde
         <div class="panel-title"><strong>下一局建議</strong><span class="soft-tag" id="quote-state">尚未開始</span></div>
         <div class="quote-cards"><div class="quote-amount"><small>每碼下注</small><strong id="per-code">—</strong></div><div class="quote-amount"><small>本局總注</small><strong id="total-stake">—</strong></div></div>
         <div class="metrics"><div><span>當前可用金</span><b id="available">—</b></div><div><span>目前關卡</span><b id="stage-label">—</b></div><div><span>完成局數</span><b id="round-count">0 / 35</b></div><div><span>本次淨盈虧</span><b id="pnl">—</b></div></div>
-        <div class="progress-block"><div class="progress-label"><span id="progress-title">計畫完成進度</span><span id="progress-text">0%</span></div><div class="progress"><div id="progress-bar"></div></div></div>
+        <div class="progress-block"><div class="progress-label"><span id="progress-title">進度 #1 · 計畫完成度</span><span id="progress-text">0%</span></div><div class="progress"><div id="progress-bar"></div></div></div>
       </section>
       <div id="notice" class="notice">請先建立一個計畫，才能計算下一局注碼。</div>
       <button type="button" id="create-plan" class="button primary full create-plan">＋ 建立計畫／設定參數</button>
       <div class="action-grid"><button id="win-button" type="button" class="button win" disabled>✓ 中</button><button id="loss-button" type="button" class="button loss" disabled>✕ 掛</button></div>
       <div class="secondary-actions"><button id="undo-button" type="button" class="button subtle" disabled>↶ 更正上一局</button><button id="open-history" type="button" class="button subtle">◷ 最近紀錄</button><button id="more-button" type="button" class="button subtle">⋯ 更多</button></div>
       <div class="secondary-actions more-actions hidden" id="more-actions"><button id="resume-button" type="button" class="button subtle hidden" disabled>下一輪</button><button id="finish-button" type="button" class="button subtle" disabled>結算本次</button></div>
-      <div id="offer-actions" class="offer hidden"><p>本輪完成，請選擇獲利配置：</p><div class="offer-row"><button type="button" data-choice="lock" class="button subtle">鎖利</button><button type="button" data-choice="roll" class="button subtle">滾利</button><button type="button" data-choice="continue" class="button subtle">略過並繼續</button></div></div>
+      <div id="offer-actions" class="offer hidden"><div class="panel-title"><strong>獲利配置</strong><button class="info-btn" type="button" data-info="鎖利與滾利均為可選操作，不會阻止下一局；不可使用時按鈕會呈半透明。策略內建自動鎖利仍會執行。" aria-label="獲利配置說明">ⓘ</button></div><div class="offer-row"><button type="button" data-choice="lock" class="button subtle" disabled>鎖利</button><button type="button" data-choice="roll" class="button subtle" disabled>滾利</button><button type="button" data-choice="continue" class="button subtle" disabled>略過分配</button></div></div>
       <div id="kelly-action" class="offer hidden"><label>本期預估中獎率（%）<input id="kelly-probability" type="number" min="0.1" max="100" step="any" value="55"></label><button id="kelly-apply" type="button" class="button subtle">更新本期預估值</button></div>
-      <section class="summary-panel neon-card"><div class="panel-title"><strong>目前策略摘要</strong><button id="read-strategy" type="button" class="text-btn">完整說明 ›</button></div><p id="current-summary">選擇策略後顯示規則。</p></section>
+      <section class="summary-panel neon-card"><div class="panel-title"><strong>目前策略摘要</strong><button type="button" class="info-btn" id="summary-info" data-info="選擇策略後顯示規則。" aria-label="查看目前策略摘要">ⓘ</button><button id="read-strategy" type="button" class="text-btn">完整說明 ›</button></div><p id="current-summary" class="sr-only">選擇策略後顯示規則。</p></section>
     </section>
-    <footer class="app-footer">RUBY Smart Chip V0.1.2 · 獨立測試版 · 只作本機籌碼試算</footer>
+    <footer class="app-footer">RUBY Smart Chip V0.1.2 · 本機試算 · 非自動下注</footer>
   </main>
 
-  <aside id="drawer-config" class="drawer drawer-right" role="dialog" aria-modal="true" aria-label="計畫參數設定" aria-hidden="true"><div class="drawer-head"><div><strong>計畫參數</strong><small>輸入後確認，計畫不會被暗中修改</small></div><button class="icon-btn close-drawer" type="button" aria-label="關閉參數設定">×</button></div>
+  <aside id="drawer-config" class="drawer drawer-right" role="dialog" aria-modal="true" aria-label="計畫參數設定" aria-hidden="true"><div class="drawer-head"><div><strong>計畫參數</strong><button type="button" class="info-btn" data-info="輸入後請按確認，進行中的計畫不會被暗中修改。" aria-label="參數套用說明">ⓘ</button></div><button class="icon-btn close-drawer" type="button" aria-label="關閉參數設定">×</button></div>
     <div class="drawer-scroll"><form id="config-form">
       <label class="field field-full"><span>選擇策略</span><select id="strategy-select" name="strategy"></select></label>
       <label class="field"><span>操作金</span><input name="operation" type="number" min="1" step="1" value="1000" required></label>
@@ -105,13 +141,14 @@ html,body{min-width:320px}body{overflow-x:hidden}body.drawer-open{overflow:hidde
         <label class="field field-full special-param hidden" id="sequence-field"><span id="sequence-label">自訂倍率</span><input name="sequenceInput" type="text" placeholder="1,2,3,5"></label>
         <label class="field field-full special-param hidden" id="sequence-secondary-field"><span id="sequence-secondary-label">退守倍率</span><input name="sequenceSecondary" type="text" placeholder="2,3,5,8,13,20,30"></label>
       </div></details>
-      <p id="strategy-hint" class="form-note">#26：依切分份數固定等額配置。</p><div class="drawer-form-actions"><button type="button" class="button subtle close-drawer">取消修改</button><button id="start-button" type="submit" class="button primary" disabled>確認設定／開始新計畫</button></div>
+      <div class="form-note info-row"><span>策略使用說明</span><button type="button" id="strategy-hint" class="info-btn" data-info="#26：依切分份數固定等額配置。" aria-label="查看策略規則">ⓘ</button></div><div class="drawer-form-actions"><button type="button" class="button subtle close-drawer">取消修改</button><button id="start-button" type="submit" class="button primary" disabled>確認設定／開始新計畫</button></div>
     </form></div>
   </aside>
-  <section class="view drawer drawer-left drawer-wide" id="view-strategies" role="dialog" aria-modal="true" aria-hidden="true" aria-label="策略中心"><div class="drawer-head"><div><strong>26 套策略中心</strong><small>搜尋並查看公式與停止條件</small></div><button class="icon-btn close-drawer" type="button" aria-label="關閉策略中心">×</button></div><div class="drawer-scroll"><div class="search-wrap"><input id="strategy-search" type="search" placeholder="搜尋策略名稱或編號，例如 #26、馬丁"></div><div class="strategy-grid" id="strategy-grid"></div></div></section>
+  <section class="view drawer drawer-left drawer-wide" id="view-strategies" role="dialog" aria-modal="true" aria-hidden="true" aria-label="策略中心"><div class="drawer-head"><div><strong>26 套策略中心</strong><button type="button" class="info-btn" data-info="可搜尋策略名稱與編號，點擊選用不會立即更改進行中的計畫。" aria-label="策略中心說明">ⓘ</button></div><button class="icon-btn close-drawer" type="button" aria-label="關閉策略中心">×</button></div><div class="drawer-scroll"><div class="search-wrap"><input id="strategy-search" type="search" placeholder="搜尋策略名稱或編號，例如 #26、馬丁"></div><div class="strategy-grid" id="strategy-grid"></div></div></section>
   <section class="view drawer drawer-bottom" id="view-history" role="dialog" aria-modal="true" aria-hidden="true" aria-label="結算紀錄"><div class="drawer-handle" aria-hidden="true"></div><div class="drawer-head"><div><strong>本次與歷史結算</strong><small id="history-count">0 筆</small></div><button class="icon-btn close-drawer" type="button" aria-label="關閉歷史紀錄">×</button></div><div class="drawer-scroll"><div class="history-summary"><div class="mini-panel"><small>累積投注</small><strong id="sum-cost">—</strong></div><div class="mini-panel"><small>累積盈虧</small><strong id="sum-pnl">—</strong></div><div class="mini-panel"><small>已鎖利</small><strong id="sum-locked">—</strong></div></div><div class="panel history-panel"><div class="panel-head"><h3>結算明細</h3><button id="export-csv" type="button" class="button subtle">匯出 CSV</button></div><div class="table-wrap"><table><thead><tr><th>局數</th><th>策略</th><th>中／掛</th><th>每碼</th><th>投注</th><th>本局損益</th></tr></thead><tbody id="history-rows"><tr><td colspan="6" class="empty">目前沒有紀錄</td></tr></tbody></table></div></div></div></section>
-  <section class="view drawer drawer-left drawer-wide" id="view-settings" role="dialog" aria-modal="true" aria-hidden="true" aria-label="網站設定"><div class="drawer-head"><div><strong>系統設定</strong><small>主題及本機資料管理</small></div><button class="icon-btn close-drawer" type="button" aria-label="關閉設定">×</button></div><div class="drawer-scroll"><div class="settings-grid"><section class="panel"><div class="panel-head"><h3>主題風格</h3></div><p class="muted">Neon RUBY 是本版主題；可切換冰藍或冰綠強調色。</p><div class="theme-actions"><button type="button" class="theme-choice" data-theme="mint"><span class="theme-dot mint"></span>霓虹冰綠</button><button type="button" class="theme-choice" data-theme="blue"><span class="theme-dot blue"></span>霓虹冰藍</button></div></section><section class="panel"><h3>本機資料備份</h3><p class="muted">資料只存在此瀏覽器。請定期匯出 JSON 備份；無痕模式或清除瀏覽資料後可能遺失。</p><div class="button-row"><button id="backup-button" type="button" class="button subtle">匯出 JSON</button><button id="restore-button" type="button" class="button subtle">還原 JSON</button><input id="restore-file" type="file" accept=".json,application/json" hidden></div></section><section class="panel"><h3>版本資訊</h3><p>RUBY Smart Chip V0.1.2 Neon Portrait Test · 26 套策略 Python 引擎沿用原版；只作本機籌碼試算，不會送出訂單或 Telegram 訊息。</p></section></div></div></section>
+  <section class="view drawer drawer-left drawer-wide" id="view-settings" role="dialog" aria-modal="true" aria-hidden="true" aria-label="網站設定"><div class="drawer-head"><div><strong>系統設定</strong><small>字體及本機資料管理</small></div><button class="icon-btn close-drawer" type="button" aria-label="關閉設定">×</button></div><div class="drawer-scroll"><div class="settings-grid"><section class="panel"><div class="panel-head"><h3>文字大小</h3><button type="button" class="info-btn" data-info="調整網站標題、卡片、按鈕、說明的字體大小；變更後會記住設定。" aria-label="文字大小說明">ⓘ</button></div><div class="font-controls" role="group" aria-label="文字大小"><button type="button" data-font="small">小</button><button type="button" data-font="medium">中</button><button type="button" data-font="large">大</button></div></section><section class="panel"><h3>本機資料備份</h3><button type="button" class="info-btn" data-info="歷史明細只顯示並保留近 72 小時；已結束計畫的過期紀錄會自動清除。進行中計畫的必要計算狀態會保留，以避免策略與帳務失準。資料僅儲存在目前瀏覽器，清除瀏覽資料可能遺失。" aria-label="歷史保存說明">ⓘ</button><div class="button-row"><button id="backup-button" type="button" class="button subtle">匯出 JSON</button><button id="restore-button" type="button" class="button subtle">還原 JSON</button><input id="restore-file" type="file" accept=".json,application/json" hidden></div></section><section class="panel"><h3>版本資訊</h3><p>RUBY Smart Chip V0.1.2 Neon Portrait · 26 套策略 Python 引擎沿用原版；只作本機籌碼試算，不會送出訂單或 Telegram 訊息。</p></section></div></div></section>
 </div>
+<div class="info-backdrop hidden" id="info-backdrop"><div class="info-modal" role="dialog" aria-modal="true" aria-label="功能說明"><div class="panel-title"><strong>ⓘ 操作說明</strong><button type="button" id="info-close" class="icon-btn" aria-label="關閉說明">×</button></div><p id="info-text"></p></div></div>
 <nav class="mobile-nav" aria-label="底部分頁"><button type="button" class="active" data-tab="calculator">▣<span>計算</span></button><button type="button" data-tab="strategies">▤<span>策略</span></button><button type="button" data-tab="history">◷<span>紀錄</span></button><button type="button" data-tab="settings">⚙<span>設定</span></button></nav>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js"></script>
@@ -778,6 +815,7 @@ def plan_round_cap(s):
     substitute for the settled result count. planned_rounds is the canonical
     user-configured ceiling; round_limit is a legacy mirror only.
     """
+    if s.get('web_batch_mode'):return max(1,int(s.get('web_batch_total_cap') or s.get('planned_rounds') or 12))
     return max(1, int(s.get('planned_rounds') or s.get('round_limit') or 12))
 
 
@@ -952,11 +990,10 @@ def after_result(s,win,delta):
             s['allocation_mark']=s['pnl'];s['auto_lock_round']=s['round_id']
             next_round(s)
             can_roll=s.get('compound_enabled',True) and s['auto_roll_pending']>0
-            s.update(round_offer=bool(can_roll),round_offer_advanced=bool(can_roll),
-                     session_status='active',round_notice=f'本輪完成，已自動鎖利 {kept:g}；可選滾利' if can_roll else f'本輪完成，已自動鎖利 {kept:g}')
+            s.update(round_offer=False,round_offer_advanced=False,
+                     session_status='active',round_notice=f'本輪完成，已自動鎖利 {kept:g}；滾利為自主選擇' if can_roll else f'本輪完成，已自動鎖利 {kept:g}')
         else:
-            s.update(round_offer=True,round_notice='本輪完成且有獲利，可選鎖利／滾利；未選擇不重算基額')
-            if k=='attack':s['session_status']='paused_round'
+            s.update(round_offer=False,round_notice='本輪完成，有獲利可自行鎖利或滾利')
     elif k=='attack':
         # The round finished, but overall PnL may still be negative even when
         # this specific round recovered. It must still advance exactly once.
@@ -966,10 +1003,10 @@ def after_result(s,win,delta):
     elif k in ('custom','custom_win','winner'):
         next_round(s,refresh=True)
     elif s.get('pending_config') and not s.get('round_offer'):next_round(s)
-    if s.get('round_offer') and s['strategy']!='高點獲利鎖定法':
-        notice=s['round_notice'];status=s['session_status']
-        next_round(s,refresh=k=='labouchere' or bool(s.get('pending_config')))
-        s.update(round_offer=True,round_offer_advanced=True,round_notice=notice,session_status=status)
+    if not s.get('round_offer') and boundary and s['strategy']!='高點獲利鎖定法' and s.get('session_status')=='active' and s.get('round_notice')=='本輪完成，有獲利可自行鎖利或滾利':
+        notice=s.get('round_notice','')
+        next_round(s,refresh=k in ('labouchere','custom','custom_win','winner') or bool(s.get('pending_config')))
+        s['round_notice']=notice
     # A list must never remain empty while waiting for an optional choice.
     if k=='labouchere' and s.get('round_offer'):s['plan_state']['list']=copy.deepcopy(s['cancel_list'])
 
@@ -997,45 +1034,35 @@ def next_round(s,refresh=True):
     if refresh:refresh_base(s)
 
 def choose(s,action):
-    if not s.get('round_offer'):return False,'目前沒有可處理的完成輪次'
-    if action=='roll' and not s.get('compound_enabled',True):return False,'滾利選項已關閉，請先於下一輪設定啟用'
-    is_peak=s['strategy']=='高點獲利鎖定法'
-    if is_peak and action=='lock':return False,'01已自動鎖利，只提供滾利'
+    """Optional web allocation: no modal, no stage advance, no replay."""
     if action not in ('lock','roll','continue'):
         return False,'無效選項'
+    if s.get('session_status')=='settled':return False,'本次計畫已結算'
+    is_peak=s['strategy']=='高點獲利鎖定法'
     gain=unallocated(s)
+    pending=cents(s.get('auto_roll_pending',0)) if is_peak else 0.
+    if action=='lock' and (is_peak or gain<=0):return False,'此策略目前無可鎖定獲利'
+    if action=='roll' and (not s.get('compound_enabled',True) or (pending if is_peak else gain)<=0):
+        return False,'目前無可滾利獲利'
+    if action=='continue' and gain<=0 and pending<=0:return False,'目前沒有待處理的獲利'
     budget=operation_budget(s)
     if action=='lock':
         kept=cents(dec(gain)*dec('.5'))
         s['locked_profit']=cents(dec(s['locked_profit'])+dec(kept))
         set_operation_budget(s,dec(budget)-dec(kept))
     elif action=='roll':
-        # #01 already locked half automatically. Only its OTHER half can roll;
-        # never release protected/previously locked money automatically.
-        rolling=cents(s.get('auto_roll_pending',0)) if is_peak else gain
+        rolling=pending if is_peak else gain
         set_operation_budget(s,dec(budget)+dec(rolling))
-    # Even a skipped choice closes this one-time round offer. Never allocate the
-    # same profit again after a later round, crash or message replay.
     s['allocation_mark']=s['pnl']
     s['protected_unallocated']=0.
     s['auto_roll_pending']=0.
+    s['round_offer']=False
+    s['round_offer_advanced']=False
     if sid(s)=='fixed':
         s.update(dynamic_anchor_unit=s['portion_base'],dynamic_anchor_pnl=s['pnl'])
-    revision_before=s.get('config_revision',0)
-    already_advanced=(s.get('round_offer_advanced') or (
-        s.get('round_id',1)>1 and
-        s.get('round_start_count')==s.get('wins',0)+s.get('losses',0) and
-        s.get('round_offer')))
-    if already_advanced:
-        # Completion already opened the next round; choosing lock/roll only
-        # changes allocation, not the round number or its starting PnL.
-        apply_pending(s)
-        s.update(round_offer=False,round_offer_advanced=False,open_quote=None,round_notice='')
-        if action!='continue' or s.get('config_revision',0) != revision_before:refresh_base(s)
-    else:
-        next_round(s,refresh=action!='continue' or bool(s.get('pending_config')))
-    s['session_status']='active'
-    return True,'已依選擇開始新一輪，累計試算損益保留'
+    # Keep current step and cached round base unchanged. Next new round recalculates.
+    s['round_notice']='已處理可分配獲利；不改變關卡與本次累計盈虧'
+    return True,'已處理獲利配置，保留目前輪次與歷史'
 
 def observe(s,win):
     if not s.get('zero_wait'):return False,'目前不在基額0觀察流程'
@@ -1405,7 +1432,7 @@ def new_state(config):
         strategy=name,market=market,number_count=count,risk_parts=parts,max_steps=max_steps,
         stop_profit_mode='percent',stop_profit_value=profit_pct,stop_loss_mode='percent',stop_loss_value=loss_pct,
         profit_target=cash(operation*profit_pct/100),loss_limit=cash(operation*loss_pct/100),
-        planned_rounds=planned,round_limit=planned,payout_multiplier=payout,
+        planned_rounds=planned,round_limit=planned,web_batch_mode=True,web_batch_size=planned,web_batch_total_cap=planned,payout_multiplier=payout,
         payout_cycle_enabled=(market=='單球'),payout_cycle_wins=0,
         stake=0,started=True,session_status='active',
         streak=0,loss_streak=0,last_result='start',last_total_bet=None,
@@ -1435,10 +1462,10 @@ def evaluate_state():
     if STATE is None:
         return {'running':False,'status':'尚未開始','quote':None,'state':None,'undoAvailable':False}
     s=STATE
-    q,why=(sizing.quote(s) if s.get('session_status')=='active' and not s.get('round_offer') else (None,''))
+    q,why=(sizing.quote(s) if s.get('session_status')=='active' else (None,''))
     status=why or s.get('strategy_pause_reason') or s.get('round_notice') or ''
     if s.get('round_offer'):
-        status=s.get('round_notice') or '本輪完成，可鎖利／滾利／繼續'
+        status=s.get('round_notice') or '本輪完成，獲利分配可自行選擇'
     if s.get('session_status')=='settled': status='已結算，可以建立新計畫'
     if sizing.plan_limit_reached(s): status=sizing.plan_limit_message(s)
     if s.get('session_status','').startswith('paused') and not status:
@@ -1450,7 +1477,11 @@ def evaluate_state():
            'position':progression.position(s) if progression.is_new(s) else '',
            'code':strategy_engine.BY_NAME[s['strategy']]['code'],
            'canResume':bool(s.get('plan_state',{}).get('exhausted') or s.get('plan_state',{}).get('done')),
-           'cycleProgress':strategy26.cycle_progress(s) if strategy26.active(s) else None}
+           'cycleProgress':strategy26.cycle_progress(s) if strategy26.active(s) else None,
+           'allocatable':sizing.unallocated(s),
+           'pendingRoll':s.get('auto_roll_pending',0),
+           'canLock':s.get('strategy')!='高點獲利鎖定法',
+           'canRoll':bool(s.get('compound_enabled',True))}
     return out
 
 
@@ -1459,8 +1490,8 @@ def settle(outcome, action_id=None):
     if STATE is None: raise ValueError('請先開始一個計畫')
     if action_id and LAST_ACTION_ID == action_id: return evaluate_state()
     s=STATE
-    if s.get('session_status')!='active' or s.get('round_offer'):
-        raise ValueError('目前需要先處理暫停或分配選項')
+    if s.get('session_status')!='active':
+        raise ValueError('目前計畫已暫停或結束')
     quote,reason=sizing.quote(s)
     if not quote: raise ValueError(reason or '目前沒有可執行的注碼')
     if outcome not in ('win','loss'): raise ValueError('只能選中或掛')
@@ -1491,6 +1522,14 @@ def settle(outcome, action_id=None):
     s['ledger'].append(record)
     old_lock=s['locked_profit']
     sizing.after_result(s,win,delta)
+    if s.get('web_batch_mode'):
+        count=sizing.plan_completed(s)
+        batch=max(1,int(s.get('web_batch_size') or s.get('planned_rounds') or 35))
+        if count >= int(s.get('web_batch_total_cap') or batch):
+            new_cap=(count//batch+1)*batch
+            s['web_batch_total_cap']=new_cap
+            s['round_limit']=new_cap
+            s['round_notice']=f'進度 #{count//batch+1} 已開始；累計紀錄與資金保留'
     added=cash(max(0,s['locked_profit']-old_lock))
     if added>0:record['automatic_lock']=added
     if sizing.plan_limit_reached(s):
@@ -1566,6 +1605,13 @@ def web_call(action, payload_json='{}'):
             if s is not None and (not isinstance(s,dict) or s.get('strategy') not in strategy_engine.BY_NAME):
                 raise ValueError('這不是可辨識的 RUBY Smart Chip 資料')
             STATE=s
+            if STATE is not None:
+                n=max(1,int(STATE.get('web_batch_size') or STATE.get('planned_rounds') or 35))
+                complete=int(STATE.get('wins',0))+int(STATE.get('losses',0))
+                STATE.update(web_batch_mode=True,web_batch_size=n,web_batch_total_cap=(complete//n+1)*n,round_limit=(complete//n+1)*n)
+                if STATE.get('session_status')=='paused_round_limit' and STATE.get('pnl',0)>-STATE.get('loss_limit',0):
+                    STATE['session_status']='active';STATE['strategy_pause_reason']=''
+                STATE['round_offer']=False
             UNDO=p.get('undo') if isinstance(p.get('undo'),dict) else None
             LAST_ACTION_ID=None
             out=evaluate_state()
@@ -1587,7 +1633,8 @@ def web_call(action, payload_json='{}'):
 /* RUBY Smart Chip — browser-only front end. No orders, Telegram, or remote storage. */
 'use strict';
 const STORAGE_KEY = 'ruby_smart_chip_v012_test';
-const THEME_KEY = 'ruby_smart_chip_theme_v012_test';
+const FONT_KEY = 'ruby_smart_chip_font_size_v012';
+const HISTORY_TTL_MS = 72*60*60*1000;
 const PY_FILES = ['strategy_engine.py','progression.py','sizing_v180.py','strategy26.py','stake_guard.py','stage_limits.py','release_rules.py','web_engine.py'];
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
@@ -1666,6 +1713,35 @@ function setRingMode(mode){
   try{localStorage.setItem(RING_MODE_KEY,compact?'compact':'expanded');}catch{}
 }
 
+function recentRecord(record,now=Date.now()){
+  const at=Date.parse(record?.at||'');return Number.isFinite(at)&&at<=now&&at>=now-HISTORY_TTL_MS;
+}
+function cleanArchives(now=Date.now()){
+  archives=archives.filter(x=>{
+    const rows=(x.ledger||[]).filter(row=>recentRecord(row,now));
+    x.ledger=rows;
+    return rows.length>0;
+  }).slice(0,50);
+}
+function visibleLedger(){
+  const all=[...[...archives].reverse().flatMap(x=>x.ledger||[]),...(snapshot?.state?.ledger||[])];
+  return all.filter(row=>recentRecord(row));
+}
+function setFontSize(size){
+  if(!['small','medium','large'].includes(size))size='medium';
+  document.body.dataset.fontSize=size;
+  for(const b of $$('[data-font]'))b.classList.toggle('active',b.dataset.font===size);
+  try{localStorage.setItem(FONT_KEY,size);}catch{}
+}
+function showInfo(text){
+  $('#info-text').textContent=text;$('#info-backdrop').classList.remove('hidden');
+}
+function closeInfo(){ $('#info-backdrop').classList.add('hidden'); }
+function batchInfo(s){
+  const size=Math.max(1,Number(s?.web_batch_size||s?.planned_rounds||35));
+  const completed=Number(s?.wins||0)+Number(s?.losses||0);
+  return {size,index:Math.floor(completed/size)+1,count:completed%size,completed};
+}
 function setReady(isReady,message){
   busy=!isReady;
   const x=$('#engine-status');x.textContent=message;x.classList.toggle('loading',!isReady);x.classList.toggle('error',message.startsWith('載入失敗'));
@@ -1678,13 +1754,13 @@ function run(action,payload={}){
   const raw=callPython(action,JSON.stringify(payload));
   const obj=JSON.parse(raw);
   if(!obj.ok)throw new Error(obj.error||'計算失敗');
-  if(previous){archives.unshift({strategy:previous.strategy,settledAt:new Date().toISOString(),pnl:previous.pnl,total_bet:previous.total_bet,locked_profit:previous.locked_profit,ledger:previous.ledger});archives=archives.slice(0,50);}
+  if(previous){archives.unshift({strategy:previous.strategy,settledAt:new Date().toISOString(),pnl:previous.pnl,total_bet:previous.total_bet,locked_profit:previous.locked_profit,ledger:previous.ledger});cleanArchives();}
   snapshot=obj.result;
   persist();render();return snapshot;
 }
 function persist(){
   if(!snapshot)return;
-  try{localStorage.setItem(STORAGE_KEY,JSON.stringify({version:1,state:snapshot.state,undo:snapshot.undo,archives}));}
+  try{cleanArchives();localStorage.setItem(STORAGE_KEY,JSON.stringify({version:1,state:snapshot.state,undo:snapshot.undo,archives}));}
   catch(e){toast('本機儲存失敗，請匯出 JSON 備份');}
 }
 async function action(command,payload={},success){
@@ -1716,8 +1792,8 @@ function changeStrategyFields(){
   const max=$('[name=maxSteps]');
   if(code===26){max.value=$('[name=parts]').value;max.disabled=true;}else{max.disabled=false;}
   const s=strategies.find(x=>x.code===code);
-  $('#strategy-hint').textContent=code===26?'#26：切分份數就是固定等額關卡數；累計淨獲利達原始操作金 100% 時自動歸本。':s?.description||'此策略依原本 RUBY TG Chip V1.8.18 計算規則運作。';
-  $('#current-summary').textContent=s?.description||'請選擇策略。';
+  $('#strategy-hint').dataset.info=code===26?'#26：切分份數就是固定等額關卡數；累計淨獲利達原始操作金 100% 時自動歸本。':s?.description||'此策略依原本 RUBY TG Chip V1.8.18 計算規則運作。';
+  $('#current-summary').textContent=s?.description||'請選擇策略。';$('#summary-info').dataset.info=s?.description||'請選擇策略。';
 }
 function parseSeq(value){
   const seq=value.trim().split(/[\s,，/、]+/).filter(Boolean).map(Number);
@@ -1771,7 +1847,7 @@ function render(){
   $('#total-stake').textContent=q?money(q.total):'—';
   $('#available').textContent=on?money(data.available):'—';
   $('#stage-label').textContent=on?(data.position||`第 ${s.round_id||1} 輪`):'—';
-  $('#round-count').textContent=`${complete} / ${planned}`;
+  const batch=batchInfo(s||{planned_rounds:planned});$('#round-count').textContent=`${batch.count} / ${batch.size} · #${batch.index}`;
   const activeCode=on?(strategies.find(x=>x.name===s.strategy)?.code??'—'):getCode();
   $('#strategy-active-name').textContent='#'+String(activeCode).padStart(2,'0')+' '+(on?s.strategy:(strategies.find(x=>x.code===getCode())?.name||'尚未選擇'));
   $('#strategy-active-meta').textContent=on?`${data.position||'計畫執行中'} · ${complete}/${planned} 局`:'尚未開始 · 點擊選擇策略';
@@ -1779,28 +1855,33 @@ function render(){
   $('#create-plan').classList.toggle('hidden',on&&s.session_status==='active');
   updateNumber('#pnl',s?.pnl||0,true);
   const is26=s&&s.strategy==='等分倍盈歸本法';
-  $('#progress-title').textContent=is26?'100% 歸本進度':'計畫完成進度';
-  const pct=is26?Math.min(100,Math.max(0,Number(data.cycleProgress||0))):Math.min(100,complete/planned*100);
+  $('#progress-title').textContent=is26?`本週期歸本 · 進度 #${batch.index}`:`進度 #${batch.index} · 計畫完成度`;
+  const pct=is26?Math.min(100,Math.max(0,Number(data.cycleProgress||0))):Math.min(100,batch.count/batch.size*100);
   $('#progress-text').textContent=`${fmt(pct,1)}%`;
   $('#progress-bar').style.width=pct+'%';
-  $('#notice').textContent=(data?.status||'')||(!on?'請先設定並開始新計畫。':q?'手動回報中／掛後會進行本機計算。':'目前沒有下一局的建議金額。');
+  $('#notice').textContent=(data?.status||'')||(!on?'請先設定並開始新計畫。':q?'中／掛後自動更新下一局；鎖利／滾利為自主選擇。':'目前沒有下一局的建議金額。');
   $('#win-button').disabled=!valid;$('#loss-button').disabled=!valid;
   $('#undo-button').disabled=busy||!data?.undoAvailable;
   $('#finish-button').disabled=busy||!on||s?.session_status==='settled';
   $('#resume-button').classList.toggle('hidden',!data?.canResume);
-  $('#resume-button').disabled=busy||!data?.canResume||complete>=planned;
-  $('#offer-actions').classList.toggle('hidden',!s?.round_offer||busy);
+  $('#resume-button').disabled=busy||!data?.canResume;
+  const availableGain=Number(data?.allocatable||0),pendingRoll=Number(data?.pendingRoll||0);
+  const canDistribute=on&&!busy&&s.session_status!=='settled';
+  const canLock=canDistribute&&data?.canLock&&availableGain>0;
+  const canRoll=canDistribute&&data?.canRoll&&(availableGain>0||pendingRoll>0);
+  $('#offer-actions').classList.toggle('hidden',!on||s?.session_status==='settled');
+  for(const b of $$('[data-choice]')){const v=b.dataset.choice;b.disabled=!(v==='lock'?canLock:v==='roll'?canRoll:(canLock||canRoll));b.title=b.disabled?'目前沒有可分配獲利或策略不支援':v==='lock'?'將可分配獲利的一半移入鎖利':v==='roll'?'把可分配獲利加回操作預算':'保持現有操作預算繼續';}
   $('#kelly-action').classList.toggle('hidden',!s||s.strategy!=='凱利公式'||s.session_status==='settled');
   $('#start-button').disabled=busy||!callPython;
-  if(on){const selected=strategies.find(i=>i.name===s.strategy);$('#current-summary').textContent=selected?.description||s.strategy;}
-  const archivedRows=[...archives].reverse().flatMap(x=>Array.isArray(x.ledger)?x.ledger:[]);
-  const archivedTotal=archives.reduce((sum,x)=>sum+Number(x.total_bet||0),0);
-  const archivedPnL=archives.reduce((sum,x)=>sum+Number(x.pnl||0),0);
+  if(on){const selected=strategies.find(i=>i.name===s.strategy);$('#current-summary').textContent=selected?.description||s.strategy;$('#summary-info').dataset.info=selected?.description||s.strategy;}
+  const archivedRows=[...archives].reverse().flatMap(x=>Array.isArray(x.ledger)?x.ledger:[]).filter(r=>recentRecord(r));
+  const archivedTotal=archivedRows.reduce((sum,r)=>sum+Number(r.cost||0),0);
+  const archivedPnL=archivedRows.reduce((sum,r)=>sum+Number(r.delta||0),0);
   const archivedLocked=archives.reduce((sum,x)=>sum+Number(x.locked_profit||0),0);
   $('#sum-cost').textContent=money(archivedTotal+Number(s?.total_bet||0));
   updateNumber('#sum-pnl',archivedPnL+Number(s?.pnl||0),true);
   $('#sum-locked').textContent=money(archivedLocked+Number(s?.locked_profit||0));
-  const ledger=[...archivedRows,...(on&&Array.isArray(s.ledger)?s.ledger:[])];
+  const ledger=[...archivedRows,...(on&&Array.isArray(s.ledger)?s.ledger.filter(r=>recentRecord(r)):[])];
   $('#history-count').textContent=`${ledger.length} 筆`;
   const rows=$('#history-rows');rows.textContent='';
   if(!ledger.length){const row=document.createElement('tr');const cell=document.createElement('td');cell.colSpan=6;cell.className='empty';cell.textContent='目前沒有紀錄';row.append(cell);rows.append(row);}
@@ -1815,7 +1896,7 @@ function download(name,text,mime){
   const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
 }
 function exportCsv(){
-  const ledger=[...[...archives].reverse().flatMap(x=>x.ledger||[]),...(snapshot?.state?.ledger||[])];if(!ledger.length){toast('目前沒有可匯出的結算資料');return;}
+  const ledger=visibleLedger();if(!ledger.length){toast('最近 3 天沒有可匯出的結算資料');return;}
   const rows=[['局數','時間','結果','每碼','碼數','本局投注','本局返還','淨損益','累計盈虧','策略']];
   for(const r of ledger)rows.push([r.sequence,r.at,r.outcome==='win'?'中':'掛',r.stake,r.count,r.cost,r.return,r.delta,r.pnl,r.strategy]);
   const escapeCsv=v=>'"'+String(v??'').replace(/^([=+@\-])/,'\'$1').replace(/"/g,'""')+'"';
@@ -1880,16 +1961,14 @@ function bindEvents(){
       await action('load',{state:json.state,undo:json.undo||null},'已還原備份');
     }catch(err){showError(err.message||String(err));}
   });
-  for(const b of $$('[data-theme]'))b.addEventListener('click',()=>setTheme(b.dataset.theme));
+  for(const b of $$('[data-font]'))b.addEventListener('click',()=>setFontSize(b.dataset.font));
+  document.addEventListener('click',e=>{const b=e.target.closest('[data-info]');if(b){e.preventDefault();showInfo(b.dataset.info);}});
+  $('#info-close').addEventListener('click',closeInfo);$('#info-backdrop').addEventListener('click',e=>{if(e.target.id==='info-backdrop')closeInfo();});
 }
-function setTheme(theme){
-  if(!['mint','blue'].includes(theme))theme='mint';
-  document.body.dataset.theme=theme;
-  for(const b of $$('[data-theme]'))b.classList.toggle('active',b.dataset.theme===theme);
-  try{localStorage.setItem(THEME_KEY,theme);}catch{}
-}
+
 async function initialize(){
-  bindEvents();setTheme(localStorage.getItem(THEME_KEY)||'blue');setRingMode(localStorage.getItem(RING_MODE_KEY)||'compact');
+  bindEvents();setFontSize(localStorage.getItem(FONT_KEY)||'medium');setRingMode(localStorage.getItem(RING_MODE_KEY)||'expanded');
+  document.documentElement.style.setProperty('--ruby-bg-art',getComputedStyle($('.hero')).backgroundImage);
   try{
     strategies=JSON.parse(document.getElementById('ruby-strategies-json').textContent);
     if(strategies.length!==26)throw Error('策略數量不正確，請重新部署');
@@ -1908,7 +1987,7 @@ async function initialize(){
     runtime.runPython("import sys;sys.path.insert(0,'/home/py');from web_engine import web_call");
     python=runtime;callPython=runtime.globals.get('web_call');
     let restore=null;try{restore=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');}catch{}
-    archives=restore?.version===1&&Array.isArray(restore.archives)?restore.archives.slice(0,50):[];
+    archives=restore?.version===1&&Array.isArray(restore.archives)?restore.archives.slice(0,50):[];cleanArchives();
     try{run('load',restore&&restore.version===1?{state:restore.state,undo:restore.undo}:{state:null});}
     catch(e){run('load',{state:null});toast('舊紀錄無法還原，建議檢查 JSON 備份');}
     if(snapshot?.state){
