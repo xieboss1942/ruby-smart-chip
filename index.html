@@ -69,6 +69,80 @@ body[data-font-size="small"]{--font-multiplier:.90}body[data-font-size="medium"]
 .offer-row button:disabled{opacity:.3;filter:grayscale(.35);cursor:not-allowed;box-shadow:none}
 @media(max-width:355px){.ring-panel:not(.compact) svg{width:245px;height:245px}.ring-panel.compact .ring-body{grid-template-columns:91px 1fr}.ring-panel.compact svg{width:91px;height:91px}}
 
+
+/* V0.1.2 third-pass portrait layout: compact branded header, balanced ring, live results. */
+.topbar{
+  height:90px;min-height:90px;margin-bottom:8px;padding:9px 14px;
+  background-color:#170a31;
+  background-image:linear-gradient(90deg,#130825eb 0%,#14092bc4 45%,#15062f87 100%),var(--ruby-bg-art,none);
+  background-position:center,center 42%;background-size:cover,cover;background-repeat:no-repeat;
+  box-shadow:inset 0 -2px #d754c755,0 3px 17px #f72ecf22;
+}
+.topbar .nav-brand strong{font-size:clamp(17px,4.9vw,21px)!important;text-shadow:0 1px 7px #070115,0 0 11px #fc47cd}
+.topbar .nav-brand small{color:#f6deff;text-shadow:0 1px 5px #060112}
+.hero{height:0!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;box-shadow:none!important;overflow:hidden!important;visibility:hidden;pointer-events:none}
+.engine-row{margin-bottom:7px;min-height:25px}
+.current-strategy{height:46px;min-height:46px;padding:6px 12px;gap:9px;border-radius:13px;align-items:center}
+.current-strategy .strategy-accent{font-size:10px;padding:4px 7px;border-radius:6px}
+.current-strategy .strategy-text{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.current-strategy .strategy-text strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:calc(13px * var(--font-multiplier,1))!important}
+.current-strategy .strategy-text small{display:none!important}
+.current-strategy .chevron{font-size:22px;line-height:1}
+.ring-panel{padding:11px 11px 12px!important}
+.ring-panel>.panel-title{padding-left:14px;margin-bottom:5px}
+.ring-panel>.panel-title strong{font-size:calc(14px * var(--font-multiplier,1))!important}
+.ring-body{min-width:0}
+/* Compact ring deliberately larger than previous 103px, with status at far right. */
+.ring-panel.compact .ring-body{display:grid;grid-template-columns:minmax(0,47%) minmax(0,1fr);align-items:center;justify-items:stretch;column-gap:10px;padding:1px 4px 2px 7px}
+.ring-panel.compact svg{width:100%!important;max-width:188px!important;height:auto!important;aspect-ratio:1;justify-self:center;overflow:visible;filter:drop-shadow(0 0 8px #ed35c663)}
+.ring-panel.compact .ring-labels{width:100%;min-width:0;grid-template-columns:1fr;gap:6px;justify-self:stretch;padding:0 2px}
+.ring-panel.compact .ring-labels>div{min-width:0;display:grid;grid-template-columns:7px minmax(0,1fr) auto;align-items:center;gap:5px;padding:5px 2px}
+.ring-panel.compact .ring-labels small{min-width:0;font-size:calc(10px * var(--font-multiplier,1))!important;line-height:1.25;white-space:normal;overflow-wrap:anywhere}
+.ring-panel.compact .ring-labels strong{font-size:calc(11px * var(--font-multiplier,1))!important;white-space:nowrap;text-align:right}
+.ring-panel.compact .ring-number{font-size:calc(35px * var(--font-multiplier,1))!important}
+.ring-panel:not(.compact) svg{width:min(72vw,305px)!important;height:auto!important;max-width:calc(100% - 8px);filter:drop-shadow(0 0 11px #e950d188)}
+.ring-panel:not(.compact) .ring-labels{padding-left:8px;padding-right:8px}
+.quote-panel{padding:11px 12px}
+.quote-panel .panel-title{margin-bottom:7px}
+.quote-cards{margin-bottom:7px}
+.quote-amount{padding:9px 11px}
+.progress-block{margin-top:8px}
+.notice{padding:7px 11px;margin:6px 0;font-size:11px}
+.action-grid{
+  gap:7px;position:sticky;bottom:calc(69px + env(safe-area-inset-bottom));z-index:14;
+  padding:6px;border:1px solid #81408e;background:#170d32f2;backdrop-filter:blur(8px);
+  border-radius:14px;box-shadow:0 -5px 22px #11062388,0 0 15px #ea45d622;
+}
+.action-grid .button{min-height:53px}
+.secondary-actions{margin-top:6px}
+.summary-panel{display:none!important}
+.recent-feed{padding:10px 12px 11px;margin:10px 0 12px}
+.recent-feed .panel-title{margin-bottom:7px;padding:0 1px 0 6px}
+.recent-feed .panel-title strong{font-size:calc(14px * var(--font-multiplier,1))!important}
+.recent-feed .recent-hint{font-size:10px;color:#bca5d2}
+.recent-feed .recent-list{display:flex;flex-direction:column;gap:5px;max-height:256px;overflow-y:auto;overscroll-behavior:contain}
+.recent-feed .recent-empty{padding:14px 8px;text-align:center;color:#bda9d0;font-size:12px}
+.recent-item{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr) auto;align-items:center;gap:7px;padding:8px 9px;border-radius:9px;border:1px solid #69427b;background:#201437d9;color:#f7e9fb;min-width:0}
+.recent-item .recent-identity{display:flex;flex-direction:column;gap:2px;min-width:0}
+.recent-item .recent-round{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.recent-item .recent-time{font-size:10px;color:#aa97c7}
+.recent-item .recent-stake{font-size:11px;color:#c9b9e7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.recent-item .recent-result{font-size:13px;font-weight:800;text-align:right;white-space:nowrap}
+.recent-item .recent-result.positive{color:#66eeb3}
+.recent-item .recent-result.negative{color:#ff85a9}
+.recent-item .recent-result small{font-size:10px;font-weight:700;display:block}
+@media(max-width:355px){
+ .topbar{height:79px;min-height:79px}
+ .ring-panel.compact .ring-body{grid-template-columns:minmax(0,45%) minmax(0,1fr);column-gap:6px;padding-left:0;padding-right:0}
+ .ring-panel.compact .ring-labels{gap:2px;padding:0}
+ .ring-panel.compact .ring-labels>div{gap:3px;padding:3px 0}
+ .ring-panel.compact .ring-labels small{font-size:9px!important}
+ .ring-panel.compact .ring-labels strong{font-size:10px!important}
+ .recent-item{padding:7px 6px;gap:5px}
+}
+@media(min-width:700px){.topbar{margin:0 -12px 9px;padding:9px 16px}}
+@media(prefers-reduced-motion:reduce){.ring-panel svg{filter:none!important}}
+
 </style>
 </head>
 <body data-theme="neon">
@@ -118,6 +192,11 @@ body[data-font-size="small"]{--font-multiplier:.90}body[data-font-size="medium"]
       <div class="secondary-actions more-actions hidden" id="more-actions"><button id="resume-button" type="button" class="button subtle hidden" disabled>下一輪</button><button id="finish-button" type="button" class="button subtle" disabled>結算本次</button></div>
       <div id="offer-actions" class="offer hidden"><div class="panel-title"><strong>獲利配置</strong><button class="info-btn" type="button" data-info="鎖利與滾利均為可選操作，不會阻止下一局；不可使用時按鈕會呈半透明。策略內建自動鎖利仍會執行。" aria-label="獲利配置說明">ⓘ</button></div><div class="offer-row"><button type="button" data-choice="lock" class="button subtle" disabled>鎖利</button><button type="button" data-choice="roll" class="button subtle" disabled>滾利</button><button type="button" data-choice="continue" class="button subtle" disabled>略過分配</button></div></div>
       <div id="kelly-action" class="offer hidden"><label>本期預估中獎率（%）<input id="kelly-probability" type="number" min="0.1" max="100" step="any" value="55"></label><button id="kelly-apply" type="button" class="button subtle">更新本期預估值</button></div>
+      <section id="recent-feed" class="recent-feed neon-card" aria-label="即時中掛歷史清單">
+        <div class="panel-title"><strong>即時中掛紀錄</strong><button type="button" id="recent-feed-more" class="small-action" aria-label="開啟完整歷史紀錄">查看全部 ›</button></div>
+        <div id="recent-feed-list" class="recent-list" aria-live="polite"><div class="recent-empty">目前還沒有中／掛紀錄</div></div>
+        <div class="recent-hint">ⓘ 僅顯示最近 3 天的結算明細，最新在上方。</div>
+      </section>
       <section class="summary-panel neon-card"><div class="panel-title"><strong>目前策略摘要</strong><button type="button" class="info-btn" id="summary-info" data-info="選擇策略後顯示規則。" aria-label="查看目前策略摘要">ⓘ</button><button id="read-strategy" type="button" class="text-btn">完整說明 ›</button></div><p id="current-summary" class="sr-only">選擇策略後顯示規則。</p></section>
     </section>
     <footer class="app-footer">RUBY Smart Chip V0.1.2 · 本機試算 · 非自動下注</footer>
@@ -1860,6 +1939,7 @@ function render(){
   $('#progress-text').textContent=`${fmt(pct,1)}%`;
   $('#progress-bar').style.width=pct+'%';
   $('#notice').textContent=(data?.status||'')||(!on?'請先設定並開始新計畫。':q?'中／掛後自動更新下一局；鎖利／滾利為自主選擇。':'目前沒有下一局的建議金額。');
+  $('#notice').classList.toggle('hidden',on&&s.session_status==='active'&&!!q&&!(data?.status||'').trim());
   $('#win-button').disabled=!valid;$('#loss-button').disabled=!valid;
   $('#undo-button').disabled=busy||!data?.undoAvailable;
   $('#finish-button').disabled=busy||!on||s?.session_status==='settled';
@@ -1883,6 +1963,7 @@ function render(){
   $('#sum-locked').textContent=money(archivedLocked+Number(s?.locked_profit||0));
   const ledger=[...archivedRows,...(on&&Array.isArray(s.ledger)?s.ledger.filter(r=>recentRecord(r)):[])];
   $('#history-count').textContent=`${ledger.length} 筆`;
+  renderRecentFeed();
   const rows=$('#history-rows');rows.textContent='';
   if(!ledger.length){const row=document.createElement('tr');const cell=document.createElement('td');cell.colSpan=6;cell.className='empty';cell.textContent='目前沒有紀錄';row.append(cell);rows.append(row);}
   else for(const record of [...ledger].reverse().slice(0,200)){
@@ -1891,6 +1972,30 @@ function render(){
     for(let i=0;i<values.length;i++){const td=document.createElement('td');td.textContent=values[i];if(i===2)td.className=record.outcome==='win'?'positive':'negative';if(i===5)td.className=Number(record.delta)>=0?'positive':'negative';tr.append(td);}rows.append(tr);
   }
 }
+
+function renderRecentFeed(){
+  const root=$('#recent-feed-list');if(!root)return;
+  root.replaceChildren();
+  const entries=visibleLedger().slice().sort((a,b)=>Date.parse(b.at||'')-Date.parse(a.at||'')).slice(0,10);
+  if(entries.length===0){
+    const empty=document.createElement('div');empty.className='recent-empty';
+    empty.textContent='目前還沒有中／掛紀錄';root.append(empty);return;
+  }
+  for(const entry of entries){
+    const item=document.createElement('div');item.className='recent-item';
+    const identity=document.createElement('div');identity.className='recent-identity';
+    const round=document.createElement('span');round.className='recent-round';round.textContent=`第 ${entry.sequence||'—'} 局`;
+    const time=document.createElement('span');time.className='recent-time';
+    const when=new Date(entry.at||'');time.textContent=Number.isNaN(when.valueOf())?'—':when.toLocaleString('zh-TW',{timeZone:'Asia/Taipei',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
+    identity.append(round,time);
+    const stake=document.createElement('span');stake.className='recent-stake';stake.textContent=`每碼 ${money(entry.stake)} · 總注 ${money(entry.cost)}`;
+    const gain=document.createElement('span');const win=entry.outcome==='win';gain.className='recent-result '+(win?'positive':'negative');
+    const result=document.createElement('small');result.textContent=win?'● 中':'● 掛';
+    const amount=document.createElement('span');const delta=Number(entry.delta)||0;amount.textContent=(delta>0?'+':'')+money(delta);
+    gain.append(result,amount);item.append(identity,stake,gain);root.append(item);
+  }
+}
+
 function download(name,text,mime){
   const blob=new Blob([text],{type:mime});const url=URL.createObjectURL(blob);
   const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
@@ -1910,6 +2015,7 @@ function bindEvents(){
   $('#create-plan').addEventListener('click',e=>showDrawer('drawer-config',e.currentTarget));
   $('#open-strategies').addEventListener('click',e=>showDrawer('view-strategies',e.currentTarget));
   $('#open-history').addEventListener('click',e=>showDrawer('view-history',e.currentTarget));
+  $('#recent-feed-more').addEventListener('click',e=>showDrawer('view-history',e.currentTarget));
   $('#ring-toggle').addEventListener('click',()=>setRingMode($('#ring-panel').classList.contains('compact')?'expanded':'compact'));
   $('#more-button').addEventListener('click',()=>$('#more-actions').classList.toggle('hidden'));
   $('#drawer-backdrop').addEventListener('click',closeDrawers);
