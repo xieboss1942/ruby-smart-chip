@@ -49,9 +49,9 @@ body[data-theme="blue"]{--bg:#102334;--rail:#112c44;--panel:#173b53;--panel-hi:#
               <div class="fields">
                 <label class="field"><span>停利比例（%）</span><input name="profitPct" type="number" min="1" max="10000" value="100" required></label>
                 <label class="field"><span>停損比例（%）</span><input name="lossPct" type="number" min="1" max="100" value="100" required></label>
-                <label class="field special-param hidden" id="fraction-field"><span>投入比例（%）</span><input name="fraction" type="number" min="0.1" max="100" value="20"></label>
+                <label class="field special-param hidden" id="fraction-field"><span>投入比例（%）</span><input name="fraction" type="number" min="0.1" max="100" step="any" value="20"></label>
                 <label class="field special-param hidden" id="kelly-field"><span>凱利採用比例（%）</span><input name="kellyFraction" type="number" min="1" max="100" value="25"></label>
-                <label class="field special-param hidden" id="probability-field"><span>預估中獎率（%）</span><input name="probability" type="number" min="0.1" max="100" value="55"></label>
+                <label class="field special-param hidden" id="probability-field"><span>預估中獎率（%）</span><input name="probability" type="number" min="0.1" max="100" step="any" value="55"></label>
                 <label class="field field-full special-param hidden" id="sequence-field"><span id="sequence-label">自訂倍率（逗號分隔）</span><input name="sequenceInput" type="text" placeholder="1,2,3,5"></label><label class="field field-full special-param hidden" id="sequence-secondary-field"><span id="sequence-secondary-label">退守倍率（逗號分隔）</span><input name="sequenceSecondary" type="text" placeholder="2,3,5,8,13,20,30"></label>
               </div>
             </details>
@@ -84,7 +84,7 @@ body[data-theme="blue"]{--bg:#102334;--rail:#112c44;--panel:#173b53;--panel-hi:#
     <section class="view" id="view-settings"><div class="section-intro"><div><h2>網站設定</h2><p>不需要登入，不會把你的操作紀錄傳到 GitHub。</p></div></div>
       <div class="settings-grid"><section class="panel"><div class="panel-head"><h3>主題色系</h3></div><div class="theme-actions"><button type="button" class="theme-choice" data-theme="mint"><span class="theme-dot mint"></span>冰綠</button><button type="button" class="theme-choice" data-theme="blue"><span class="theme-dot blue"></span>冰藍</button></div></section>
         <section class="panel"><div class="panel-head"><h3>本機資料備份</h3></div><p class="muted">建議定期匯出 JSON。清除瀏覽器資料、使用無痕模式或切換手機可能遺失紀錄。</p><div class="button-row"><button id="backup-button" class="button subtle" type="button">匯出 JSON 備份</button><button id="restore-button" class="button subtle" type="button">還原 JSON 備份</button><input id="restore-file" type="file" accept="application/json,.json" hidden></div></section>
-        <section class="panel"><div class="panel-head"><h3>版本與說明</h3></div><p>Web Preview 0.1 · 計算模組取自 RUBY TG Chip V1.8.18。使用 Pyodide 在瀏覽器執行 Python，首次載入需要網路。沒有自動下單、機率預測或 Telegram 連線功能。</p><p class="muted">籌碼策略只處理投入金額，不能提高中獎機率，也不保證盈利。</p></section></div>
+        <section class="panel"><div class="panel-head"><h3>版本與說明</h3></div><p>Web Preview 0.1.1 · 計算模組取自 RUBY TG Chip V1.8.18。使用 Pyodide 在瀏覽器執行 Python，首次載入需要網路。沒有自動下單、機率預測或 Telegram 連線功能。</p><p class="muted">籌碼策略只處理投入金額，不能提高中獎機率，也不保證盈利。</p></section></div>
     </section>
     <footer class="app-footer">RUBY Smart Chip · 個人本機模擬計算工具 · 無自動下注功能</footer>
   </main>
@@ -1640,6 +1640,10 @@ function changeStrategyFields(){
     input.dataset.strategy=String(code);
     if(code===20){$('#sequence-secondary-field').classList.remove('hidden');$('[name=sequenceSecondary]').value='2,3,5,8,13,20,30';}
   }
+  for(const field of $('.special-param')){
+    const hidden=field.classList.contains('hidden');
+    for(const input of field.querySelectorAll('input,select,textarea'))input.disabled=hidden;
+  }
   const max=$('[name=maxSteps]');
   if(code===26){max.value=$('[name=parts]').value;max.disabled=true;}else{max.disabled=false;}
   const s=strategies.find(x=>x.code===code);
@@ -1750,6 +1754,11 @@ function bindEvents(){
   $('#strategy-search').addEventListener('input',e=>displayStrategyLibrary(e.target.value));
   $('#market').addEventListener('change',e=>{$('[name=count]').value=e.target.value==='單球'?6:1;});
   $('[name=parts]').addEventListener('input',()=>{if(getCode()===26)$('[name=maxSteps]').value=$('[name=parts]').value;});
+  $('#config-form').addEventListener('invalid',e=>{
+    const field=e.target;
+    const label=field.closest('label')?.querySelector('span')?.textContent?.trim()||field.name||'輸入欄位';
+    showError('請檢查「'+label+'」：'+(field.validationMessage||'輸入格式不正確'));
+  },true);
   $('#config-form').addEventListener('submit',async e=>{
     e.preventDefault();if(busy)return;
     try{
