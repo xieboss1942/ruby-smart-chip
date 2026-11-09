@@ -1,0 +1,1831 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#102b36" />
+  <meta name="description" content="RUBY Smart Chip：26 套籌碼策略、本機中掛結算、週期鎖利與策略教學。" />
+  <title>RUBY Smart Chip｜兔寶寶籌碼計算機</title>
+  <style>
+:root{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI","Noto Sans TC",sans-serif;font-synthesis:none;color-scheme:dark;--bg:#0b2029;--rail:#102b36;--panel:#163743;--panel-hi:#1a424d;--stroke:#305763;--muted:#a2c0c8;--text:#e9f7f7;--accent:#71e1c7;--accent-deep:#216e69;--success:#73e3ba;--danger:#ff9a9c;--shadow:0 12px 34px rgba(0,0,0,.11)}
+body[data-theme="blue"]{--bg:#102334;--rail:#112c44;--panel:#173b53;--panel-hi:#204a63;--stroke:#3c6176;--muted:#b2ccdb;--text:#ecf5ff;--accent:#83d9ff;--accent-deep:#286d91;--success:#87e7ca;--danger:#ffa4aa}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text)}body{line-height:1.55}button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.38;cursor:not-allowed}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}a{color:var(--accent)}.hidden{display:none!important}
+.app-shell{display:flex;min-height:100vh;max-width:1660px;margin:auto}.sidebar{width:245px;flex:none;background:var(--rail);border-right:1px solid var(--stroke);padding:28px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}.brand{display:flex;align-items:center;gap:12px;padding:4px 5px 28px}.brand-mark{display:grid;place-items:center;width:46px;height:46px;border:2px solid var(--accent);background:var(--panel-hi);border-radius:16px;font-size:28px;font-weight:900;color:var(--accent);box-shadow:0 0 0 5px rgba(112,225,199,.07)}.brand strong{display:block;font-size:16px;letter-spacing:.02em}.brand strong span{font-weight:400;color:var(--accent)}.brand small{display:block;color:var(--muted);font-size:12px}.desktop-nav{display:grid;gap:8px}.nav-item{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:0;border-radius:12px;background:transparent;padding:13px 17px;color:var(--muted);font-weight:600}.nav-item span{font-size:22px;width:25px;text-align:center}.nav-item:hover,.nav-item.active{background:var(--panel-hi);color:var(--text)}.nav-item.active{box-shadow:inset 3px 0 var(--accent)}.sidebar-footer{margin-top:auto;color:var(--muted);font-size:12px;display:flex;align-items:center;gap:8px}.online-dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.main-view{min-width:0;flex:1;padding:24px clamp(18px,4vw,48px) 36px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:0 0 23px}.eyebrow{font-size:11px;letter-spacing:.19em;color:var(--accent);font-weight:700}h1{font-size:clamp(23px,2.4vw,31px);margin:1px 0 0;letter-spacing:.02em}h2{font-size:20px;margin:0 0 2px}h3{font-size:16px;margin:0}.status-pill{border:1px solid var(--stroke);color:var(--accent);border-radius:30px;padding:6px 13px;white-space:nowrap;font-size:12px;font-weight:700}.status-pill.loading{color:var(--muted)}.status-pill.error{color:var(--danger);border-color:var(--danger)}.view{display:none}.view.active{display:block}.section-intro{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:17px}.section-intro p,.muted{margin:3px 0;color:var(--muted);font-size:13px}.tip{font-size:12px;color:var(--accent);padding:7px 10px;border-radius:30px;border:1px solid var(--stroke);white-space:nowrap}.layout-two{display:grid;grid-template-columns:minmax(340px,1fr) minmax(345px,1.05fr);gap:19px;align-items:start}.right-stack{display:grid;gap:17px}.panel{border:1px solid var(--stroke);background:var(--panel);border-radius:17px;padding:20px;box-shadow:var(--shadow)}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:17px}.panel-head small{color:var(--muted)}.soft-tag{font-size:11px;padding:4px 8px;color:var(--muted);background:var(--panel-hi);border:1px solid var(--stroke);border-radius:8px}.fields,#config-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.field{min-width:0;display:flex;flex-direction:column;gap:5px;color:var(--muted);font-size:12px;font-weight:600}.field-full{grid-column:1/-1}.field input,.field select,.search-wrap input,#kelly-probability{width:100%;min-width:0;height:43px;background:#102f3a;border:1px solid var(--stroke);border-radius:9px;padding:0 11px;color:var(--text);font-size:15px;outline:0}body[data-theme=blue] .field input,body[data-theme=blue] .field select,body[data-theme=blue] .search-wrap input{background:#19374a}.field select{cursor:pointer}.advanced{border:1px solid var(--stroke);border-radius:10px;padding:10px 12px}.advanced summary{color:var(--text);font-size:13px;cursor:pointer;font-weight:700}.advanced summary span{color:var(--muted);font-size:11px;font-weight:400;margin-left:5px}.advanced .fields{padding-top:12px}.form-note{grid-column:1/-1;margin:0;font-size:12px;color:var(--muted);min-height:37px}.button{border:1px solid var(--stroke);border-radius:10px;padding:10px 13px;font-weight:800;color:var(--text);background:var(--panel-hi);font-size:14px;transition:filter .14s,transform .1s}.button:hover:not(:disabled){filter:brightness(1.12)}.button:active:not(:disabled){transform:scale(.985)}.button.primary{color:#092e36;background:var(--accent);border-color:transparent}.button.full{grid-column:1/-1;width:100%;height:47px}.button.win{background:#1b5e52;border:1px solid #348c76;color:#b5ffe1;font-size:18px;min-height:56px}.button.loss{background:#683740;border:1px solid #8e5660;color:#ffd6d8;font-size:18px;min-height:56px}.button.subtle{background:transparent;color:var(--text);font-weight:650}.text-btn{border:0;background:transparent;padding:0;color:var(--accent);font-size:12px;font-weight:700}.quote-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px}.quote-amount{padding:14px 15px;background:var(--panel-hi);border:1px solid var(--stroke);border-radius:12px}.quote-amount small{display:block;color:var(--muted);font-size:12px}.quote-amount strong{display:block;font-size:clamp(25px,3.3vw,36px);line-height:1.38;letter-spacing:-.03em}.quote-amount:first-child strong{color:var(--accent)}.metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px}.metrics div{display:flex;flex-direction:column}.metrics span{font-size:11px;color:var(--muted)}.metrics b{font-size:15px;font-weight:750}.positive{color:var(--success)!important}.negative{color:var(--danger)!important}.progress-block{margin:19px 0 15px}.progress-label{display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px}.progress-label span:first-child{color:var(--muted)}.progress{background:var(--rail);height:9px;border-radius:10px;overflow:hidden}.progress>div{width:0%;height:100%;background:var(--accent);transition:width .2s}.notice{border:1px solid var(--stroke);border-radius:10px;padding:10px 12px;background:rgba(255,255,255,.025);color:var(--muted);font-size:13px;margin-bottom:13px;min-height:47px}.action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.secondary-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.secondary-actions>.button{flex:1;min-width:110px;padding:9px 8px;font-size:12px}.compact-panel p{margin:0;white-space:pre-line;color:var(--muted);font-size:13px}.offer{border:1px solid var(--stroke);border-radius:10px;margin-top:13px;padding:12px}.offer p{font-size:13px;color:var(--muted);margin:0 0 10px}.offer-row{display:flex;flex-wrap:wrap;gap:8px}.offer-row button{flex:1;white-space:nowrap;font-size:12px}.offer label{font-size:12px;display:block;margin-bottom:10px}.offer #kelly-probability{margin-top:5px}.alert{padding:12px 16px;background:#533b3e;color:#ffe4e4;border:1px solid #9f6262;border-radius:10px;margin-bottom:14px;font-size:13px}
+.search-wrap{margin-bottom:18px}.search-wrap input{max-width:500px}.strategy-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:13px}.strategy-card{background:var(--panel);border:1px solid var(--stroke);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}.strategy-card header{display:flex;gap:10px;align-items:center}.strategy-code{display:grid;place-items:center;width:46px;height:42px;flex:none;border:1px solid var(--stroke);border-radius:10px;color:var(--accent);font-size:18px;font-weight:850}.strategy-card h3{font-size:15px}.strategy-card small{color:var(--muted);font-size:11px}.strategy-card p{font-size:12px;color:var(--muted);margin:0;line-height:1.65;flex:1;white-space:pre-line}.strategy-card button{align-self:flex-end}.history-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}.mini-panel{border:1px solid var(--stroke);border-radius:12px;background:var(--panel);padding:14px}.mini-panel small{display:block;color:var(--muted);font-size:12px}.mini-panel strong{display:block;font-size:22px}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px;min-width:530px}th{text-align:right;color:var(--muted);font-size:11px;font-weight:650;padding:11px 8px;border-bottom:1px solid var(--stroke)}th:first-child{text-align:left}td{padding:12px 8px;text-align:right;border-bottom:1px solid rgba(255,255,255,.07)}td:first-child{text-align:left}.empty{text-align:center!important;color:var(--muted)}.settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.settings-grid>.panel:last-child{grid-column:1/-1}.settings-grid .panel p{font-size:13px;line-height:1.8}.theme-actions,.button-row{display:flex;gap:10px;flex-wrap:wrap}.theme-choice{border:1px solid var(--stroke);border-radius:11px;padding:11px 15px;background:var(--panel-hi);color:var(--text);font-weight:800;display:flex;align-items:center;gap:10px}.theme-choice.active{border-color:var(--accent)}.theme-dot{display:inline-block;width:17px;height:17px;border-radius:50%}.theme-dot.mint{background:#71e1c7}.theme-dot.blue{background:#83d9ff}.app-footer{border-top:1px solid var(--stroke);padding-top:14px;margin-top:27px;color:var(--muted);font-size:11px;text-align:center}.mobile-nav{display:none}.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(40px);opacity:0;transition:all .2s;background:#264a56;color:#f5ffff;border:1px solid var(--stroke);border-radius:12px;padding:11px 17px;z-index:40;font-size:13px;pointer-events:none;text-align:center;box-shadow:var(--shadow)}.toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:1050px){.sidebar{width:185px}.brand strong{font-size:13px}.main-view{padding:24px 20px}.layout-two{grid-template-columns:1fr 1fr}.panel{padding:16px}.quote-amount strong{font-size:26px}}@media(max-width:850px){.layout-two{grid-template-columns:1fr}.sidebar{width:174px}.settings-grid{grid-template-columns:1fr}.settings-grid>.panel:last-child{grid-column:auto}}@media(max-width:630px){.sidebar{display:none}.mobile-nav{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;bottom:0;left:0;right:0;background:var(--rail);border-top:1px solid var(--stroke);padding:7px 7px calc(7px + env(safe-area-inset-bottom));z-index:10}.mobile-nav button{display:flex;align-items:center;flex-direction:column;gap:0;border:0;background:transparent;color:var(--muted);font-size:21px;padding:5px 0;border-radius:8px;line-height:1.15}.mobile-nav button span{font-size:11px}.mobile-nav button.active{color:var(--accent);background:var(--panel-hi)}.main-view{padding:19px 13px 104px}.topbar{align-items:flex-end}.status-pill{font-size:10px;padding:5px 8px}h1{font-size:24px}.section-intro{align-items:flex-start}.tip{display:none}.panel{padding:15px;border-radius:14px}.fields,#config-form{gap:11px}.field input,.field select{height:41px}.app-footer{margin-top:17px}.history-summary{gap:7px}.mini-panel{padding:9px}.mini-panel strong{font-size:17px}.strategy-grid{grid-template-columns:1fr}.quote-amount strong{font-size:30px}.settings-grid{grid-template-columns:1fr}.settings-grid>.panel:last-child{grid-column:auto}.toast{bottom:85px;max-width:90%;min-width:180px}}@media(max-width:355px){.topbar{display:block}.status-pill{display:inline-block;margin-top:8px}.field{font-size:11px}.quote-amount strong{font-size:25px}.secondary-actions{flex-direction:column}}
+
+</style>
+</head>
+<body data-theme="mint">
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark">R</span><div><strong>RUBY <span>Smart Chip</span></strong><small>兔寶寶籌碼計算機</small></div></div>
+    <nav class="desktop-nav" aria-label="主選單">
+      <button type="button" class="nav-item active" data-tab="calculator"><span>▣</span> 計算機</button>
+      <button type="button" class="nav-item" data-tab="strategies"><span>▤</span> 策略中心</button>
+      <button type="button" class="nav-item" data-tab="history"><span>◷</span> 結算紀錄</button>
+      <button type="button" class="nav-item" data-tab="settings"><span>⚙</span> 設定</button>
+    </nav>
+    <div class="sidebar-footer"><span class="online-dot"></span><span>純本機計算 · 不會自動下注</span></div>
+  </aside>
+  <main class="main-view">
+    <header class="topbar"><div><div class="eyebrow">RUBY CHIP · WEB EDITION</div><h1 id="page-title">籌碼計算機</h1></div><div id="engine-status" class="status-pill loading" role="status">計算核心載入中…</div></header>
+    <div id="alert" class="alert hidden" role="alert"></div>
+    <section class="view active" id="view-calculator" aria-labelledby="page-title">
+      <div class="section-intro"><div><h2>快速設定</h2><p>修改參數後按「開始新計畫」。進行中的計畫不會被偷偷改動。</p></div><div class="tip">本機計算 · 不連交易平台</div></div>
+      <div class="layout-two">
+        <section class="panel config-panel">
+          <div class="panel-head"><h3>計畫參數</h3><span id="session-label" class="soft-tag">未開始</span></div>
+          <form id="config-form">
+            <label class="field field-full"><span>選擇策略</span><select id="strategy-select" name="strategy"></select></label>
+            <label class="field"><span>操作金</span><input name="operation" inputmode="decimal" type="number" min="1" step="1" value="1000" required></label>
+            <label class="field"><span>玩法</span><select name="market" id="market"><option value="單球">賽車單球</option><option value="兩面盤">兩面盤</option><option value="百家樂">百家樂</option></select></label>
+            <label class="field"><span>下注碼數</span><input name="count" type="number" min="1" max="8" value="6" required></label>
+            <label class="field"><span>切分份數</span><input name="parts" type="number" min="2" max="50" value="6" required></label>
+            <label class="field"><span>最大關卡</span><input name="maxSteps" type="number" min="1" max="50" value="6" required></label>
+            <label class="field"><span>計畫總局數</span><input name="planned" type="number" min="1" max="100000" value="35" required></label>
+            <details class="advanced field-full"><summary>進階設定 <span>停利／停損／專屬參數</span></summary>
+              <div class="fields">
+                <label class="field"><span>停利比例（%）</span><input name="profitPct" type="number" min="1" max="10000" value="100" required></label>
+                <label class="field"><span>停損比例（%）</span><input name="lossPct" type="number" min="1" max="100" value="100" required></label>
+                <label class="field special-param hidden" id="fraction-field"><span>投入比例（%）</span><input name="fraction" type="number" min="0.1" max="100" value="20"></label>
+                <label class="field special-param hidden" id="kelly-field"><span>凱利採用比例（%）</span><input name="kellyFraction" type="number" min="1" max="100" value="25"></label>
+                <label class="field special-param hidden" id="probability-field"><span>預估中獎率（%）</span><input name="probability" type="number" min="0.1" max="100" value="55"></label>
+                <label class="field field-full special-param hidden" id="sequence-field"><span id="sequence-label">自訂倍率（逗號分隔）</span><input name="sequenceInput" type="text" placeholder="1,2,3,5"></label><label class="field field-full special-param hidden" id="sequence-secondary-field"><span id="sequence-secondary-label">退守倍率（逗號分隔）</span><input name="sequenceSecondary" type="text" placeholder="2,3,5,8,13,20,30"></label>
+              </div>
+            </details>
+            <p class="form-note" id="strategy-hint">#26：切分 6 份代表 6 個等額關卡。所有輸入都只用於試算。</p>
+            <button id="start-button" type="submit" class="button primary full" disabled>開始新計畫</button>
+          </form>
+        </section>
+        <div class="right-stack">
+          <section class="panel quote-panel"><div class="panel-head"><h3>下局建議金額</h3><span class="soft-tag" id="quote-state">等待開始</span></div>
+            <div class="quote-cards"><div class="quote-amount"><small>每碼下注</small><strong id="per-code">—</strong></div><div class="quote-amount"><small>本局總注</small><strong id="total-stake">—</strong></div></div>
+            <div class="metrics"><div><span>當前可用金</span><b id="available">—</b></div><div><span>目前關卡</span><b id="stage-label">—</b></div><div><span>完成局數</span><b id="round-count">0 / 35</b></div><div><span>本次淨盈虧</span><b id="pnl">—</b></div></div>
+            <div class="progress-block"><div class="progress-label"><span id="progress-title">計畫進度</span><span id="progress-text">0%</span></div><div class="progress"><div id="progress-bar"></div></div></div>
+            <div id="notice" class="notice">請先設定並開始新計畫。</div>
+            <div class="action-grid"><button id="win-button" type="button" class="button win" disabled>✓ 中</button><button id="loss-button" type="button" class="button loss" disabled>✕ 掛</button></div>
+            <div class="secondary-actions"><button id="undo-button" type="button" class="button subtle" disabled>↶ 更正上一局</button><button id="resume-button" type="button" class="button subtle hidden" disabled>重新開始下一輪</button><button id="finish-button" type="button" class="button subtle" disabled>結算本次</button></div>
+            <div id="offer-actions" class="offer hidden"><p>本輪已完成，選擇本輪獲利處理方式：</p><div class="offer-row"><button type="button" data-choice="lock" class="button subtle">鎖利</button><button type="button" data-choice="roll" class="button subtle">滾利</button><button type="button" data-choice="continue" class="button subtle">略過並繼續</button></div></div>
+            <div id="kelly-action" class="offer hidden"><label>本期預估中獎率（%）<input id="kelly-probability" type="number" min="0.1" max="100" value="55"></label><button id="kelly-apply" type="button" class="button subtle">更新本期預估值</button></div>
+          </section>
+          <section class="panel compact-panel"><div class="panel-head"><h3>目前策略摘要</h3><button id="read-strategy" type="button" class="text-btn">查看完整說明 →</button></div><p id="current-summary">選擇策略後可看到詳細規則。</p></section>
+        </div>
+      </div>
+    </section>
+    <section class="view" id="view-strategies"><div class="section-intro"><div><h2>26 套策略中心</h2><p>可搜尋、查看規則與切換下一個計畫。列表不是獲利排名。</p></div></div>
+      <div class="search-wrap"><input id="strategy-search" type="search" placeholder="搜尋名稱或編號，例如 #26、天門、馬丁"></div><div class="strategy-grid" id="strategy-grid"></div>
+    </section>
+    <section class="view" id="view-history"><div class="section-intro"><div><h2>本機結算紀錄</h2><p>每次中／掛後立即保存於這台裝置；更換裝置不會自動同步。</p></div><button id="export-csv" type="button" class="button subtle">匯出 CSV</button></div>
+      <div class="history-summary"><div class="mini-panel"><small>總投注</small><strong id="sum-cost">—</strong></div><div class="mini-panel"><small>累積盈虧</small><strong id="sum-pnl">—</strong></div><div class="mini-panel"><small>已鎖利</small><strong id="sum-locked">—</strong></div></div>
+      <div class="panel history-panel"><div class="panel-head"><h3>最近結算明細</h3><small id="history-count">0 筆</small></div><div class="table-wrap"><table><thead><tr><th>局數</th><th>策略</th><th>中／掛</th><th>每碼</th><th>投注</th><th>本局損益</th></tr></thead><tbody id="history-rows"><tr><td colspan="6" class="empty">目前沒有紀錄</td></tr></tbody></table></div></div>
+    </section>
+    <section class="view" id="view-settings"><div class="section-intro"><div><h2>網站設定</h2><p>不需要登入，不會把你的操作紀錄傳到 GitHub。</p></div></div>
+      <div class="settings-grid"><section class="panel"><div class="panel-head"><h3>主題色系</h3></div><div class="theme-actions"><button type="button" class="theme-choice" data-theme="mint"><span class="theme-dot mint"></span>冰綠</button><button type="button" class="theme-choice" data-theme="blue"><span class="theme-dot blue"></span>冰藍</button></div></section>
+        <section class="panel"><div class="panel-head"><h3>本機資料備份</h3></div><p class="muted">建議定期匯出 JSON。清除瀏覽器資料、使用無痕模式或切換手機可能遺失紀錄。</p><div class="button-row"><button id="backup-button" class="button subtle" type="button">匯出 JSON 備份</button><button id="restore-button" class="button subtle" type="button">還原 JSON 備份</button><input id="restore-file" type="file" accept="application/json,.json" hidden></div></section>
+        <section class="panel"><div class="panel-head"><h3>版本與說明</h3></div><p>Web Preview 0.1 · 計算模組取自 RUBY TG Chip V1.8.18。使用 Pyodide 在瀏覽器執行 Python，首次載入需要網路。沒有自動下單、機率預測或 Telegram 連線功能。</p><p class="muted">籌碼策略只處理投入金額，不能提高中獎機率，也不保證盈利。</p></section></div>
+    </section>
+    <footer class="app-footer">RUBY Smart Chip · 個人本機模擬計算工具 · 無自動下注功能</footer>
+  </main>
+</div>
+<nav class="mobile-nav" aria-label="行動版選單"><button class="active" data-tab="calculator">▣<span>計算</span></button><button data-tab="strategies">▤<span>策略</span></button><button data-tab="history">◷<span>紀錄</span></button><button data-tab="settings">⚙<span>設定</span></button></nav>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js"></script>
+<script type="application/json" id="ruby-strategies-json">[
+  {
+    "id": "custom",
+    "name": "自訂關卡配注法",
+    "code": 0,
+    "kind": "負追",
+    "description": "未取整每碼基額＝(一份÷碼數÷有效配注序列和)。掛進、中回首；末階後回首開新輪。"
+  },
+  {
+    "id": "custom_win",
+    "name": "自訂關卡配注法（勝近）",
+    "code": 99,
+    "kind": "勝近",
+    "description": "未取整每碼基額＝(一份÷碼數÷有效勝近序列和)。中進、掛回首；序列用完開新輪。"
+  },
+  {
+    "id": "twoleg",
+    "name": "兩關分層法",
+    "code": 66,
+    "kind": "雙向",
+    "description": "未取整每碼基額＝(一份÷碼數÷(有效層倍數和×3))。每層先×1、中後×2；兩中回首層、掛進下層；實際層數受分層序列長度限制，最大關卡不會自動補足層數；末層掛保留原版暫停。"
+  },
+  {
+    "id": "peak",
+    "name": "高點獲利鎖定法",
+    "code": 1,
+    "kind": "中性",
+    "description": "起始基額＝floor(一份÷碼數÷10)。依可用金與剩餘停損相對起始預算調節。達連中門檻且有獲利，完成輪次並自動保留可處理獲利50%；只提供滾利。"
+  },
+  {
+    "id": "progress",
+    "name": "停利進度收斂法",
+    "code": 2,
+    "kind": "中性",
+    "description": "起始基額＝floor(一份÷碼數÷10)。調節倍數＝剩餘停損÷初始停損×份數÷(份數＋floor(停利進度×12))。"
+  },
+  {
+    "id": "drawdown",
+    "name": "高點回撤階梯法",
+    "code": 3,
+    "kind": "中性",
+    "description": "起始基額＝floor(一份÷碼數÷10)。每回撤初始操作金5%，分母增加4份；回撤20%暫停，恢復不重置高點。"
+  },
+  {
+    "id": "volatility",
+    "name": "損益波動調節法",
+    "code": 4,
+    "kind": "中性",
+    "description": "起始基額＝floor(一份÷碼數÷10)。最近10局母體標準差÷(初始停損÷份數)向上取整，最多加24份；不足3局用0。"
+  },
+  {
+    "id": "shock",
+    "name": "最大虧損壓力法",
+    "code": 5,
+    "kind": "中性",
+    "description": "起始基額＝floor(一份÷碼數÷10)。調節倍數＝剩餘停損÷初始停損×基準÷max(基準,近20局最大虧損)，基準＝初始停損÷份數。"
+  },
+  {
+    "id": "dual",
+    "name": "本金獲利雙池法",
+    "code": 6,
+    "kind": "中性",
+    "description": "起始基額＝floor(一份÷(2×份數)÷碼數)。本金池＝max(0,初始停損＋min(損益,0))；獲利池＝max(0,損益－最高正獲利70%)；調節倍數＝(本金池＋2×獲利池)÷初始停損。保留70%保護。"
+  },
+  {
+    "id": "cooldown",
+    "name": "連掛冷卻檢核法",
+    "code": 7,
+    "kind": "中性",
+    "description": "起始基額＝floor(一份÷碼數÷10)。調節倍數＝剩餘停損÷初始停損×份數÷(份數＋近10局掛數)；連掛3局冷卻，手動恢復只重置冷卻計數。"
+  },
+  {
+    "id": "giveback",
+    "name": "獲利回吐底線法",
+    "code": 8,
+    "kind": "中性",
+    "description": "起始基額＝floor(一份÷碼數÷10)。保留原高點回吐底線；調節預算受目前損益與保護底線的差額限制。"
+  },
+  {
+    "id": "rounds",
+    "name": "剩餘局數預算法",
+    "code": 9,
+    "kind": "中性",
+    "description": "每碼＝floor(max(0,本輪起始一份＋本輪淨盈虧)÷碼數÷(計畫總局數－本次已完成局數))。全計畫局數不因換輪歸零；達計畫局數即硬性停止，恢復不得延長；歷史盈虧不清除。"
+  },
+  {
+    "id": "consensus",
+    "name": "多因子防守共識法",
+    "code": 10,
+    "kind": "中性",
+    "description": "起始基額＝floor(一份÷碼數÷10)。進度、回撤、波動三個調節倍數取最小；高點50%保護，回撤20%暫停。"
+  },
+  {
+    "id": "fixed",
+    "name": "動態固定注",
+    "code": 11,
+    "kind": "中性",
+    "description": "動態固定注：每碼＝floor((當前操作預算＋本次尚未分配的損益)÷分割份數÷碼數÷5)，中掛後重算；鎖利扣操作預算，滾利加當次獲利，均不重複。"
+  },
+  {
+    "id": "fraction",
+    "name": "固定比例法",
+    "code": 12,
+    "kind": "中性",
+    "description": "每碼＝floor(一份÷碼數×投入比例)，新使用者預設20%；已存在的自訂比例保留。"
+  },
+  {
+    "id": "budget",
+    "name": "預算分配法",
+    "code": 13,
+    "kind": "中性",
+    "description": "每碼＝floor(一份÷碼數÷份數)。先取一份後再除份數，保留指定二次分份。"
+  },
+  {
+    "id": "winner",
+    "name": "有限連贏法",
+    "code": 14,
+    "kind": "勝進",
+    "description": "未取整每碼基額＝(一份÷碼數÷有效勝進序列和)。預設1/1，中進、掛回首，序列走完回首。"
+  },
+  {
+    "id": "martingale",
+    "name": "標準馬丁法",
+    "code": 16,
+    "kind": "負追",
+    "description": "未取整每碼基額＝(一份÷碼數÷有效1/2/4/8…總和)。掛進、中回首；末階掛保留原版暫停。"
+  },
+  {
+    "id": "tianmen",
+    "name": "天門打法",
+    "code": 17,
+    "kind": "負追",
+    "description": "未取整每碼基額＝(一份÷碼數÷有效1/3/7/15/31總和)。固定只有5個倍率，最大關卡超過5不會自動補倍率；掛進、中回首；末階掛保留原版暫停。"
+  },
+  {
+    "id": "dalembert",
+    "name": "達朗貝爾法",
+    "code": 18,
+    "kind": "負追",
+    "description": "未取整每碼基額＝(一份÷碼數÷有效1/2/3…總和)。掛加1單位、中減1單位；超過末階保留原版暫停。有限序列總和不代表來回操作的最大支出。"
+  },
+  {
+    "id": "fibonacci",
+    "name": "費波納契法",
+    "code": 19,
+    "kind": "負追",
+    "description": "未取整每碼基額＝(一份÷碼數÷有效費波納契總和)。掛進1、中退2；超過末階保留原版暫停。"
+  },
+  {
+    "id": "attack",
+    "name": "攻擊／退守切換法",
+    "code": 20,
+    "kind": "雙向",
+    "description": "未取整每碼基額＝((一份÷(有效攻擊和＋有效防守和))×(碼數÷份數))，同輪固定，測試2倍不入序列和；最大關卡包含測試1關，其餘取攻擊／退守最多(最大關卡－1)筆。測試中轉攻擊、掛轉退守；攻擊掛回測試；退守最低關中回測試。回測試時：本輪有可分配獲利可選鎖利／滾利；當輪虧損、打平或無可分配獲利時，未觸發整體停損則進下一輪。末階仍保留關卡上限暫停。"
+  },
+  {
+    "id": "recovery",
+    "name": "目標回補法",
+    "code": 22,
+    "kind": "負追",
+    "description": "每碼＝ceil((未回補虧損＋回補目標)÷(含本金賠率－碼數))。分母≤0不計算。"
+  },
+  {
+    "id": "kelly",
+    "name": "凱利公式",
+    "code": 23,
+    "kind": "中性",
+    "description": "每期先提供本期預估中獎率p。b＝含本金賠率÷碼數－1；f＝(b×p－(1－p))÷b。每碼＝floor(一份×f×凱利折數÷碼數)；未提供p、b≤0或f≤0不進場。"
+  },
+  {
+    "id": "labouchere",
+    "name": "清單消去法",
+    "code": 24,
+    "kind": "負追",
+    "description": "新輪未取整每碼基額＝(一份÷初始清單和÷碼數)，同輪固定。倍數取首尾和，單項僅一次；掛追加、中刪首尾。清空才完成；不受連掛或關卡上限重置。新輪基額依當前操作預算重新算；鎖利扣預算，滾利加當次可滾獲利。"
+  },
+  {
+    "id": "equal_reset",
+    "name": "等分倍盈歸本法",
+    "code": 26,
+    "kind": "等分",
+    "description": "每碼=floor(min(當前可用金, 當前操作預算)÷碼數÷切分份數)；每輪固定基額，每關1倍。中則下一輪回首關，掛進下關；全關掛暫停。累計已結算週期淨獲利達起始操作金100%時，已鎖金額不重複計入，超額獲利全鎖，操作預算歸回起始值，開始下一週期。"
+  }
+]</script>
+<script type="text/plain" id="py-src-strategy_engine.py">
+"""Deterministic budget controls, not predictions or validated profit systems."""
+from decimal import Decimal, ROUND_FLOOR
+import math
+import statistics
+import stake_guard
+import progression
+
+VERSION = '1.8.5'
+CATALOG = [
+ {'id':'peak','name':'高點獲利鎖定法','principle':'本次獲利創高後，逐步把一半最高獲利移出操作池。',
+  'formula':'保護額＝最高正獲利×50%；本局預算＝min(可動用金、剩餘停損額)÷風險份數。',
+  'trigger':'保護額只升不降；鎖定不等於平台實際出金。', 'limit':'鎖住的金額不再參與下一局；輸後不提高總投入。'},
+ {'id':'progress','name':'停利進度收斂法','principle':'越靠近本次停利目標，分配給單局的損失預算越小。',
+  'formula':'進度＝max(0,損益)÷停利目標，上限1；分母＝風險份數＋floor(進度×12)。',
+  'trigger':'本局預算＝剩餘停損額÷分母；達標歸零並等待繼續或結算。', 'limit':'目標只是停下條件，不代表較容易達到。'},
+ {'id':'drawdown','name':'高點回撤階梯法','principle':'從本次損益最高點下滑時，逐階縮小投入。',
+  'formula':'回撤階＝floor((最高損益－目前損益)÷初始操作金的5%)；分母＝風險份數＋4×回撤階。',
+  'trigger':'回撤達初始操作金20%時暫停；手動恢復不重置最高點或放寬底線。', 'limit':'暫停若仍超過回撤底線，須結算；不自動追損。'},
+ {'id':'volatility','name':'損益波動調節法','principle':'用近期實際試算損益的波動，衡量單局金額是否應縮小。',
+  'formula':'取最近10局損益母體標準差σ；單位＝初始停損額÷風險份數；分母再加ceil(σ÷單位)，最多加24。',
+  'trigger':'不足3局先以零波動處理；每局更新，越波動分母越大。', 'limit':'波動是過去金額變化，不是下一局勝率。'},
+ {'id':'shock','name':'最大虧損壓力法','principle':'依近期最重的一次虧損，收緊後續單局預算。',
+  'formula':'取最近20局最大單局虧損W；單位U＝初始停損額÷風險份數；預算＝剩餘停損額÷份數×U÷max(U,W)。',
+  'trigger':'大額虧損仍在最近20局視窗內時，持續壓低投入。', 'limit':'只控制投入，不保證最壞損失不會再發生。'},
+ {'id':'dual','name':'本金獲利雙池法','principle':'把可承受的本金損失與尚未保護的獲利分開分配。',
+  'formula':'本金池＝max(0,初始停損額＋min(損益,0))；獲利池＝max(0,損益－最高正獲利×70%)。',
+  'trigger':'預算＝本金池÷(2×份數)＋獲利池÷份數；最高正獲利70%移出操作池。', 'limit':'兩池合計仍受共通上限約束，不會把鎖利再算一次。'},
+ {'id':'cooldown','name':'連掛冷卻檢核法','principle':'除了資金預算，連掛到門檻就強制停下檢查。',
+  'formula':'預算＝剩餘停損額÷(份數＋最近10局掛的次數)；連掛3局即冷卻。',
+  'trigger':'按恢復前先核對狀態；恢復只重設冷卻計數，損益與連掛紀錄不歸零。', 'limit':'冷卻後不補注、不倍增，也不表示勝率回升。'},
+ {'id':'giveback','name':'獲利回吐底線法','principle':'獲利達一定幅度後，保留可回吐的明確金額。',
+  'formula':'最高正獲利達初始停損額20%後啟動；保護底線＝max(舊底線,最高正獲利－max(初始停損額20%,最高正獲利25%))。',
+  'trigger':'預算再受(目前損益－保護底線)÷份數限制；低於最低單位即暫停。', 'limit':'不主動解鎖獲利；外部下注與平台費用不在模型內。'},
+ {'id':'rounds','name':'剩餘局數預算法','principle':'先決定本次計畫局數，讓剩餘損失預算配合剩餘局數。',
+  'formula':'預算＝剩餘停損額÷max(風險份數,計畫總局數－已完成局數)。',
+  'trigger':'計畫局數為硬性上限，達標停止；恢復不得延長原局數，歷史損益保留。', 'limit':'局數是操作上限，不是保證可玩完；輸後總投入仍不增加。'},
+ {'id':'consensus','name':'多因子防守共識法','principle':'同時看停利進度、資金回撤及近期損益波動，取最嚴格預算。',
+  'formula':'同時計算進度法、回撤法、波動法的預算，取最小值；另外保護最高正獲利50%。',
+  'trigger':'回撤20%亦暫停；任何一項收緊，就以較小金額執行。', 'limit':'多個限制不等於多重勝率優勢，仍可能虧損。'},
+]
+for d in CATALOG:
+    d.update(group='original',kind='中性')
+CATALOG += progression.CATALOG
+for i,d in enumerate(CATALOG,1):
+    d['code']=0 if d['id']=='custom' else 99 if d['id']=='custom_win' else 66 if d['id']=='twoleg' else 26 if d['id']=='equal_reset' else i
+MENU_CODES=[0,99,66]+list(range(1,15))+list(range(16,21))+[22,23,24,26]
+BY_CODE={d['code']:d for d in CATALOG}
+MENU_CATALOG=[BY_CODE[code] for code in MENU_CODES]
+BY_ID={x['id']:x for x in CATALOG}
+BY_NAME={x['name']:x for x in CATALOG}
+
+def descriptor(name):
+    return BY_NAME[name]
+
+def common_rules():
+    return ('共通規則：只試算金額，不預測勝負、不自動下注。原有10套維持舊預算與連中降注。'
+            '新增14套照各自規則推進；超過金額上限、剩餘停損額或可用金額就暫停，不自動補本金。'
+            '各項限制只控制投入，不代表具有機率優勢。')
+
+def rule_text(name):
+    d=descriptor(name)
+    if name in progression.BY_NAME:
+        return '\n'.join([d['name']+'｜'+d['kind'], '原理：'+d['principle'], '觸發：'+d['trigger'], '限制：'+d['limit'], common_rules(),
+            '新增策略每碼不足整數向上取整（比例／預算法／凱利先向下取整）。兩面盤每局僅押一邊，1.90含本金。',
+            '攻擊法只移植資金模式，沒有A/B選邊訊號；退守最低關中回測試，連中2次或最近3次中2次退2關並清空該計數。',
+            '天門採1/3/7/15/31版本；兩關法採每層1倍再2倍，單球賠率不同不保證回本。',
+            '凱利每期先回報本期預估中獎率；每次中掛後清空，沒有回報就不計算下注金額。回報值是預估機率，不是本期已開獎結果，也不是自動採用歷史勝率。',
+            '凱利與回補估算使用循環最低賠率9.54；每局實際損益仍依9.59／9.54循環。V1.8.15 僅接受中／掛，舊和局紀錄保留。',
+            '鎖利自當前操作預算扣除；不會因按滾利自動解鎖。關卡用完後手動恢復只重開該輪，不清掉帳面虧損。'])
+    trigger=('本次計畫局數為硬上限，達標後不可透過恢復延長；若舊圖卡仍寫可延長，以新版文字規則為準。' if d['id']=='rounds' else d['trigger'])
+    return '\n'.join([d['name'], '原理：'+d['principle'], '算法：'+d['formula'], '觸發：'+trigger, '限制：'+d['limit'], common_rules(),
+                      'V1.6.4 規則優先：鎖利從可用操作金扣除，不保證獲利不回吐。有效中掛結算後，鎖利留在獨立保留金欄位，不因按滾利自動解除；不補錢、不動用保留本金。新計畫可指定操作金，圖中50%為預設示例。'])
+
+def update_protection(s):
+    s['peak_pnl']=max(s.get('peak_pnl',0),s['pnl'],0)
+    name=s['strategy']; peak=s['peak_pnl']; lock=s['locked_profit']
+    if name in ('高點獲利鎖定法','多因子防守共識法'):
+        lock=max(lock,peak*.5)
+    if name=='本金獲利雙池法':
+        lock=max(lock,peak*.7)
+    if name=='獲利回吐底線法' and peak >= s['loss_limit']*.2:
+        lock=max(lock,peak-max(s['loss_limit']*.2,peak*.25))
+        s['giveback_active']=True
+    s['locked_profit']=round(max(0,lock),2)
+
+def evaluate(s):
+    """Return total stake budget and an optional hard pause reason."""
+    # Legacy evaluator must obey the same strict plan ceiling as the current
+    # sizing engine; do not bypass it through alternative strategy paths.
+    if s.get('wins',0)+s.get('losses',0) >= max(1,int(s.get('planned_rounds') or s.get('round_limit') or 12)):
+        return 0,'已達計畫局數，請結算後重新設定'
+    if s['strategy'] not in BY_NAME:
+        return 0,'舊版策略需重新設定'
+    if progression.is_new(s):return progression.evaluate(s)
+    n=s.get('risk_parts',8)
+    if not isinstance(n,int) or not 4<=n<=50:
+        raise ValueError('invalid risk_parts')
+    available=max(0,s['operation_base']+s['pnl']-s['locked_profit'])
+    headroom=max(0,s['loss_limit']+s['pnl'])
+    cap=min(available,headroom/4)
+    if s['pnl'] <= -s['loss_limit']:
+        return 0,'已達停損'
+    rows=s.get('ledger',[])
+    d=max(0,s.get('peak_pnl',0)-s['pnl'])
+    progress=min(1,max(0,s['pnl'])/max(.01,s['profit_target']))
+    steps=math.floor((d+1e-9)/max(.01,s['operation_base']*.05))
+    recent=[x['delta'] for x in rows[-10:]]
+    sigma=statistics.pstdev(recent) if len(recent)>=3 else 0
+    unit=max(.01,s['loss_limit']/n)
+    budgets={'progress':headroom/(n+math.floor(progress*12)),
+             'drawdown':headroom/(n+4*steps),
+             'volatility':headroom/(n+min(24,math.ceil(sigma/unit)))}
+    sid=descriptor(s['strategy'])['id']
+    if sid in ('drawdown','consensus') and d+1e-9>=s['operation_base']*.2:
+        return 0,'回撤已達操作金20%'
+    if sid=='cooldown' and s.get('cooldown_losses',0)>=3:
+        return 0,'連掛3局冷卻'
+    completed=s.get('wins',0)+s.get('losses',0)
+    if sid=='rounds' and completed>=s.get('round_limit',s.get('planned_rounds',12)):
+        return 0,'已達計畫局數'
+    if sid=='peak': risk=min(available,headroom)/n
+    elif sid in budgets: risk=budgets[sid]
+    elif sid=='shock':
+        worst=max([max(0,-x['delta']) for x in rows[-20:]]+[unit])
+        risk=headroom/n*unit/worst
+    elif sid=='dual':
+        risk=max(0,s['loss_limit']+min(s['pnl'],0))/(2*n)+max(0,s['pnl']-s.get('peak_pnl',0)*.7)/n
+    elif sid=='cooldown': risk=headroom/(n+sum(x['delta']<0 for x in rows[-10:]))
+    elif sid=='giveback':
+        risk=headroom/n
+        if s.get('giveback_active'):
+            risk=min(risk,max(0,s['pnl']-s['locked_profit'])/n)
+    elif sid=='rounds': risk=headroom/max(n,s.get('round_limit',12)-completed)
+    else: risk=min(budgets.values())
+    risk=min(cap,max(0,risk))
+    if s.get('last_result')=='loss' and s.get('last_total_bet') is not None:
+        risk=min(risk,s['last_total_bet'])
+    risk=stake_guard.cap(risk,s)
+    count=s['number_count']
+    per_code=int((Decimal(str(risk))/Decimal(count)).to_integral_value(rounding=ROUND_FLOOR))
+    if per_code<=0:
+        return 0,('降注後預算不足1元／碼，請結算' if s.get('guard_reset_pending') and s.get('guard_enabled') else '預算不足1元／碼')
+    return per_code*count,''
+
+# The public engine entry point uses V1.8 sizing only after explicit migration.
+import sizing_v180
+def evaluate(s):return sizing_v180.evaluate(s)
+def update_protection(s):
+    # Protection is now applied exactly once in accepted-result processing.
+    return None
+def common_rules():
+    return '只做手動回報試算，不自動下注。每碼只顯示整數且不補1；下局總注不得突破可用資金、操作預算或剩餘停損額度。#22保留向上取整特例。'
+def rule_text(name):
+    d=descriptor(name)
+    from release_rules import describe
+    return f"{d['code']:02d} {name}｜{d['kind']}\n"+describe(d['code'])+'\n'+common_rules()+'\n籌碼配置不會提高中獎機率。'
+
+from release_rules import describe as _release_description
+for _d in CATALOG:
+    _d['principle']=_release_description(_d['code'])
+    _d['formula']=_release_description(_d['code'])
+    _d['trigger']='依V1.8.2輪次與停利停損規則。'
+    _d['limit']='只做試算，不保證獲利。'
+
+</script>
+<script type="text/plain" id="py-src-progression.py">
+"""Finite, deterministic sizing rules. No placement of bets or prediction."""
+import copy
+import math
+
+_ROWS=[('fixed', '動態固定注', '中性', '每碼維持基本注，中掛都不推進。'), ('fraction', '固定比例法', '中性', '每局總注＝可用操作金×投入比例，平均分給各碼。'), ('budget', '預算分配法', '中性', '每局總注＝min(可用操作金,剩餘停損額)÷預算份數。'), ('winner', '有限連贏法', '勝進', '中往勝進序列下一關；掛或序列走完回第一關。'), ('custom', '自訂關卡配注法', '負追', '掛往配注序列下一關，中回第一關；末階掛後循環回首關（仍受停損與局數限制）。'), ('martingale', '標準馬丁法', '負追', '掛後每碼加倍，中回基本注；最多使用最大關卡數。'), ('tianmen', '天門打法', '負追', '使用你確認的1／3／7／15／31倍版本，掛進、中回首關。'), ('dalembert', '達朗貝爾法', '負追', '掛增加一個基本單位，中減一個單位，最低一單位。'), ('fibonacci', '費波納契法', '負追', '1／1／2／3／5…；掛前進一關，中退兩關，最低首關。'), ('attack', '攻擊／退守切換法', '雙向', '測試注中轉攻擊、掛轉退守；攻擊中進掛回測試；退守掛進中退。'), ('twoleg', '兩關分層法', '雙向', '每層先一注，中再下兩倍；兩關都中回第一層，任一關掛換下一層。'), ('recovery', '目標回補法', '負追', '每碼＝向上取整((未回補虧損＋回補目標)÷(含本金賠率－碼數))。'), ('kelly', '凱利公式', '中性', '每期先回報本期預估中獎率；f=(b×p－(1－p))÷b，b=賠率÷碼數－1；f≤0不下注。'), ('labouchere', '清單消去法', '負追', '下注清單首尾和；中刪首尾，掛把本局單位加到末尾；單項只取該項。'), ('equal_reset','等分倍盈歸本法','等分','當前操作預算／碼數／切分份數；同輪全關1倍、任一中下一輪、全關掛暫停，週期淨獲利達起始操作金100%即歸本鎖利。')]
+CATALOG=[dict(id=r[0],name=r[1],kind=r[2],principle=r[3],formula=r[3],
+             trigger='有限關卡、金額上限或計畫局數到達即暫停；只有有效中掛才更新策略。',
+             limit='籌碼變化不會提高命中機率，亦不保證回本。',group='new') for r in _ROWS]
+BY_NAME={x['name']:x for x in CATALOG}
+CONFIG_DEFAULTS=dict(base_stake=10.0,stake_cap=1000.0,total_cap=2000.0,max_steps=5,
+    stake_fraction=20.0,win_sequence=[1,1],loss_sequence=[1,2],kelly_probability=None,
+    kelly_fraction=25.0,recovery_target=10.0,cancel_list=[1,1],
+    attack_sequence=[1,1.6,2,2.6,3.2,4,5,6],retreat_sequence=[2,3,5,8,13,20,30],
+    layer_sequence=[1,1],custom_win_sequence=[3,1,2,3,2,3,4,1,2],use_count_sequence=False,compound_enabled=True,extra_caps_enabled=False)
+STATE_FIELDS=('plan_state','kelly_probability')
+
+def defaults():return dict(copy.deepcopy(CONFIG_DEFAULTS),plan_state={})
+def is_new(s):return s.get('strategy') in BY_NAME
+
+def init(s):
+    for k,v in CONFIG_DEFAULTS.items():s.setdefault(k,copy.deepcopy(v))
+    s['plan_state']=dict(step=0,mode='trigger',leg=0,recent=[],debt=0.0,exhausted=False,done=False)
+    if BY_NAME.get(s.get('strategy'),{}).get('id') == 'labouchere':
+        s['plan_state']['list']=copy.deepcopy(s['cancel_list'])
+    # Original 1.6.6 guard would change the definition of these strategies.
+    s['guard_enabled']=False
+
+def _p(s):return s.get('plan_state') or dict(step=0,mode='trigger',leg=0,recent=[],debt=0.,exhausted=False,done=False)
+def _seq(s,key):return s[key][:s['max_steps']]
+def attack_branch(s,key):
+    # max_steps includes the separate trigger/test bet. Never synthesize odds.
+    return s[key][:max(0, int(s['max_steps'])-1)]
+def _ceil(x):return math.ceil(x-1e-10)
+
+def evaluate(s):
+    p=_p(s);d=BY_NAME[s['strategy']];sid=d['id'];n=s['number_count'];base=s['base_stake']
+    if p.get('exhausted'):return 0,'本輪關卡已用完；恢復會另開一輪，原損益保留'
+    if p.get('done'):return 0,'清單已完成；恢復會重建原清單，原損益保留'
+    if s.get('wins',0)+s.get('losses',0)>=s.get('round_limit',s.get('planned_rounds',12)):
+        return 0,'已達計畫局數，請結算後重新設定'
+    available=max(0,s['operation_base']+s['pnl']-s['locked_profit'])
+    headroom=max(0,s['loss_limit']+s['pnl'])
+    if headroom<=0:return 0,'已達停損'
+    i=p['step'];per=base
+    if sid=='fraction':per=math.floor(available*s['stake_fraction']/100/n)
+    elif sid=='budget':per=math.floor(min(available,headroom)/s['risk_parts']/n)
+    elif sid in ('winner','custom','attack','twoleg','tianmen'):
+        if sid=='winner':seq=_seq(s,'win_sequence')
+        elif sid=='custom':seq=_seq(s,'loss_sequence')
+        elif sid=='tianmen':seq=[1,3,7,15,31][:s['max_steps']]
+        elif sid=='twoleg':seq=_seq(s,'layer_sequence')
+        else:seq=([2] if p['mode']=='trigger' else attack_branch(s,'attack_sequence') if p['mode']=='attack' else attack_branch(s,'retreat_sequence'))
+        if i>=len(seq):return 0,'關卡超出範圍，請結算'
+        per=base*seq[i]*(2 if sid=='twoleg' and p['leg'] else 1)
+    elif sid=='martingale':per=base*2**i
+    elif sid=='dalembert':per=base*(i+1)
+    elif sid=='fibonacci':
+        a,b=1,1
+        for _ in range(i):a,b=b,a+b
+        per=base*a
+    elif sid=='recovery':
+        net=conservative_rate(s)-n
+        if net<=0:return 0,'賠率不足以產生單局正損益'
+        per=(p['debt']+s['recovery_target'])/net
+    elif sid=='kelly':
+        prob=s.get('kelly_probability')
+        if prob is None:return 0,'請回報本期預估中獎率，例如70%；每期重新填寫'
+        b=conservative_rate(s)/n-1
+        f=(b*prob/100-(1-prob/100))/b if b>0 else 0
+        if f<=0:return 0,'凱利比例≤0，本次不進場'
+        per=math.floor(available*f*s['kelly_fraction']/100/n)
+    elif sid=='labouchere':
+        seq=p.get('list',s['cancel_list']);per=base*(seq[0]+seq[-1] if len(seq)>1 else seq[0])
+    per=_ceil(per)
+    if per<1:return 0,'預算不足1元／碼'
+    total=per*n
+    # Pause rather than silently truncating a progression to an unrelated amount.
+    if per>s['stake_cap'] or total>s['total_cap']:return 0,'下局超過每碼或單局總注上限，請結算或維持暫停'
+    if total>available+1e-8:return 0,'可用操作金不足以完成下局，請結算'
+    if total>headroom+1e-8:return 0,'下局可能超過剩餘停損額，請結算'
+    return total,''
+
+def conservative_rate(s):
+    return 9.54 if s.get('payout_cycle_enabled') and abs(s['payout_multiplier']-9.59)<1e-8 else s['payout_multiplier']
+
+def after_result(s,win,delta):
+    p=copy.deepcopy(_p(s));sid=BY_NAME[s['strategy']]['id'];i=p['step'];maximum=s['max_steps']
+    if sid=='kelly':s['kelly_probability']=None
+    if sid=='winner':p['step']=(i+1)%len(_seq(s,'win_sequence')) if win else 0
+    elif sid in ('custom','martingale','tianmen','dalembert','fibonacci'):
+        if sid=='dalembert':j=max(0,i-1) if win else i+1
+        elif sid=='fibonacci':j=max(0,i-2) if win else i+1
+        else:j=0 if win else i+1
+        limit=len(_seq(s,'loss_sequence')) if sid=='custom' else min(5,maximum) if sid=='tianmen' else maximum
+        p['step']=min(j,limit-1);p['exhausted']=j>=limit
+    elif sid=='attack':
+        mode=p['mode']
+        if mode=='trigger':p.update(mode='attack' if win else 'retreat',step=0,recent=[])
+        elif mode=='attack':
+            if win:
+                j=i+1;p['step']=min(j,len(attack_branch(s,'attack_sequence'))-1);p['exhausted']=j>=len(attack_branch(s,'attack_sequence'))
+            else:p.update(mode='trigger',step=0,recent=[])
+        elif win and i==0:p.update(mode='trigger',step=0,recent=[])
+        else:
+            recent=(p.get('recent',[])+[bool(win)])[-3:]
+            retreat_two=win and ((len(recent)>=2 and all(recent[-2:])) or (len(recent)==3 and sum(recent)>=2))
+            j=max(0,i-(2 if retreat_two else 1)) if win else i+1
+            p.update(step=min(j,len(attack_branch(s,'retreat_sequence'))-1),recent=[] if retreat_two else recent,exhausted=j>=len(attack_branch(s,'retreat_sequence')))
+    elif sid=='twoleg':
+        if win and p['leg']==0:p['leg']=1
+        elif win:p.update(step=0,leg=0)
+        else:
+            j=i+1;p.update(step=min(j,len(_seq(s,'layer_sequence'))-1),leg=0,exhausted=j>=len(_seq(s,'layer_sequence')))
+    elif sid=='recovery':
+        p['debt']=round(max(0,p['debt']-delta),2)
+        p['step']=0 if win else i+1
+        p['exhausted']=p['step']>=maximum
+    elif sid=='labouchere':
+        seq=p.get('list',copy.deepcopy(s['cancel_list']))
+        if win:seq=seq[1:-1] if len(seq)>1 else []
+        else:seq=seq+[seq[0]+seq[-1] if len(seq)>1 else seq[0]]
+        p['list']=seq;p['done']=not seq;p['exhausted']=not win and i+1>=maximum;p['step']=0 if win else i+1
+    s['plan_state']=p
+
+def resume(s):
+    p=_p(s)
+    if p.get('exhausted') or p.get('done'):
+        debt=p.get('debt',0.0)
+        init(s)
+        if BY_NAME[s['strategy']]['id']=='recovery':s['plan_state']['debt']=debt
+        return True
+    return False
+
+def position(s):
+    p=_p(s);sid=BY_NAME[s['strategy']]['id']
+    if sid=='attack':return {'trigger':'測試','attack':'攻擊','retreat':'退守'}[p['mode']]+f" {p['step']+1}關"
+    if sid=='twoleg':return f"第{p['step']+1}層／第{p['leg']+1}關"
+    if sid=='recovery':return f"待回補 {p['debt']:g}"
+    if sid=='labouchere':return '清單 '+ '/'.join(f'{x:g}' for x in p.get('list',s['cancel_list']))[:65]
+    if sid=='equal_reset':return f'第{p["step"]+1}關／共{s["risk_parts"]}關'
+    return f"第{p['step']+1}關" if sid in ('custom','winner','martingale','tianmen','dalembert','fibonacci') else ''
+
+def settings_text(s):
+    d=BY_NAME[s['strategy']]
+    return f"分類：{d['kind']}\n基本注每碼{s['base_stake']:g}；每碼上限{s['stake_cap']:g}；總注上限{s['total_cap']:g}；關卡上限{s['max_steps']}（關卡策略適用）。"
+
+
+def is_kelly(s):return s.get('strategy')=='凱利公式'
+
+# V1.8.0 preserves legacy transition rules where no replacement was specified.
+legacy_after_result=after_result
+_custom_win=dict(CATALOG[4],id='custom_win',name='自訂關卡配注法（勝近）',kind='勝近',principle='中進下一階、掛回第一階；有效序列走完進下一輪。')
+CATALOG.append(_custom_win)
+BY_NAME={x['name']:x for x in CATALOG}
+def settings_text(s):
+    import sizing_v180
+    import stage_limits
+    first=(sizing_v180.sizing_text(s) if s.get('sizing_version')==180 else
+           '基額依策略自動計算；配注階段上限 '+str(s.get('max_steps',5))+'。')
+    note=stage_limits.details(s)['line']
+    return first + ('\n'+note if note else '')
+
+</script>
+<script type="text/plain" id="py-src-sizing_v180.py">
+"""V1.8.0 manual-result simulation. No network, placement or hidden stake caps.
+All calculations preserve precision until the specified per-code rounding step.
+Round bookkeeping is advanced exclusively by accepted results or explicit choices.
+"""
+import copy
+import math
+import statistics
+from decimal import Decimal, ROUND_FLOOR, ROUND_CEILING
+import progression
+import strategy26
+
+VERSION = '1.8.6-stability'
+THRESHOLDS = {2:1,3:1,4:2,5:3,6:5,7:7,8:9}
+CONFIG_KEYS = ('operation_base','risk_parts','number_count','strategy','market','payout_multiplier',
+ 'payout_cycle_enabled','stop_profit_mode','stop_profit_value','stop_loss_mode','stop_loss_value',
+ 'planned_rounds','use_count_sequence','compound_enabled') + tuple(progression.CONFIG_DEFAULTS)
+FIELDS = ('sizing_version','portion_base','original_portion','round_base','round_id','round_start_pnl',
+ 'round_start_count','allocation_mark','round_offer','offer_return_status','open_quote','zero_wait',
+ 'zero_observed','pending_config','sizing_note','round_notice','last_base','last_multiplier',
+ 'round_complete_count','config_revision','auto_lock_round','round_offer_advanced','dynamic_anchor_unit','dynamic_anchor_pnl','session_operation_origin','round_win_streak','protected_unallocated','active_operation_budget','auto_roll_pending','round_base_precise') + strategy26.STATE_FIELDS
+COUNT_SEQUENCES = {
+ 2:[1,1,1,1,2,2,3,3,4,5,7,8,11,14,17,22,28,35,46,59,75,95,121,152,193],
+ 3:[1,1,2,3,4,6,9,14,20,30,45,65,95,140,205],4:[1,2,3,4,7,13,22,40,70],
+ 5:[1,2,4,8,16,32,64],6:[1,2,6,18,36,108],7:[1,3,11,40],8:[1,6,20,100]}
+
+def dec(x): return Decimal(str(x))
+def floor(x): return int(dec(x).to_integral_value(rounding=ROUND_FLOOR))
+def cents(x): return float(dec(x).quantize(Decimal('.01')))
+def sid(s): return progression.BY_NAME.get(s['strategy'],{}).get('id','')
+def available(s):
+    # Wallet balance and stake-allocation budget are intentionally separate.
+    return max(0,cents(dec(s.get('session_operation_origin',s['operation_base']))+dec(s['pnl'])-dec(s['locked_profit'])))
+
+def operation_budget(s):
+    # A running 1.8.3 session has no allocation-budget field. Preserve its
+    # existing stake until its first explicit allocation action, rather than
+    # silently reinterpreting historic roll/lock operations on import.
+    if 'active_operation_budget' in s:
+        return max(0,cents(s['active_operation_budget']))
+    return max(0,cents(dec(s.get('portion_base',dec(s['operation_base'])/dec(s['risk_parts'])))*dec(s['risk_parts'])))
+
+def set_operation_budget(s, amount):
+    amount=max(0,cents(amount))
+    s['active_operation_budget']=amount
+    s['portion_base']=float(dec(amount)/dec(s['risk_parts']))
+
+def sequence(s,key):
+    vals=COUNT_SEQUENCES[s['number_count']] if key=='loss_sequence' and s.get('use_count_sequence') else s[key]
+    return vals[:int(s['max_steps'])]
+def fibs(m):
+    out=[];a,b=1,1
+    for _ in range(m):out.append(a);a,b=b,a+b
+    return out
+
+def initialize(s):
+    s.update(sizing_version=180,active_operation_budget=cents(s['operation_base']),auto_roll_pending=0.,session_operation_origin=s['operation_base'],portion_base=float(dec(s['operation_base'])/dec(s['risk_parts'])),
+      original_portion=float(dec(s['operation_base'])/dec(s['risk_parts'])),round_id=1,
+      round_start_pnl=s['pnl'],round_start_count=s['wins']+s['losses'],allocation_mark=s['pnl'],
+      round_offer=False,open_quote=None,zero_wait=False,zero_observed=0,pending_config=None,
+      round_notice='',round_complete_count=0,config_revision=0,auto_lock_round=0,round_offer_advanced=False,
+      dynamic_anchor_unit=None,dynamic_anchor_pnl=0.,round_win_streak=0,protected_unallocated=0.)
+    if progression.is_new(s):progression.init(s)
+    if strategy26.active(s):strategy26.initialize(s)
+    refresh_base(s)
+
+def base_raw(s):
+    # Derive portions from the exact cent-denominated operation budget rather
+    # than a previously converted repeating float (e.g. 1000/6).
+    u=(dec(operation_budget(s))/dec(s['risk_parts']) if 'active_operation_budget' in s
+       else dec(s['portion_base']))
+    n=dec(s['number_count']);f=dec(s['risk_parts']);k=sid(s)
+    if k=='equal_reset':
+        return dec(strategy26.per_code_base(s,available(s),operation_budget(s)))
+    if k in ('custom','custom_win','winner'):
+        return u/n/sum(map(dec,sequence(s,{'custom':'loss_sequence','custom_win':'custom_win_sequence','winner':'win_sequence'}[k])))
+    if k=='martingale':return u/n/(2**int(s['max_steps'])-1)
+    if k=='tianmen':return u/n/sum([1,3,7,15,31][:s['max_steps']])
+    if k=='dalembert':return u/n/sum(range(1,s['max_steps']+1))
+    if k=='fibonacci':return u/n/sum(fibs(s['max_steps']))
+    if k=='twoleg':return u/n/(3*sum(map(dec,sequence(s,'layer_sequence'))))
+    if k=='attack':return u/(sum(map(dec,sequence(s,'attack_sequence')))+sum(map(dec,sequence(s,'retreat_sequence'))))*(n/f)
+    if k=='labouchere':return u/sum(map(dec,s['cancel_list']))/n
+    if k=='fixed':
+        amount=((dec(operation_budget(s))+dec(s['pnl'])-dec(s.get('allocation_mark',0)))/f if 'active_operation_budget' in s else ((dec(s['operation_base'])+dec(s['pnl']))/f if s.get('dynamic_anchor_unit') is None else dec(s['dynamic_anchor_unit'])+dec(s['pnl'])-dec(s['dynamic_anchor_pnl'])))
+        return max(dec(0),amount)/n/5
+    if k=='fraction':return u/n*dec(s['stake_fraction'])/100
+    if k=='budget':return u/n/f
+    if k=='recovery':
+        net=dec(progression.conservative_rate(s))-n
+        return None if net<=0 else (dec(progression._p(s)['debt'])+dec(s['recovery_target']))/net
+    if k=='kelly':
+        p=s.get('kelly_probability')
+        if p is None:return None
+        b=dec(progression.conservative_rate(s))/n-1
+        if b<=0:return dec(0)
+        q=dec(p)/100;frac=(b*q-(1-q))/b
+        return max(dec(0),u*frac*dec(s['kelly_fraction'])/100/n)
+    code=s.get('_code')
+    if s['strategy']=='本金獲利雙池法':return u/(2*f)/n
+    if s['strategy']=='剩餘局數預算法':
+        remain=s['planned_rounds']-(s['wins']+s['losses'])
+        return dec(0) if remain<=0 else max(dec(0),u+dec(s['pnl'])-dec(s['round_start_pnl']))/n/remain
+    return u/n/10
+
+def refresh_base(s):
+    raw=base_raw(s)
+    # Preserve the unrounded *per-code* base for stage-by-stage integer sizing.
+    # A sequence's stake is floor(exact_base * stage_multiplier), not
+    # floor(exact_base) * stage_multiplier. This avoids compounding early truncation.
+    # Historical sessions without round_base_precise keep their old committed base
+    # until an explicit next-round recalculation.
+    s['round_base_precise']=None if raw is None else str(raw)
+    s['round_base']=None if raw is None else int(raw.to_integral_value(rounding=ROUND_CEILING if sid(s)=='recovery' else ROUND_FLOOR))
+    s['base_stake']=s['round_base'] or 0
+
+def adjustment(s):
+    """Normalize old budgets against their initial, uncapped budget.
+    Explicit mapping, NOT a multiplier extracted from a silently capped stake.
+    """
+    f=s['risk_parts'];L=s['loss_limit'];P=s['pnl'];name=s['strategy']
+    h=max(0,L+P);a=available(s);d=max(0,s.get('peak_pnl',0)-P)
+    prog=min(1,max(0,P)/s['profit_target']);steps=floor(d/max(.01,s['operation_base']*.05))
+    recent=[r['delta'] for r in s.get('ledger',[])[-10:]]
+    sigma=statistics.pstdev(recent) if len(recent)>=3 else 0
+    unit=max(.01,L/f)
+    factors=[h/L*f/(f+floor(prog*12)),h/L*f/(f+4*steps),h/L*f/(f+min(24,math.ceil(sigma/unit)))]
+    names=['停利進度收斂法','高點回撤階梯法','損益波動調節法']
+    if name in names:return factors[names.index(name)],''
+    if name=='高點獲利鎖定法':return min(a,h)/max(.01,min(s['operation_base'],L)),''
+    if name=='最大虧損壓力法':
+        worst=max([max(0,-r['delta']) for r in s.get('ledger',[])[-20:]]+[unit])
+        return h/L*unit/worst,''
+    if name=='本金獲利雙池法':
+        principal=max(0,L+min(P,0));profit=max(0,P-s.get('peak_pnl',0)*.7)
+        return (principal+2*profit)/L,''
+    if name=='連掛冷卻檢核法':return h/L*f/(f+sum(r['delta']<0 for r in s.get('ledger',[])[-10:])) ,''
+    if name=='獲利回吐底線法':
+        return min(h,max(0,P-s['locked_profit']))/L if s.get('giveback_active') else h/L,''
+    if name=='多因子防守共識法':return min(factors),''
+    return 1,''
+
+def plan_round_cap(s):
+    """Configured number of accepted win/loss results in the current session.
+
+    Never use progression step, roll/lock cycle or historic tie records as a
+    substitute for the settled result count. planned_rounds is the canonical
+    user-configured ceiling; round_limit is a legacy mirror only.
+    """
+    return max(1, int(s.get('planned_rounds') or s.get('round_limit') or 12))
+
+
+def plan_completed(s):
+    return int(s.get('wins',0)) + int(s.get('losses',0))
+
+
+def plan_limit_reached(s):
+    return plan_completed(s) >= plan_round_cap(s)
+
+
+def plan_limit_message(s):
+    n=plan_round_cap(s)
+    return f'已達計畫局數（{plan_completed(s)}/{n}），本次已暫停；請結算後重新設定'
+
+
+def quote(s):
+    # Check before reusing an open_quote. An old progress card or a recovered
+    # state must never offer the (N+1)th wager after N accepted results.
+    if plan_limit_reached(s):
+        return None,plan_limit_message(s)
+    if s.get('open_quote'):
+        existing=s['open_quote']
+        if dec(existing['total']) > max(dec(0),dec(s['loss_limit'])+dec(s['pnl'])):
+            return None,'下局總注超過剩餘停損額度，不得執行'
+        if dec(existing['total']) > dec(available(s)):
+            return None,'本局總投入超過可用資金，不得執行'
+        if 'active_operation_budget' in s and dec(existing['total']) > dec(operation_budget(s)):
+            return None,'本局總投入超過當前操作預算，不得執行'
+        return copy.deepcopy(existing),''
+    a=available(s);n=s['number_count'];k=sid(s);p=progression._p(s)
+    # Do NOT demand a whole original portion in the wallet. The only valid
+    # affordability test is the actual whole-number stake below.
+    if s['pnl']<=-s['loss_limit']:return None,'已達停損'
+    if s.get('zero_wait'):return None,'基額為0，請使用獨立觀察中／掛回報'
+    if p.get('exhausted'):
+        return None,('全部等分關卡已掛完，計畫暫停；請結算或重新開始' if k=='equal_reset' else '本輪末階已用完；保留原版末階暫停，請恢復或結束')
+    d=max(0,s.get('peak_pnl',0)-s['pnl'])
+    if s['strategy'] in ('高點回撤階梯法','多因子防守共識法') and d+1e-8>=s['operation_base']*.2:return None,'回撤已達操作金20%'
+    if s['strategy']=='連掛冷卻檢核法' and s.get('cooldown_losses',0)>=3:return None,'連掛3局冷卻'
+    completed=s['wins']+s['losses']
+    raw=base_raw(s) if k in ('fixed','kelly','recovery') or s['strategy']=='剩餘局數預算法' else None
+    b=(int(raw.to_integral_value(rounding=ROUND_CEILING if k=='recovery' else ROUND_FLOOR)) if raw is not None else s.get('round_base'))
+    if k=='recovery' and dec(progression.conservative_rate(s))<=dec(n):return None,'賠率減碼數小於或等於0，禁止計算下注額'
+    if k=='kelly':
+        if s.get('kelly_probability') is None:return None,'請回報本期預估中獎率；每期重新填寫'
+        if raw<=0:return None,'凱利比例≤0，本次不進場'
+    if b is None:return None,'基額無法計算，請重新設定參數或變更策略'
+    i=p['step'];mult=1
+    keys={'custom':'loss_sequence','custom_win':'custom_win_sequence','winner':'win_sequence','tianmen':None,'twoleg':'layer_sequence'}
+    if k in keys:
+        seq=[1,3,7,15,31][:s['max_steps']] if k=='tianmen' else sequence(s,keys[k])
+        if i>=len(seq):return None,'關卡超出有效序列'
+        mult=seq[i]*(2 if k=='twoleg' and p['leg'] else 1)
+    elif k=='martingale':mult=2**i
+    elif k=='dalembert':mult=i+1
+    elif k=='fibonacci':mult=fibs(s['max_steps'])[i]
+    elif k=='attack':
+        branch=progression.attack_branch(s,'attack_sequence' if p['mode']=='attack' else 'retreat_sequence') if p['mode']!='trigger' else [2]
+        if i>=len(branch):return None,'已達最大關卡或有效序列末階，請結算或重新設定'
+        mult=branch[i]
+    elif k=='labouchere':
+        seq=p.get('list',s['cancel_list']);mult=seq[0]+seq[-1] if len(seq)>1 else seq[0]
+    elif not k:mult=adjustment(s)[0]
+    # Keep per-stage precision and truncate only the *final per-code stake*.
+    # Recovery intentionally retains its original ceil formula to target a
+    # chosen recovery amount; it still outputs an integer stake.
+    if k in ('fixed','kelly') or s['strategy']=='剩餘局數預算法':
+        precise=raw
+    else:
+        stored=s.get('round_base_precise')
+        precise=dec(stored) if stored is not None else dec(b)
+    if k=='recovery':
+        per=int(precise.to_integral_value(rounding=ROUND_CEILING))
+    else:
+        per=floor(precise*dec(mult))
+    total=per*n
+    if per<1:return None,'調節後不足1元／碼，進入基額0觀察流程'
+    if total > max(dec(0), dec(s['loss_limit']) + dec(s['pnl'])):
+        return None,'下局總注超過剩餘停損額度，不得執行'
+    if total>a+1e-8:return None,'本局總投入超過可用資金，不得執行'
+    if 'active_operation_budget' in s and total>operation_budget(s)+1e-8:
+        return None,'本局總投入超過當前操作預算，不得執行'
+    # Legacy fixed caps are explicit opt-in, never determine the base of 20/24.
+    if s.get('extra_caps_enabled') and k not in ('attack','labouchere') and (per>s['stake_cap'] or total>s['total_cap']):
+        return None,'使用者額外注額上限暫停（基額公式未改）'
+    rate=progression.conservative_rate(s)
+    if s.get('payout_cycle_enabled') and abs(s['payout_multiplier']-9.59)<1e-8:
+        rate=(9.54,9.54,9.59,9.54,9.54,9.59,9.54,9.54,9.59,9.54)[s.get('payout_cycle_wins',0)%10]
+    return dict(per=per,count=n,total=total,rate=rate,base=b,multiplier=mult,
+                round_id=s['round_id'],config_revision=s.get('config_revision',0)),''
+
+def evaluate(s):
+    if s.get('sizing_version')!=180:return 0,'舊版帳目待結算；請開始新版計畫'
+    q,reason=quote(s)
+    return (q['total'],'') if q else (0,reason)
+
+def after_result(s,win,delta):
+    p=copy.deepcopy(progression._p(s));before=copy.deepcopy(p);k=sid(s);i=p['step'];boundary=False
+    s['round_win_streak']=s.get('round_win_streak',0)+1 if win else 0
+    if k=='equal_reset':
+        s['cycle_notice']=''  # A completed cycle notice is shown for one result only.
+        p['step']=0 if win else i+1
+        if not win and p['step']>=int(s['risk_parts']):
+            p['step']=int(s['risk_parts'])-1
+            p['exhausted']=True
+            s['session_status']='paused_strategy'
+            s['strategy_pause_reason']='全部等分關卡已掛完；自動暫停'
+        s['plan_state']=p
+        if strategy26.reached_goal(s):
+            result=strategy26.close_cycle(s,get_wallet=available,set_budget=set_operation_budget)
+            if result is not None:
+                next_round(s)
+                s['round_notice']=s['cycle_notice']
+        elif win:
+            next_round(s)
+        return
+    if k in ('custom','custom_win','winner'):
+        key={'custom':'loss_sequence','custom_win':'custom_win_sequence','winner':'win_sequence'}[k]
+        move=not win if k=='custom' else win
+        j=i+1 if move else 0
+        p['step']=j%len(sequence(s,key));boundary=p['step']==0
+    elif k=='labouchere':
+        seq=p.get('list',copy.deepcopy(s['cancel_list']))
+        if win:seq=seq[1:-1] if len(seq)>1 else []
+        else:seq=seq+[seq[0]+seq[-1] if len(seq)>1 else seq[0]]
+        p.update(list=seq,step=0,done=False,exhausted=False);boundary=not seq
+    elif k:
+        progression.legacy_after_result(s,win,delta);p=copy.deepcopy(progression._p(s))
+        if k=='attack':boundary=before['mode']!='trigger' and p['mode']=='trigger'
+        elif k=='twoleg':boundary=win and before['leg']==1
+        elif k in ('martingale','tianmen','dalembert','fibonacci'):boundary=p['step']==0 and not p['exhausted']
+        else:boundary=win and s['round_win_streak']>=THRESHOLDS.get(s['number_count'],1)
+    else:boundary=win and s['round_win_streak']>=THRESHOLDS.get(s['number_count'],1)
+    if k=='kelly':s['kelly_probability']=None
+    s['plan_state']=p
+    s['peak_pnl']=max(s.get('peak_pnl',0),s['pnl'],0)
+    old_protection=s['locked_profit']
+    # Retain original 06/08/10 protections. 01 now locks only on round completion.
+    if s['strategy']=='本金獲利雙池法':s['locked_profit']=max(s['locked_profit'],max(0,s['pnl'])*.7)
+    if s['strategy']=='多因子防守共識法':s['locked_profit']=max(s['locked_profit'],max(0,s['pnl'])*.5)
+    if s['strategy']=='獲利回吐底線法' and s['peak_pnl']>=s['loss_limit']*.2:
+        s['giveback_active']=True
+        s['locked_profit']=max(s['locked_profit'],s['peak_pnl']-max(s['loss_limit']*.2,s['peak_pnl']*.25))
+    if s['strategy'] in ('本金獲利雙池法','多因子防守共識法','獲利回吐底線法'):
+        protection_added=max(0,cents(s['locked_profit']-old_protection))
+        s['protected_unallocated']=cents(s.get('protected_unallocated',0)+protection_added)
+        if protection_added:
+            set_operation_budget(s,dec(operation_budget(s))-dec(protection_added))
+            refresh_base(s)
+
+    if not boundary:return
+    s['round_complete_count']+=1
+    profit=cents(s['pnl']-s['round_start_pnl'])
+    if k=='attack' and profit<0:
+        # A losing round is not a stop-loss event. Keep the cumulative ledger
+        # and start another round unless the overall loss limit was reached.
+        if s['pnl']<=-s['loss_limit']:
+            s['round_notice']='本輪虧損，累計已達停損，停止本次計畫'
+            return
+        next_round(s)
+        s['round_notice']=f'本輪虧損，已自動進入第{s["round_id"]}輪'
+        return
+    if k=='attack' and profit<=0:
+        next_round(s);s['round_notice']='本輪已結束，已進下一輪';return
+    if s['pnl']>0 and unallocated(s)>0:
+        if s['strategy']=='高點獲利鎖定法':
+            gain=unallocated(s);kept=cents(gain*.5)
+            s['locked_profit']=cents(s['locked_profit']+kept)
+            set_operation_budget(s,dec(operation_budget(s))-dec(kept))
+            s['auto_roll_pending']=max(0,cents(dec(gain)-dec(kept)))
+            s['allocation_mark']=s['pnl'];s['auto_lock_round']=s['round_id']
+            next_round(s)
+            can_roll=s.get('compound_enabled',True) and s['auto_roll_pending']>0
+            s.update(round_offer=bool(can_roll),round_offer_advanced=bool(can_roll),
+                     session_status='active',round_notice=f'本輪完成，已自動鎖利 {kept:g}；可選滾利' if can_roll else f'本輪完成，已自動鎖利 {kept:g}')
+        else:
+            s.update(round_offer=True,round_notice='本輪完成且有獲利，可選鎖利／滾利；未選擇不重算基額')
+            if k=='attack':s['session_status']='paused_round'
+    elif k=='attack':
+        # The round finished, but overall PnL may still be negative even when
+        # this specific round recovered. It must still advance exactly once.
+        next_round(s)
+        s['round_notice']=f'本輪完成，已進第{s["round_id"]}輪'
+    elif k=='labouchere':next_round(s)
+    elif k in ('custom','custom_win','winner'):
+        next_round(s,refresh=True)
+    elif s.get('pending_config') and not s.get('round_offer'):next_round(s)
+    if s.get('round_offer') and s['strategy']!='高點獲利鎖定法':
+        notice=s['round_notice'];status=s['session_status']
+        next_round(s,refresh=k=='labouchere' or bool(s.get('pending_config')))
+        s.update(round_offer=True,round_offer_advanced=True,round_notice=notice,session_status=status)
+    # A list must never remain empty while waiting for an optional choice.
+    if k=='labouchere' and s.get('round_offer'):s['plan_state']['list']=copy.deepcopy(s['cancel_list'])
+
+def unallocated(s):return max(0,cents(s['pnl']-s.get('allocation_mark',0)-s.get('protected_unallocated',0)))
+
+def apply_pending(s):
+    pending=s.get('pending_config')
+    if not pending:return
+    old_operation=s['operation_base']
+    old_budget=operation_budget(s)
+    for key in CONFIG_KEYS:
+        if key in pending:s[key]=copy.deepcopy(pending[key])
+    s['round_limit']=plan_round_cap(s)  # Keep the legacy field consistent with the edited plan.
+    s['pending_config']=None;s['config_revision']=s.get('config_revision',0)+1
+    if pending.get('_funding_changed'):
+        # A changed part-count redistributes the SAME current budget.
+        set_operation_budget(s,old_budget if s['operation_base'] == old_operation else s['operation_base'])
+    s['profit_target']=(cents(s.get('cycle_origin',s['operation_base'])) if strategy26.active(s) else cents(s['operation_base']*s['stop_profit_value']/100 if s['stop_profit_mode']=='percent' else s['stop_profit_value']))
+    s['loss_limit']=cents(s['operation_base']*s['stop_loss_value']/100 if s['stop_loss_mode']=='percent' else s['stop_loss_value'])
+
+def next_round(s,refresh=True):
+    apply_pending(s)
+    s.update(round_win_streak=0,round_id=s['round_id']+1,round_start_pnl=s['pnl'],round_start_count=s['wins']+s['losses'],round_offer=False,round_offer_advanced=False,open_quote=None,round_notice='')
+    if progression.is_new(s):progression.init(s)
+    if refresh:refresh_base(s)
+
+def choose(s,action):
+    if not s.get('round_offer'):return False,'目前沒有可處理的完成輪次'
+    if action=='roll' and not s.get('compound_enabled',True):return False,'滾利選項已關閉，請先於下一輪設定啟用'
+    is_peak=s['strategy']=='高點獲利鎖定法'
+    if is_peak and action=='lock':return False,'01已自動鎖利，只提供滾利'
+    if action not in ('lock','roll','continue'):
+        return False,'無效選項'
+    gain=unallocated(s)
+    budget=operation_budget(s)
+    if action=='lock':
+        kept=cents(dec(gain)*dec('.5'))
+        s['locked_profit']=cents(dec(s['locked_profit'])+dec(kept))
+        set_operation_budget(s,dec(budget)-dec(kept))
+    elif action=='roll':
+        # #01 already locked half automatically. Only its OTHER half can roll;
+        # never release protected/previously locked money automatically.
+        rolling=cents(s.get('auto_roll_pending',0)) if is_peak else gain
+        set_operation_budget(s,dec(budget)+dec(rolling))
+    # Even a skipped choice closes this one-time round offer. Never allocate the
+    # same profit again after a later round, crash or message replay.
+    s['allocation_mark']=s['pnl']
+    s['protected_unallocated']=0.
+    s['auto_roll_pending']=0.
+    if sid(s)=='fixed':
+        s.update(dynamic_anchor_unit=s['portion_base'],dynamic_anchor_pnl=s['pnl'])
+    revision_before=s.get('config_revision',0)
+    already_advanced=(s.get('round_offer_advanced') or (
+        s.get('round_id',1)>1 and
+        s.get('round_start_count')==s.get('wins',0)+s.get('losses',0) and
+        s.get('round_offer')))
+    if already_advanced:
+        # Completion already opened the next round; choosing lock/roll only
+        # changes allocation, not the round number or its starting PnL.
+        apply_pending(s)
+        s.update(round_offer=False,round_offer_advanced=False,open_quote=None,round_notice='')
+        if action!='continue' or s.get('config_revision',0) != revision_before:refresh_base(s)
+    else:
+        next_round(s,refresh=action!='continue' or bool(s.get('pending_config')))
+    s['session_status']='active'
+    return True,'已依選擇開始新一輪，累計試算損益保留'
+
+def observe(s,win):
+    if not s.get('zero_wait'):return False,'目前不在基額0觀察流程'
+    if available(s)<s['number_count'] or operation_budget(s)<s['number_count']:
+        s.update(zero_wait=False,session_status='paused_funds');return False,'操作金不足1元／碼，請修改設定'
+    s['zero_observed']+=1
+    if s['zero_observed']>=5 and win:
+        refresh_base(s);s['zero_wait']=False;s['open_quote']=None
+        q,reason=quote(s)
+        if q:
+            s.update(session_status='active',strategy_pause_reason='')
+            return True,'觀察條件達成，下一期恢復試算；觀察結果未計投注或盈虧'
+        s['zero_wait']=True
+        return False,'重算仍無法執行：'+reason
+    return False,f'觀察第{s["zero_observed"]}期；至少5期後等待觀察中，未計投注或盈虧'
+
+def sizing_text(s):
+    q,_=quote(s) if s.get('sizing_version')==180 else (None,'')
+    b=q['base'] if q else s.get('round_base')
+    mult=q['multiplier'] if q else '—'
+    return f'當前操作金 {operation_budget(s):g}｜分{s["risk_parts"]}份\n一份操作金 {s.get("portion_base",s["operation_base"]/s["risk_parts"]):g}｜每碼基額 {b if b is not None else "待提供參數"}\n當局倍數 {mult}｜第{s.get("round_id",1)}輪'
+
+
+def resume_exhausted(s):
+    """Start one new round for an exhausted finite strategy; never reset ledger.
+
+    Only call after higher-level stop-loss / funds checks. Preserve special
+    recovery debt rather than silently clearing obligations on resume.
+    """
+    p=progression._p(s)
+    if not (p.get('exhausted') or p.get('done')):
+        return False
+    old_strategy=s['strategy']
+    debt=p.get('debt',0.)
+    next_round(s)
+    if sid(s)=='recovery' and s['strategy']==old_strategy:
+        s['plan_state']['debt']=debt
+        refresh_base(s)
+    s['round_notice']=f'已進第{s["round_id"]}輪；原帳目保留'
+    return True
+
+</script>
+<script type="text/plain" id="py-src-strategy26.py">
+"""#26 equal-split, fixed-base 100% profit-cycle reset; simulation only.
+
+Capital is virtual, allocated only once. This module is deliberately isolated
+from all pre-existing staking strategies and does not contact Telegram.
+"""
+from decimal import Decimal, ROUND_FLOOR, ROUND_HALF_UP
+from datetime import datetime, timezone
+
+NAME = '等分倍盈歸本法'
+STATE_FIELDS = ('cycle_number','cycle_origin','cycle_start_pnl','cycle_goal',
+                'cycle_history','cycle_last_lock','cycle_notice')
+
+
+def D(value):
+    return Decimal(str(value))
+
+
+def money(value):
+    return float(D(value).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP))
+
+
+def active(state):
+    return state.get('strategy') == NAME
+
+
+def initialize(state):
+    if not active(state):
+        return
+    origin = money(state['operation_base'])
+    state.update(cycle_number=1, cycle_origin=origin,
+                 cycle_start_pnl=money(state.get('pnl', 0)), cycle_goal=origin,
+                 cycle_history=[], cycle_last_lock=0., cycle_notice='')
+
+
+def cycle_profit(state):
+    return money(D(state['pnl']) - D(state.get('cycle_start_pnl', 0)))
+
+
+def cycle_progress(state):
+    target = D(state.get('cycle_goal') or state['operation_base'])
+    return 0. if target <= 0 else float(min(D(100),max(D(0),D(cycle_profit(state))*100/target)))
+
+
+def per_code_base(state, wallet, budget):
+    parts = int(state['risk_parts'])
+    count = int(state['number_count'])
+    if count <= 0 or parts < 2:
+        return 0
+    funds = min(max(D(0),D(wallet)), max(D(0),D(budget)))
+    return int((funds / D(parts) / D(count)).to_integral_value(rounding=ROUND_FLOOR))
+
+
+def reached_goal(state):
+    return active(state) and D(cycle_profit(state)) >= D(state['cycle_goal'])
+
+
+def close_cycle(state, *, get_wallet, set_budget):
+    """Finish exactly one cycle and segregate unallocated cash.
+
+    PnL is unchanged; old locks are never counted twice. Call only after an
+    accepted result. The caller must start the next equal-stake round itself.
+    """
+    if not reached_goal(state):
+        return 0.
+    orig = D(state['cycle_origin'])
+    wallet = D(get_wallet(state))
+    if wallet < orig:
+        state['cycle_notice'] = '獲利已達標，但可用操作金不足原始金額；暫停，不動用已鎖資金'
+        state['session_status'] = 'paused_funds'
+        return None
+    added = money(max(D(0),wallet-orig))
+    completed = int(state.get('cycle_number',1))
+    realized = cycle_profit(state)
+    state['locked_profit'] = money(D(state['locked_profit']) + D(added))
+    set_budget(state, float(orig))
+    # Existing allocation choices are snapshots of real gains, not extra PnL.
+    state['allocation_mark'] = money(state['pnl'])
+    state['protected_unallocated'] = 0.
+    state['auto_roll_pending'] = 0.
+    state['round_offer'] = False
+    state['round_offer_advanced'] = False
+    state['profit_choice'] = None
+    state['cycle_history'] = (state.get('cycle_history',[]) + [{
+        'number':completed,'realized_pnl':realized,'goal':money(state['cycle_goal']),
+        'new_lock':added,'locked_total':money(state['locked_profit']),
+        'completed_at':datetime.now(timezone.utc).isoformat(),
+    }])[-100:]
+    state['cycle_number'] = completed + 1
+    state['cycle_start_pnl'] = money(state['pnl'])
+    state['cycle_last_lock'] = added
+    state['cycle_notice'] = f'第{completed}週期達成100%：新增鎖利 {added:g}，下週期操作金恢復 {float(orig):g}'
+    return added
+
+</script>
+<script type="text/plain" id="py-src-stake_guard.py">
+"""Sizing caps applied after each strategy, before integer unit rounding.
+Counters change only on accepted results; evaluating or viewing is read-only.
+"""
+from decimal import Decimal
+
+VERSION = 166
+WIN_LIMITS = {3:1, 4:2, 5:4, 6:5, 7:7, 8:9, 9:13}
+STATE_FIELDS = ('guard_version','guard_enabled','guard_baseline_total',
+                'guard_cycle_wins','guard_reset_pending','guard_hold_recovery')
+
+def defaults():
+    return dict(guard_version=VERSION,guard_enabled=True,guard_baseline_total=None,
+                guard_cycle_wins=0,guard_reset_pending=False,guard_hold_recovery=False)
+
+def limit(state):
+    return 2 if state.get('market')=='兩面盤' else WIN_LIMITS[state['number_count']]
+
+def after_result(state, win):
+    if not state.get('guard_enabled'):return
+    previous=state.get('last_result')
+    state['guard_hold_recovery']=bool(win and previous=='loss')
+    state['guard_reset_pending']=False
+    if not win:
+        state['guard_cycle_wins']=0
+        return
+    count=state.get('guard_cycle_wins',0)+1
+    if count>=limit(state):
+        state['guard_cycle_wins']=0
+        state['guard_reset_pending']=True
+    else:state['guard_cycle_wins']=count
+
+def cap(raw_budget, state):
+    if not state.get('guard_enabled') or state.get('guard_baseline_total') is None:
+        return raw_budget
+    raw=Decimal(str(raw_budget));base=Decimal(str(state['guard_baseline_total']))
+    caps=[raw,base*Decimal('1.5')]
+    last=state.get('last_total_bet')
+    if last is not None:
+        last=Decimal(str(last))
+        if state.get('last_result')=='loss' or state.get('guard_hold_recovery'):
+            caps.append(last)
+        elif state.get('last_result')=='win':
+            caps.append(last*Decimal('1.10'))
+        if state.get('guard_reset_pending'):
+            caps.extend([base,raw*Decimal('.70'),last*Decimal('.70')])
+    return float(max(Decimal('0'),min(caps)))
+
+def notice(state):
+    if not state.get('guard_enabled'):
+        return '舊場次：結算後新計畫套用連中降注'
+    if state.get('guard_reset_pending'):
+        return f'🛡 連中{limit(state)}次，下一局降注'
+    if state.get('guard_hold_recovery'):
+        return '🛡 掛後首中，下一局不加碼'
+    return ''
+
+def rules_text(state):
+    if not state.get('guard_enabled',True):return '舊場次保持原算法；結算後開新計畫套用降注。'
+    return (f'V1.6.6 降注規則優先：每段連中{limit(state)}次，下一局不高於首局投入、原策略預算70%及上一局投入70%，取最小。'
+        '掛後第一次中不加碼；其他連中每局增加上限10%，且全場不超過首局1.5倍。'
+        '每碼／每注向下取整，不足1元暫停，不強制補到1元。降注後仍受上述上限限制，不直接跳回原策略高額。'
+        '降注週期與實際連中紀錄分開，狀態查詢、繼續、恢復及手動鎖利不重設週期。'
+        '這些門檻為投入控制設定，不是下一局轉掛機率，也不保證降低總虧損。')
+
+</script>
+<script type="text/plain" id="py-src-stage_limits.py">
+"""V1.8.17 read-only effective stage explanation; no stake calculation here.
+
+Do not automatically synthesize new multipliers or override the budget engine.
+In #20, the trigger wager counts as stage one of max_steps; at most
+max_steps - 1 entries may be taken from attack/retreat sequences.
+"""
+import progression
+
+
+def details(s):
+    entry = progression.BY_NAME.get(s.get('strategy'), {})
+    sid = entry.get('id')
+    maximum = max(1, int(s.get('max_steps', 5)))
+    result = {'line': '', 'warning': '', 'effective': None, 'requested': maximum}
+    if sid == 'attack':
+        attack = min(max(0, maximum-1), len(s.get('attack_sequence', [])))
+        retreat = min(max(0, maximum-1), len(s.get('retreat_sequence', [])))
+        result['effective'] = 1 + min(attack, retreat)
+        result['line'] = (f'最大關卡 {maximum}（含測試1關）｜攻擊最多{1+attack}關／退守最多{1+retreat}關')
+        if maximum < 2:
+            result['warning'] = '攻擊／退守至少設定2關（測試1關＋序列至少1關），目前只能執行測試關。'
+        elif attack < maximum-1 or retreat < maximum-1:
+            result['warning'] = (f'攻擊序列{len(s.get("attack_sequence", []))}筆、退守序列{len(s.get("retreat_sequence", []))}筆；'
+                                 f'設定{maximum}關必須各有至少{maximum-1}筆（另含測試1關）。不足者會在序列末階暫停。')
+    elif sid == 'twoleg':
+        layers = len(s.get('layer_sequence', []))
+        effective = min(maximum, layers)
+        result['effective'] = effective
+        result['line'] = f'設定最大{maximum}層｜實際{effective}層（每層最多2關）'
+        if layers < maximum:
+            result['warning'] = f'分層序列只有{layers}層，並非{maximum}層；未自動補倍率，末層掛後暫停。'
+    elif sid == 'tianmen':
+        effective = min(maximum, 5)
+        result['effective'] = effective
+        result['line'] = f'設定最大{maximum}關｜天門固定有效{effective}關（1／3／7／15／31）'
+        if maximum > 5:
+            result['warning'] = '天門內建倍率只有5關，最大關卡超過5不會自動產生新的倍率；第5關掛後暫停。'
+    elif sid in ('custom','custom_win','winner'):
+        if sid == 'custom' and s.get('use_count_sequence'):
+            import sizing_v180
+            values = sizing_v180.COUNT_SEQUENCES.get(s.get('number_count'), [])
+        else:
+            key = {'custom':'loss_sequence','custom_win':'custom_win_sequence','winner':'win_sequence'}[sid]
+            values = s.get(key, [])
+        effective = min(maximum, len(values))
+        result['effective'] = effective
+        result['line'] = f'設定最大{maximum}關｜實際序列{effective}關'
+        if sid == 'custom':
+            result['line'] += '｜末關掛後回首關（按現行規則）'
+        elif sid == 'custom_win':
+            result['line'] += '｜末關中後回首關'
+        else:
+            result['line'] += '｜勝進末階後回首關'
+        if len(values) < maximum:
+            result['warning'] = f'序列實際只有{len(values)}個倍率，未自動補足到{maximum}關。'
+    elif sid == 'equal_reset':
+        parts = int(s.get('risk_parts', 1))
+        result['effective'] = parts
+        result['line'] = f'#26 依切分{parts}份執行{parts}關，與最大關卡設定分離'
+    return result
+
+
+def progress_line(s):
+    d = details(s)
+    # Progress cards must clearly disclose a shorter effective sequence,
+    # rather than imply that the requested maximum is guaranteed.
+    return d['line'] if d['warning'] else ''
+
+</script>
+<script type="text/plain" id="py-src-release_rules.py">
+"""Single source for release text, catalog and precise instruction cards."""
+FORMULAS={
+0:'未取整每碼基額＝(一份÷碼數÷有效配注序列和)。掛進、中回首；末階後回首開新輪。',
+99:'未取整每碼基額＝(一份÷碼數÷有效勝近序列和)。中進、掛回首；序列用完開新輪。',
+66:'未取整每碼基額＝(一份÷碼數÷(有效層倍數和×3))。每層先×1、中後×2；兩中回首層、掛進下層；實際層數受分層序列長度限制，最大關卡不會自動補足層數；末層掛保留原版暫停。',
+1:'起始基額＝floor(一份÷碼數÷10)。依可用金與剩餘停損相對起始預算調節。達連中門檻且有獲利，完成輪次並自動保留可處理獲利50%；只提供滾利。',
+2:'起始基額＝floor(一份÷碼數÷10)。調節倍數＝剩餘停損÷初始停損×份數÷(份數＋floor(停利進度×12))。',
+3:'起始基額＝floor(一份÷碼數÷10)。每回撤初始操作金5%，分母增加4份；回撤20%暫停，恢復不重置高點。',
+4:'起始基額＝floor(一份÷碼數÷10)。最近10局母體標準差÷(初始停損÷份數)向上取整，最多加24份；不足3局用0。',
+5:'起始基額＝floor(一份÷碼數÷10)。調節倍數＝剩餘停損÷初始停損×基準÷max(基準,近20局最大虧損)，基準＝初始停損÷份數。',
+6:'起始基額＝floor(一份÷(2×份數)÷碼數)。本金池＝max(0,初始停損＋min(損益,0))；獲利池＝max(0,損益－最高正獲利70%)；調節倍數＝(本金池＋2×獲利池)÷初始停損。保留70%保護。',
+7:'起始基額＝floor(一份÷碼數÷10)。調節倍數＝剩餘停損÷初始停損×份數÷(份數＋近10局掛數)；連掛3局冷卻，手動恢復只重置冷卻計數。',
+8:'起始基額＝floor(一份÷碼數÷10)。保留原高點回吐底線；調節預算受目前損益與保護底線的差額限制。',
+9:'每碼＝floor(max(0,本輪起始一份＋本輪淨盈虧)÷碼數÷(計畫總局數－本次已完成局數))。全計畫局數不因換輪歸零；達計畫局數即硬性停止，恢復不得延長；歷史盈虧不清除。',
+10:'起始基額＝floor(一份÷碼數÷10)。進度、回撤、波動三個調節倍數取最小；高點50%保護，回撤20%暫停。',
+11:'動態固定注：每碼＝floor((當前操作預算＋本次尚未分配的損益)÷分割份數÷碼數÷5)，中掛後重算；鎖利扣操作預算，滾利加當次獲利，均不重複。',
+12:'每碼＝floor(一份÷碼數×投入比例)，新使用者預設20%；已存在的自訂比例保留。',
+13:'每碼＝floor(一份÷碼數÷份數)。先取一份後再除份數，保留指定二次分份。',
+14:'未取整每碼基額＝(一份÷碼數÷有效勝進序列和)。預設1/1，中進、掛回首，序列走完回首。',
+16:'未取整每碼基額＝(一份÷碼數÷有效1/2/4/8…總和)。掛進、中回首；末階掛保留原版暫停。',
+17:'未取整每碼基額＝(一份÷碼數÷有效1/3/7/15/31總和)。固定只有5個倍率，最大關卡超過5不會自動補倍率；掛進、中回首；末階掛保留原版暫停。',
+18:'未取整每碼基額＝(一份÷碼數÷有效1/2/3…總和)。掛加1單位、中減1單位；超過末階保留原版暫停。有限序列總和不代表來回操作的最大支出。',
+19:'未取整每碼基額＝(一份÷碼數÷有效費波納契總和)。掛進1、中退2；超過末階保留原版暫停。',
+20:'未取整每碼基額＝((一份÷(有效攻擊和＋有效防守和))×(碼數÷份數))，同輪固定，測試2倍不入序列和；最大關卡包含測試1關，其餘取攻擊／退守最多(最大關卡－1)筆。測試中轉攻擊、掛轉退守；攻擊掛回測試；退守最低關中回測試。回測試時：本輪有可分配獲利可選鎖利／滾利；當輪虧損、打平或無可分配獲利時，未觸發整體停損則進下一輪。末階仍保留關卡上限暫停。',
+22:'每碼＝ceil((未回補虧損＋回補目標)÷(含本金賠率－碼數))。分母≤0不計算。',
+23:'每期先提供本期預估中獎率p。b＝含本金賠率÷碼數－1；f＝(b×p－(1－p))÷b。每碼＝floor(一份×f×凱利折數÷碼數)；未提供p、b≤0或f≤0不進場。',
+24:'新輪未取整每碼基額＝(一份÷初始清單和÷碼數)，同輪固定。倍數取首尾和，單項僅一次；掛追加、中刪首尾。清空才完成；不受連掛或關卡上限重置。新輪基額依當前操作預算重新算；鎖利扣預算，滾利加當次可滾獲利。',
+26:'每碼=floor(min(當前可用金, 當前操作預算)÷碼數÷切分份數)；每輪固定基額，每關1倍。中則下一輪回首關，掛進下關；全關掛暫停。累計已結算週期淨獲利達起始操作金100%時，已鎖金額不重複計入，超額獲利全鎖，操作預算歸回起始值，開始下一週期。'}
+
+def describe(code):
+    text=FORMULAS[code]
+    text+='\n一般策略每關：每碼=floor(未取整基額×當關倍率)；不下注小數，不足1元／碼則暫停。#22回補策略保留ceil例外，仍為整數。下局總注若高於可用金、操作預算或剩餘停損額度，先暫停，不縮注。'
+    if 1<=code<=13 or code in (22,23):
+        text+='\n連中門檻：2/3碼1中、4碼2中、5碼3中、6碼5中、7碼7中、8碼9中；達標且整體獲利提供選項，後續掛不保留資格。'
+    if code not in (1,26):text+='\n完成且有可分配獲利時：鎖利將當次獲利50%移出下一輪操作預算；滾利僅將當次未分配獲利加進操作預算，不會自動解鎖歷史鎖利；同筆獲利只分配一次。'
+    if code==26:text+='\n本策略允許最新有效中獎局選鎖利／滾利；100%固定目標不受中途分配影響。鎖利資金與操作金分離；不足原始金額不虛構補款，暫停處理。'
+    return text
+
+</script>
+<script type="text/plain" id="py-src-web_engine.py">
+"""Browser-only adapter for the original RUBY TG Chip 1.8.18 simulation engine.
+
+No Telegram, network, user accounts, orders, or external state are accessed.
+The snapshot format is JSON and stored only by the hosting web page.
+"""
+import copy
+import json
+from datetime import datetime, timezone
+from decimal import Decimal, ROUND_HALF_UP
+import progression
+import stake_guard
+import sizing_v180 as sizing
+import strategy_engine
+import strategy26
+
+STATE = None
+UNDO = None
+LAST_ACTION_ID = None
+
+
+def cash(value):
+    return float(Decimal(str(value)).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP))
+
+
+def new_state(config):
+    strategy_code = int(config.get('strategy',26))
+    if strategy_code not in strategy_engine.BY_CODE:
+        raise ValueError('沒有這套策略')
+    name = strategy_engine.BY_CODE[strategy_code]['name']
+    operation = cash(config.get('operation',1000))
+    count = int(config.get('count',6))
+    parts = int(config.get('parts',6))
+    max_steps = int(config.get('maxSteps',6))
+    planned = int(config.get('planned',35))
+    market = config.get('market','單球')
+    if market not in ('單球','兩面盤','百家樂'):
+        raise ValueError('不支援的玩法')
+    if not (1 <= operation <= 1000000000):
+        raise ValueError('操作金必須大於零')
+    if not (2 <= parts <= 50 and 1 <= max_steps <= 50 and 1 <= planned <= 100000):
+        raise ValueError('切分／關卡／局數超出允許範圍')
+    if not (1 <= count <= 8 if market == '單球' else count == 1):
+        raise ValueError('單球支援 1～8 碼，兩面盤／百家樂請使用 1 碼')
+    profit_pct = float(config.get('profitPct',100))
+    loss_pct = float(config.get('lossPct',100))
+    if not (1 <= profit_pct <= 10000 and 1 <= loss_pct <= 100):
+        raise ValueError('停利為 1～10000%，停損為 1～100%')
+    payout = (9.59 if market == '單球' else 1.90)
+    s = dict(**stake_guard.defaults(),**progression.defaults())
+    s.update(
+        schema=16,operation_base=operation,bankroll=operation,session_operation_origin=operation,
+        pnl=0.0,locked_profit=0.0,wins=0,losses=0,ties=0,total_bet=0.0,total_return=0.0,
+        strategy=name,market=market,number_count=count,risk_parts=parts,max_steps=max_steps,
+        stop_profit_mode='percent',stop_profit_value=profit_pct,stop_loss_mode='percent',stop_loss_value=loss_pct,
+        profit_target=cash(operation*profit_pct/100),loss_limit=cash(operation*loss_pct/100),
+        planned_rounds=planned,round_limit=planned,payout_multiplier=payout,
+        payout_cycle_enabled=(market=='單球'),payout_cycle_wins=0,
+        stake=0,started=True,session_status='active',
+        streak=0,loss_streak=0,last_result='start',last_total_bet=None,
+        peak_pnl=0.0,lock_peak_pnl=0.0,cooldown_losses=0,giveback_active=False,
+        strategy_pause_reason='',ledger=[],history=[],profit_events=[],
+        selection_side=None,round_offer=False,round_offer_advanced=False,
+        allocation_mark=0.0,protected_unallocated=0.0,
+        guard_enabled=False,guard_baseline_total=None,
+        config_revision=0,last_multiplier=1,last_base=0,
+    )
+    s['stake_fraction'] = float(config.get('fraction',20))
+    s['kelly_fraction'] = float(config.get('kellyFraction',25))
+    prob=config.get('probability')
+    if prob not in (None,''):
+        s['kelly_probability']=float(prob)
+    for key in ('loss_sequence','win_sequence','custom_win_sequence','layer_sequence','attack_sequence','retreat_sequence','cancel_list'):
+        if key in config:
+            seq=config[key]
+            if not isinstance(seq,list) or not seq or len(seq)>100 or any(not 0<x<=100000 for x in seq):
+                raise ValueError('倍率序列格式錯誤')
+            s[key] = seq
+    sizing.initialize(s)
+    return s
+
+
+def evaluate_state():
+    if STATE is None:
+        return {'running':False,'status':'尚未開始','quote':None,'state':None,'undoAvailable':False}
+    s=STATE
+    q,why=(sizing.quote(s) if s.get('session_status')=='active' and not s.get('round_offer') else (None,''))
+    status=why or s.get('strategy_pause_reason') or s.get('round_notice') or ''
+    if s.get('round_offer'):
+        status=s.get('round_notice') or '本輪完成，可鎖利／滾利／繼續'
+    if s.get('session_status')=='settled': status='已結算，可以建立新計畫'
+    if sizing.plan_limit_reached(s): status=sizing.plan_limit_message(s)
+    if s.get('session_status','').startswith('paused') and not status:
+        status=s.get('round_notice') or '計畫已暫停'
+    out = {'running':True,'status':status,'quote':q,
+           'state':s,'undoAvailable':UNDO is not None,
+           'available':sizing.available(s),
+           'operationBudget':sizing.operation_budget(s),
+           'position':progression.position(s) if progression.is_new(s) else '',
+           'code':strategy_engine.BY_NAME[s['strategy']]['code'],
+           'canResume':bool(s.get('plan_state',{}).get('exhausted') or s.get('plan_state',{}).get('done')),
+           'cycleProgress':strategy26.cycle_progress(s) if strategy26.active(s) else None}
+    return out
+
+
+def settle(outcome, action_id=None):
+    global STATE, UNDO, LAST_ACTION_ID
+    if STATE is None: raise ValueError('請先開始一個計畫')
+    if action_id and LAST_ACTION_ID == action_id: return evaluate_state()
+    s=STATE
+    if s.get('session_status')!='active' or s.get('round_offer'):
+        raise ValueError('目前需要先處理暫停或分配選項')
+    quote,reason=sizing.quote(s)
+    if not quote: raise ValueError(reason or '目前沒有可執行的注碼')
+    if outcome not in ('win','loss'): raise ValueError('只能選中或掛')
+    before=copy.deepcopy(s)
+    cost=cash(quote['total']);win=outcome=='win'
+    returned=cash(Decimal(str(quote['per']))*Decimal(str(quote['rate']))) if win else 0.0
+    delta=cash(Decimal(str(returned))-Decimal(str(cost)))
+    s['open_quote']=copy.deepcopy(quote)
+    s['total_bet']=cash(s['total_bet']+cost)
+    s['total_return']=cash(s['total_return']+returned)
+    s['pnl']=cash(s['pnl']+delta)
+    s['wins' if win else 'losses'] += 1
+    s['streak']=s['streak']+1 if win else 0
+    s['loss_streak']=0 if win else s['loss_streak']+1
+    s['last_result']=outcome
+    s['last_total_bet']=cost
+    s['cooldown_losses']=0 if win else s.get('cooldown_losses',0)+1
+    s['open_quote']=None
+    if win and s['payout_cycle_enabled']:
+        s['payout_cycle_wins']=s.get('payout_cycle_wins',0)+1
+    record={
+       'sequence':s['wins']+s['losses'],'at':datetime.now(timezone.utc).isoformat(),
+       'outcome':outcome,'stake':quote['per'],'count':quote['count'],
+       'cost':cost,'return':returned,'delta':delta,'pnl':s['pnl'],
+       'quote':copy.deepcopy(quote),'strategy':s['strategy'],
+       'position':progression.position(before) if progression.is_new(before) else '',
+    }
+    s['ledger'].append(record)
+    old_lock=s['locked_profit']
+    sizing.after_result(s,win,delta)
+    added=cash(max(0,s['locked_profit']-old_lock))
+    if added>0:record['automatic_lock']=added
+    if sizing.plan_limit_reached(s):
+        s['session_status']='paused_round_limit'
+        s['strategy_pause_reason']=sizing.plan_limit_message(s)
+        s['open_quote']=None;s['round_offer']=False
+    elif s['pnl']<=-s['loss_limit']:
+        s['session_status']='paused_loss'
+        s['strategy_pause_reason']='已達設定停損'
+    elif not strategy26.active(s) and s['pnl']>=s['profit_target']:
+        s['session_status']='paused_profit'
+        s['strategy_pause_reason']='已達設定停利'
+    UNDO=before
+    LAST_ACTION_ID=action_id
+    return evaluate_state()
+
+
+def choose(action):
+    global STATE
+    if STATE is None: raise ValueError('目前沒有計畫')
+    ok,why=sizing.choose(STATE,action)
+    if not ok:raise ValueError(why)
+    return evaluate_state()
+
+
+def undo():
+    global STATE,UNDO,LAST_ACTION_ID
+    if UNDO is None: raise ValueError('目前沒有上一局可更正')
+    STATE=copy.deepcopy(UNDO)
+    UNDO=None
+    LAST_ACTION_ID=None
+    return evaluate_state()
+
+
+def resume():
+    global STATE
+    if STATE is None:raise ValueError('沒有計畫')
+    if sizing.plan_limit_reached(STATE):raise ValueError('已達計畫局數，不允許恢復')
+    if STATE['pnl']<=-STATE['loss_limit']:raise ValueError('已達停損，不允許恢復')
+    if not sizing.resume_exhausted(STATE):raise ValueError('這個策略不在末階暫停狀態')
+    STATE['session_status']='active'
+    return evaluate_state()
+
+
+def set_probability(value):
+    global STATE
+    if STATE is None or STATE['strategy']!='凱利公式':raise ValueError('目前不是凱利公式')
+    value=float(value)
+    if value<=0 or value>100:raise ValueError('預估命中率應為 0～100%')
+    STATE['kelly_probability']=value
+    return evaluate_state()
+
+
+def finish():
+    global STATE
+    if STATE is not None:
+        STATE['session_status']='settled'
+        STATE['open_quote']=None
+    return evaluate_state()
+
+
+def web_call(action, payload_json='{}'):
+    global STATE,UNDO,LAST_ACTION_ID
+    try:
+        p=json.loads(payload_json or '{}')
+        if action=='start':
+            STATE=new_state(p)
+            UNDO=None
+            LAST_ACTION_ID=None
+            out=evaluate_state()
+        elif action=='load':
+            s=p.get('state')
+            if s is not None and (not isinstance(s,dict) or s.get('strategy') not in strategy_engine.BY_NAME):
+                raise ValueError('這不是可辨識的 RUBY Smart Chip 資料')
+            STATE=s
+            UNDO=p.get('undo') if isinstance(p.get('undo'),dict) else None
+            LAST_ACTION_ID=None
+            out=evaluate_state()
+        elif action=='settle':out=settle(p.get('outcome'),p.get('actionId'))
+        elif action=='choose':out=choose(p.get('choice'))
+        elif action=='undo':out=undo()
+        elif action=='resume':out=resume()
+        elif action=='probability':out=set_probability(p['value'])
+        elif action=='finish':out=finish()
+        elif action=='status':out=evaluate_state()
+        else:raise ValueError('未知操作')
+        out['undo']=UNDO
+        return json.dumps({'ok':True,'result':out},ensure_ascii=False,allow_nan=False)
+    except Exception as e:
+        return json.dumps({'ok':False,'error':str(e)},ensure_ascii=False)
+
+</script>
+<script>
+/* RUBY Smart Chip — browser-only front end. No orders, Telegram, or remote storage. */
+'use strict';
+const STORAGE_KEY = 'ruby_smart_chip_v1';
+const THEME_KEY = 'ruby_smart_chip_theme';
+const PY_FILES = ['strategy_engine.py','progression.py','sizing_v180.py','strategy26.py','stake_guard.py','stage_limits.py','release_rules.py','web_engine.py'];
+const $ = selector => document.querySelector(selector);
+const $$ = selector => [...document.querySelectorAll(selector)];
+let python = null;
+let callPython = null;
+let strategies = [];
+let archives = [];
+let snapshot = null;
+let busy = true;
+let toastTimer = null;
+
+function fmt(num,decimals=0){
+  const n=Number(num);
+  return Number.isFinite(n)?n.toLocaleString('zh-TW',{minimumFractionDigits:decimals,maximumFractionDigits:decimals}):'—';
+}
+function money(num){return Number.isFinite(Number(num))?fmt(Number(num),2):'—';}
+function toast(message){
+  const el=$('#toast');el.textContent=message;el.classList.add('visible');
+  if(toastTimer)clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('visible'),3600);
+}
+function showError(message){
+  const el=$('#alert');el.textContent=message;el.classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function clearError(){const el=$('#alert');el.textContent='';el.classList.add('hidden');}
+function go(tab){
+  for(const v of $$('.view'))v.classList.toggle('active',v.id===`view-${tab}`);
+  for(const b of $$('[data-tab]'))b.classList.toggle('active',b.dataset.tab===tab);
+  $('#page-title').textContent=({calculator:'籌碼計算機',strategies:'策略中心',history:'結算紀錄',settings:'設定'})[tab]||'RUBY Smart Chip';
+  clearError();window.scrollTo({top:0,behavior:'instant'});
+}
+function setReady(isReady,message){
+  busy=!isReady;
+  const x=$('#engine-status');x.textContent=message;x.classList.toggle('loading',!isReady);x.classList.toggle('error',message.startsWith('載入失敗'));
+  $('#start-button').disabled=!isReady;
+  render();
+}
+function run(action,payload={}){
+  if(!callPython)throw new Error('計算核心尚未載入');
+  const previous = action==='start' && snapshot?.state?.ledger?.length ? snapshot.state : null;
+  const raw=callPython(action,JSON.stringify(payload));
+  const obj=JSON.parse(raw);
+  if(!obj.ok)throw new Error(obj.error||'計算失敗');
+  if(previous){archives.unshift({strategy:previous.strategy,settledAt:new Date().toISOString(),pnl:previous.pnl,total_bet:previous.total_bet,locked_profit:previous.locked_profit,ledger:previous.ledger});archives=archives.slice(0,50);}
+  snapshot=obj.result;
+  persist();render();return snapshot;
+}
+function persist(){
+  if(!snapshot)return;
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify({version:1,state:snapshot.state,undo:snapshot.undo,archives}));}
+  catch(e){toast('本機儲存失敗，請匯出 JSON 備份');}
+}
+async function action(command,payload={},success){
+  if(busy)return;
+  busy=true;render();clearError();
+  try{const data=run(command,payload);if(success)toast(success);return data;}
+  catch(err){showError(err.message||String(err));return null;}
+  finally{busy=false;render();}
+}
+function getCode(){return Number($('#strategy-select').value||26);}
+function changeStrategyFields(){
+  const code=getCode();
+  const fieldMap={0:['loss_sequence','自訂關卡倍率','1,2'],99:['custom_win_sequence','勝進倍率','3,1,2,3,2,3,4,1,2'],66:['layer_sequence','分層倍率','1,1'],14:['win_sequence','勝進倍率','1,1'],20:['attack_sequence','攻擊倍率','1,1.6,2,2.6,3.2,4,5,6'],24:['cancel_list','清單數值','1,1']};
+  for(const id of ['fraction-field','kelly-field','probability-field','sequence-field','sequence-secondary-field'])$('#'+id).classList.add('hidden');
+  if(code===12)$('#fraction-field').classList.remove('hidden');
+  if(code===23){$('#kelly-field').classList.remove('hidden');$('#probability-field').classList.remove('hidden');}
+  if(fieldMap[code]){
+    $('#sequence-field').classList.remove('hidden');
+    $('#sequence-label').textContent=fieldMap[code][1];
+    const input=$('[name=sequenceInput]');input.placeholder=fieldMap[code][2];
+    if(!input.value||input.dataset.strategy!==String(code))input.value=fieldMap[code][2];
+    input.dataset.strategy=String(code);
+    if(code===20){$('#sequence-secondary-field').classList.remove('hidden');$('[name=sequenceSecondary]').value='2,3,5,8,13,20,30';}
+  }
+  const max=$('[name=maxSteps]');
+  if(code===26){max.value=$('[name=parts]').value;max.disabled=true;}else{max.disabled=false;}
+  const s=strategies.find(x=>x.code===code);
+  $('#strategy-hint').textContent=code===26?'#26：切分份數就是固定等額關卡數；累計淨獲利達原始操作金 100% 時自動歸本。':s?.description||'此策略依原本 RUBY TG Chip V1.8.18 計算規則運作。';
+  $('#current-summary').textContent=s?.description||'請選擇策略。';
+}
+function parseSeq(value){
+  const seq=value.trim().split(/[\s,，/、]+/).filter(Boolean).map(Number);
+  if(!seq.length||seq.length>100||seq.some(x=>!Number.isFinite(x)||x<=0||x>100000))throw new Error('倍率序列須為 1～100 個正數，以逗號分隔');
+  return seq;
+}
+function readConfig(){
+  const f=new FormData($('#config-form'));
+  const config={strategy:getCode(),operation:Number(f.get('operation')),market:f.get('market'),count:Number(f.get('count')),
+    parts:Number(f.get('parts')),maxSteps:Number(f.get('maxSteps')||$('[name=maxSteps]').value),planned:Number(f.get('planned')),
+    profitPct:Number(f.get('profitPct')),lossPct:Number(f.get('lossPct')),
+    fraction:Number(f.get('fraction')||20),kellyFraction:Number(f.get('kellyFraction')||25)};
+  if(config.strategy===26)config.maxSteps=config.parts;
+  const codes={0:'loss_sequence',99:'custom_win_sequence',66:'layer_sequence',14:'win_sequence',20:'attack_sequence',24:'cancel_list'};
+  if(codes[config.strategy])config[codes[config.strategy]]=parseSeq(f.get('sequenceInput')||'');
+  if(config.strategy===20)config.retreat_sequence=parseSeq(f.get('sequenceSecondary')||'');
+  if(config.strategy===23)config.probability=Number(f.get('probability'));
+  return config;
+}
+function displayStrategyLibrary(query=''){
+  const holder=$('#strategy-grid');holder.textContent='';
+  const q=query.trim().toLocaleLowerCase();
+  const visible=strategies.filter(s=>!q||(`${s.code} #${s.code} ${s.name} ${s.kind} ${s.description}`).toLocaleLowerCase().includes(q));
+  if(!visible.length){const p=document.createElement('p');p.className='muted';p.textContent='沒有符合條件的策略';holder.append(p);return;}
+  for(const item of visible){
+    const card=document.createElement('article');card.className='strategy-card';
+    const head=document.createElement('header');
+    const code=document.createElement('div');code.className='strategy-code';code.textContent='#'+String(item.code).padStart(2,'0');
+    const detail=document.createElement('div');const name=document.createElement('h3');name.textContent=item.name;
+    const kind=document.createElement('small');kind.textContent=item.kind;detail.append(name,kind);head.append(code,detail);
+    const desc=document.createElement('p');desc.textContent=item.description;
+    const btn=document.createElement('button');btn.type='button';btn.className='text-btn';btn.textContent='選擇此策略 →';
+    btn.addEventListener('click',()=>{$('#strategy-select').value=item.code;changeStrategyFields();go('calculator');toast('已選擇策略；按開始新計畫才會套用');});
+    card.append(head,desc,btn);holder.append(card);
+  }
+}
+function updateNumber(selector,value,signed=false){
+  const el=$(selector);el.textContent=(signed&&Number(value)>0?'+':'')+money(value);
+  el.classList.toggle('positive',Number(value)>0&&signed);el.classList.toggle('negative',Number(value)<0);
+}
+function render(){
+  const data=snapshot;const s=data?.state;
+  const q=data?.quote;
+  const on=!!s;
+  const complete=s?Number(s.wins||0)+Number(s.losses||0):0;
+  const planned=s?.planned_rounds||Number($('[name=planned]').value)||35;
+  const valid=on&&!busy&&s.session_status==='active'&&!s.round_offer&&!!q;
+  $('#session-label').textContent=on?(s.session_status==='active'?'計畫執行中':s.session_status==='settled'?'已結算':'暫停中'):'未開始';
+  $('#quote-state').textContent=q?'可試算':'無下局注碼';
+  $('#per-code').textContent=q?money(q.per):'—';
+  $('#total-stake').textContent=q?money(q.total):'—';
+  $('#available').textContent=on?money(data.available):'—';
+  $('#stage-label').textContent=on?(data.position||`第 ${s.round_id||1} 輪`):'—';
+  $('#round-count').textContent=`${complete} / ${planned}`;
+  updateNumber('#pnl',s?.pnl||0,true);
+  const is26=s&&s.strategy==='等分倍盈歸本法';
+  $('#progress-title').textContent=is26?'100% 歸本進度':'計畫完成進度';
+  const pct=is26?Math.min(100,Math.max(0,Number(data.cycleProgress||0))):Math.min(100,complete/planned*100);
+  $('#progress-text').textContent=`${fmt(pct,1)}%`;
+  $('#progress-bar').style.width=pct+'%';
+  $('#notice').textContent=(data?.status||'')||(!on?'請先設定並開始新計畫。':q?'手動回報中／掛後會進行本機計算。':'目前沒有下一局的建議金額。');
+  $('#win-button').disabled=!valid;$('#loss-button').disabled=!valid;
+  $('#undo-button').disabled=busy||!data?.undoAvailable;
+  $('#finish-button').disabled=busy||!on||s?.session_status==='settled';
+  $('#resume-button').classList.toggle('hidden',!data?.canResume);
+  $('#resume-button').disabled=busy||!data?.canResume||complete>=planned;
+  $('#offer-actions').classList.toggle('hidden',!s?.round_offer||busy);
+  $('#kelly-action').classList.toggle('hidden',!s||s.strategy!=='凱利公式'||s.session_status==='settled');
+  $('#start-button').disabled=busy||!callPython;
+  if(on){const selected=strategies.find(i=>i.name===s.strategy);$('#current-summary').textContent=selected?.description||s.strategy;}
+  const archivedRows=[...archives].reverse().flatMap(x=>Array.isArray(x.ledger)?x.ledger:[]);
+  const archivedTotal=archives.reduce((sum,x)=>sum+Number(x.total_bet||0),0);
+  const archivedPnL=archives.reduce((sum,x)=>sum+Number(x.pnl||0),0);
+  const archivedLocked=archives.reduce((sum,x)=>sum+Number(x.locked_profit||0),0);
+  $('#sum-cost').textContent=money(archivedTotal+Number(s?.total_bet||0));
+  updateNumber('#sum-pnl',archivedPnL+Number(s?.pnl||0),true);
+  $('#sum-locked').textContent=money(archivedLocked+Number(s?.locked_profit||0));
+  const ledger=[...archivedRows,...(on&&Array.isArray(s.ledger)?s.ledger:[])];
+  $('#history-count').textContent=`${ledger.length} 筆`;
+  const rows=$('#history-rows');rows.textContent='';
+  if(!ledger.length){const row=document.createElement('tr');const cell=document.createElement('td');cell.colSpan=6;cell.className='empty';cell.textContent='目前沒有紀錄';row.append(cell);rows.append(row);}
+  else for(const record of [...ledger].reverse().slice(0,200)){
+    const tr=document.createElement('tr');
+    const values=[record.sequence||'',record.strategy||'—',record.outcome==='win'?'中':'掛',fmt(record.stake),money(record.cost),(Number(record.delta)>0?'+':'')+money(record.delta)];
+    for(let i=0;i<values.length;i++){const td=document.createElement('td');td.textContent=values[i];if(i===2)td.className=record.outcome==='win'?'positive':'negative';if(i===5)td.className=Number(record.delta)>=0?'positive':'negative';tr.append(td);}rows.append(tr);
+  }
+}
+function download(name,text,mime){
+  const blob=new Blob([text],{type:mime});const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
+}
+function exportCsv(){
+  const ledger=[...[...archives].reverse().flatMap(x=>x.ledger||[]),...(snapshot?.state?.ledger||[])];if(!ledger.length){toast('目前沒有可匯出的結算資料');return;}
+  const rows=[['局數','時間','結果','每碼','碼數','本局投注','本局返還','淨損益','累計盈虧','策略']];
+  for(const r of ledger)rows.push([r.sequence,r.at,r.outcome==='win'?'中':'掛',r.stake,r.count,r.cost,r.return,r.delta,r.pnl,r.strategy]);
+  const escapeCsv=v=>'"'+String(v??'').replace(/^([=+@\-])/,'\'$1').replace(/"/g,'""')+'"';
+  download('ruby_smart_chip_history.csv','\ufeff'+rows.map(row=>row.map(escapeCsv).join(',')).join('\r\n'),'text/csv;charset=utf-8');
+}
+function bindEvents(){
+  for(const b of $$('[data-tab]'))b.addEventListener('click',()=>go(b.dataset.tab));
+  $('#read-strategy').addEventListener('click',()=>{go('strategies');$('#strategy-search').value='#'+getCode();displayStrategyLibrary($('#strategy-search').value);});
+  $('#strategy-select').addEventListener('change',changeStrategyFields);
+  $('#strategy-search').addEventListener('input',e=>displayStrategyLibrary(e.target.value));
+  $('#market').addEventListener('change',e=>{$('[name=count]').value=e.target.value==='單球'?6:1;});
+  $('[name=parts]').addEventListener('input',()=>{if(getCode()===26)$('[name=maxSteps]').value=$('[name=parts]').value;});
+  $('#config-form').addEventListener('submit',async e=>{
+    e.preventDefault();if(busy)return;
+    try{
+      const config=readConfig();
+      if(snapshot?.state?.ledger?.length&&!confirm('開始新計畫會清空目前頁面的進行中統計。請先匯出備份，確定繼續？'))return;
+      await action('start',config,'已開始新計畫');
+    }catch(err){showError(err.message||String(err));}
+  });
+  const settle=outcome=>action('settle',{outcome,actionId:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2)},'已記錄本局'+(outcome==='win'?'中':'掛'));
+  $('#win-button').addEventListener('click',()=>settle('win'));
+  $('#loss-button').addEventListener('click',()=>settle('loss'));
+  $('#undo-button').addEventListener('click',()=>action('undo',{},'已撤銷上一局與相關鎖利變更'));
+  $('#resume-button').addEventListener('click',()=>action('resume',{},'已進下一輪'));
+  $('#finish-button').addEventListener('click',()=>{if(confirm('確認結算並停止目前計畫？歷史記錄會保留到建立新計畫為止。'))action('finish',{},'本次計畫已結算');});
+  for(const b of $$('[data-choice]'))b.addEventListener('click',()=>action('choose',{choice:b.dataset.choice},'已處理本輪獲利選項'));
+  $('#kelly-apply').addEventListener('click',()=>action('probability',{value:Number($('#kelly-probability').value)},'已更新本期預估值'));
+  $('#export-csv').addEventListener('click',exportCsv);
+  $('#backup-button').addEventListener('click',()=>{
+    const state=snapshot?.state||null;
+    if(!state){toast('目前沒有計畫可以備份');return;}
+    download('ruby_smart_chip_backup.json',JSON.stringify({version:1,createdAt:new Date().toISOString(),state,undo:snapshot.undo||null,archives},null,2),'application/json;charset=utf-8');
+    toast('已匯出 JSON 備份');
+  });
+  $('#restore-button').addEventListener('click',()=>$('#restore-file').click());
+  $('#restore-file').addEventListener('change',async e=>{
+    const f=e.target.files?.[0];if(!f)return;e.target.value='';
+    if(f.size>8*1024*1024){showError('備份檔太大，請檢查內容');return;}
+    try{const json=JSON.parse(await f.text());if(json.version!==1||!json.state)throw Error('檔案版本或資料內容不正確');
+      if(!confirm('還原備份會取代這台瀏覽器目前的計畫，確定繼續？'))return;
+      archives=Array.isArray(json.archives)?json.archives.slice(0,50):[];
+      await action('load',{state:json.state,undo:json.undo||null},'已還原備份');
+    }catch(err){showError(err.message||String(err));}
+  });
+  for(const b of $$('[data-theme]'))b.addEventListener('click',()=>setTheme(b.dataset.theme));
+}
+function setTheme(theme){
+  if(!['mint','blue'].includes(theme))theme='mint';
+  document.body.dataset.theme=theme;
+  for(const b of $$('[data-theme]'))b.classList.toggle('active',b.dataset.theme===theme);
+  try{localStorage.setItem(THEME_KEY,theme);}catch{}
+}
+async function initialize(){
+  bindEvents();setTheme(localStorage.getItem(THEME_KEY)||'mint');
+  try{
+    strategies=JSON.parse(document.getElementById('ruby-strategies-json').textContent);
+    if(strategies.length!==26)throw Error('策略數量不正確，請重新部署');
+    const select=$('#strategy-select');
+    for(const item of strategies){const option=document.createElement('option');option.value=item.code;option.textContent=`#${String(item.code).padStart(2,'0')} ${item.name}`;select.append(option);}
+    select.value='26';changeStrategyFields();displayStrategyLibrary();
+    const bundle=PY_FILES.map(name=>{
+      const el=document.getElementById('py-src-'+name);
+      if(!el)throw Error(name+' 原始碼不存在');
+      return [name,el.textContent];
+    });
+    if(typeof loadPyodide!=='function')throw Error('Pyodide 未載入，請確認網路與 CDN 可連線');
+    const runtime=await loadPyodide({indexURL:'https://cdn.jsdelivr.net/pyodide/v0.27.7/full/'});
+    runtime.FS.mkdirTree('/home/py');
+    for(const [name,contents] of bundle)runtime.FS.writeFile('/home/py/'+name,contents);
+    runtime.runPython("import sys;sys.path.insert(0,'/home/py');from web_engine import web_call");
+    python=runtime;callPython=runtime.globals.get('web_call');
+    let restore=null;try{restore=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');}catch{}
+    archives=restore?.version===1&&Array.isArray(restore.archives)?restore.archives.slice(0,50):[];
+    try{run('load',restore&&restore.version===1?{state:restore.state,undo:restore.undo}:{state:null});}
+    catch(e){run('load',{state:null});toast('舊紀錄無法還原，建議檢查 JSON 備份');}
+    if(snapshot?.state){
+      const t=snapshot.state;$('#strategy-select').value=String(strategies.find(x=>x.name===t.strategy)?.code||26);
+      for(const [name,value] of Object.entries({operation:t.operation_base,count:t.number_count,parts:t.risk_parts,maxSteps:t.max_steps,planned:t.planned_rounds,market:t.market,profitPct:t.stop_profit_value,lossPct:t.stop_loss_value})){
+        const field=$(`[name="${name}"]`);if(field&&value!==undefined)field.value=String(value);
+      }
+      changeStrategyFields();
+    }
+    setReady(true,'計算核心已就緒');
+  }catch(err){setReady(false,'載入失敗');showError((err.message||String(err))+'。此頁需要 HTTP(S) 網址及首次連線載入 Pyodide，請勿直接以 file:// 開啟。');}
+}
+window.addEventListener('DOMContentLoaded',initialize);
+
+</script>
+</body>
+</html>
