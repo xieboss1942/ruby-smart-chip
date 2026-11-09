@@ -1640,7 +1640,7 @@ function changeStrategyFields(){
     input.dataset.strategy=String(code);
     if(code===20){$('#sequence-secondary-field').classList.remove('hidden');$('[name=sequenceSecondary]').value='2,3,5,8,13,20,30';}
   }
-  for(const field of $('.special-param')){
+  for(const field of $$('.special-param')){
     const hidden=field.classList.contains('hidden');
     for(const input of field.querySelectorAll('input,select,textarea'))input.disabled=hidden;
   }
