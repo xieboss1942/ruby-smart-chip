@@ -143,6 +143,31 @@ body[data-font-size="small"]{--font-multiplier:.90}body[data-font-size="medium"]
 @media(min-width:700px){.topbar{margin:0 -12px 9px;padding:9px 16px}}
 @media(prefers-reduced-motion:reduce){.ring-panel svg{filter:none!important}}
 
+
+/* RUBY Neon moving activity rings: progress stays data-driven; only highlights pulse. */
+#ring-loss{stroke:url(#ruby-red-grad)!important}
+#ring-profit{stroke:url(#ruby-blue-grad)!important}
+#ring-win{stroke:url(#ruby-green-grad)!important}
+.ring-panel .ring{stroke-width:11;stroke-linecap:round;filter:drop-shadow(0 0 3px currentColor) drop-shadow(0 0 7px currentColor)}
+.ring-halo{fill:none;stroke-width:21;stroke-linecap:round;opacity:.55;filter:url(#ruby-ring-softglow);pointer-events:none;animation:ruby-ring-breathe 3.8s ease-in-out infinite}
+.halo-red{stroke:#ff4d9f}.halo-blue{stroke:#38dfff}.halo-green{stroke:#44f8bd}
+.ring-tip{stroke:#ffffff;stroke-width:1.5;pointer-events:none;animation:ruby-ring-tip-glow 2.7s ease-in-out infinite;filter:drop-shadow(0 0 4px currentColor) drop-shadow(0 0 8px currentColor)}
+.tip-red{fill:#ff84ba;color:#ff4d9f}.tip-blue{fill:#a0faff;color:#39ddff}.tip-green{fill:#a9ffe0;color:#46efae}
+.ruby-ring-orbit{fill:none;stroke:#be61f9;stroke-opacity:.28;stroke-width:1.5;stroke-dasharray:2 24;transform-origin:110px 110px;animation:ruby-ring-orbit 34s linear infinite;pointer-events:none}
+@keyframes ruby-ring-breathe{0%,100%{opacity:.28}50%{opacity:.66}}
+@keyframes ruby-ring-tip-glow{0%,100%{stroke-opacity:.70;stroke-width:1.1}50%{stroke-opacity:1;stroke-width:2.4}}
+@keyframes ruby-ring-orbit{to{transform:rotate(360deg)}}
+/* Show the practical condensed layout on every new visit. */
+.ring-panel.compact .ring-body{grid-template-columns:minmax(0,42%) minmax(0,1fr);column-gap:7px;padding:0 3px}
+.ring-panel.compact svg{width:100%!important;max-width:145px!important;height:auto!important;aspect-ratio:1}
+.ring-panel.compact .ring-labels{gap:3px;padding:0 1px}
+.ring-panel.compact .ring-labels>div{padding:3px 1px}
+.ring-panel.compact .ring-number{font-size:calc(32px * var(--font-multiplier,1))!important}
+.quote-title-actions{display:flex;align-items:center;gap:5px;flex-wrap:nowrap;min-width:0}
+#quick-amount{font-size:10px;line-height:1.25;white-space:nowrap;padding:6px 7px;color:#d7f6ff;border-color:#4b9ab9}
+#quick-amount:focus-visible{outline:2px solid #7fefff;outline-offset:2px}
+@media(max-width:355px){.ring-panel.compact .ring-body{grid-template-columns:minmax(0,41%) minmax(0,1fr);column-gap:4px}.ring-panel.compact svg{max-width:117px!important}.quote-title-actions{gap:3px}#quick-amount{padding:5px;font-size:9px}}
+@media(prefers-reduced-motion:reduce){.ring-halo,.ring-tip,.ruby-ring-orbit{animation:none!important}.ring-panel .ring{filter:none!important}.ring-halo{opacity:.25!important}}
 </style>
 </head>
 <body data-theme="neon">
@@ -168,10 +193,17 @@ body[data-font-size="small"]{--font-multiplier:.90}body[data-font-size="medium"]
       <button type="button" class="current-strategy neon-card" id="open-strategies" aria-label="開啟策略中心"><span class="strategy-accent">當前策略</span><span class="strategy-text"><strong id="strategy-active-name">#26 等分倍盈歸本法</strong><small id="strategy-active-meta">尚未開始 · 點擊選擇策略</small></span><span class="chevron">›</span></button>
       <section id="ring-panel" class="ring-panel neon-card" aria-label="本次戰況">
         <div class="panel-title"><strong>戰況光圈</strong><button type="button" id="ring-toggle" class="small-action" aria-expanded="true">收合光圈⌃</button></div>
-        <div class="ring-body"><svg id="ring-svg" viewBox="0 0 220 220" width="220" height="220" role="img" aria-label="虧損、收益、命中率三層光圈">
-          <circle class="track" cx="110" cy="110" r="96"/><circle id="ring-loss" class="ring red" cx="110" cy="110" r="96" transform="rotate(-90 110 110)"/>
-          <circle class="track" cx="110" cy="110" r="76"/><circle id="ring-profit" class="ring cyan" cx="110" cy="110" r="76" transform="rotate(-90 110 110)"/>
-          <circle class="track" cx="110" cy="110" r="56"/><circle id="ring-win" class="ring green" cx="110" cy="110" r="56" transform="rotate(-90 110 110)"/>
+        <div class="ring-body"><svg id="ring-svg" viewBox="0 0 220 220" width="220" height="220" role="img" aria-label="虧損、收益、命中率三層動態光圈">
+          <defs>
+            <linearGradient id="ruby-red-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff388b"/><stop offset="58%" stop-color="#ff88c7"/><stop offset="100%" stop-color="#fa336a"/></linearGradient>
+            <linearGradient id="ruby-blue-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#12bdf9"/><stop offset="58%" stop-color="#80f6ff"/><stop offset="100%" stop-color="#3679ff"/></linearGradient>
+            <linearGradient id="ruby-green-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#12dc9c"/><stop offset="58%" stop-color="#a5ffe5"/><stop offset="100%" stop-color="#3cecb5"/></linearGradient>
+            <filter id="ruby-ring-softglow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="3.5"/></filter>
+          </defs>
+          <circle class="ruby-ring-orbit" cx="110" cy="110" r="104"/>
+          <circle class="track" cx="110" cy="110" r="96"/><circle id="ring-loss-halo" class="ring-halo halo-red" cx="110" cy="110" r="96" transform="rotate(-90 110 110)"/><circle id="ring-loss" class="ring red" cx="110" cy="110" r="96" transform="rotate(-90 110 110)"/><circle id="ring-loss-tip" class="ring-tip tip-red" cx="110" cy="14" r="5" style="opacity:0"/>
+          <circle class="track" cx="110" cy="110" r="76"/><circle id="ring-profit-halo" class="ring-halo halo-blue" cx="110" cy="110" r="76" transform="rotate(-90 110 110)"/><circle id="ring-profit" class="ring cyan" cx="110" cy="110" r="76" transform="rotate(-90 110 110)"/><circle id="ring-profit-tip" class="ring-tip tip-blue" cx="110" cy="34" r="5" style="opacity:0"/>
+          <circle class="track" cx="110" cy="110" r="56"/><circle id="ring-win-halo" class="ring-halo halo-green" cx="110" cy="110" r="56" transform="rotate(-90 110 110)"/><circle id="ring-win" class="ring green" cx="110" cy="110" r="56" transform="rotate(-90 110 110)"/><circle id="ring-win-tip" class="ring-tip tip-green" cx="110" cy="54" r="5" style="opacity:0"/>
           <text id="ring-center-caption" x="110" y="97" class="ring-caption" text-anchor="middle">尚未開始</text>
           <text id="ring-center-number" x="110" y="132" class="ring-number" text-anchor="middle">—</text>
           <text id="ring-center-detail" x="110" y="153" class="ring-detail" text-anchor="middle">建立計畫後顯示</text>
@@ -180,7 +212,7 @@ body[data-font-size="small"]{--font-multiplier:.90}body[data-font-size="medium"]
         </div>
       </section>
       <section class="quote-panel neon-card" aria-label="下一局建議">
-        <div class="panel-title"><strong>下一局建議</strong><span class="soft-tag" id="quote-state">尚未開始</span></div>
+        <div class="panel-title"><strong>下一局建議</strong><div class="quote-title-actions"><button type="button" id="quick-amount" class="small-action" aria-label="開啟操作金及計畫參數設定">調整金額</button><span class="soft-tag" id="quote-state">尚未開始</span></div></div>
         <div class="quote-cards"><div class="quote-amount"><small>每碼下注</small><strong id="per-code">—</strong></div><div class="quote-amount"><small>本局總注</small><strong id="total-stake">—</strong></div></div>
         <div class="metrics"><div><span>當前可用金</span><b id="available">—</b></div><div><span>目前關卡</span><b id="stage-label">—</b></div><div><span>完成局數</span><b id="round-count">0 / 35</b></div><div><span>本次淨盈虧</span><b id="pnl">—</b></div></div>
         <div class="progress-block"><div class="progress-label"><span id="progress-title">進度 #1 · 計畫完成度</span><span id="progress-text">0%</span></div><div class="progress"><div id="progress-bar"></div></div></div>
@@ -1760,6 +1792,37 @@ function go(tab){
   const id=({strategies:'view-strategies',history:'view-history',settings:'view-settings'})[tab];
   if(id){showDrawer(id);for(const b of $$('[data-tab]'))b.classList.toggle('active',b.dataset.tab===tab);}
 }
+ let rubyRingFrame=0;
+ const rubyRingValues=new Map();
+ function animateRingValues(items){
+   if(rubyRingFrame)cancelAnimationFrame(rubyRingFrame);
+   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches||document.visibilityState==='hidden';
+   const rows=items.map(([id,r,pct])=>({id,r,to:Math.min(100,Math.max(0,Number(pct)||0)),from:rubyRingValues.get(id)??0}));
+   const paint=(progress)=>{
+     for(const item of rows){
+       const current=item.from+(item.to-item.from)*progress;
+       const circumference=2*Math.PI*item.r;
+       const shown=current/100*circumference;
+       const dash=`${shown.toFixed(3)} ${circumference.toFixed(3)}`;
+       $('#'+item.id).style.strokeDasharray=dash;
+       $('#'+item.id+'-halo').style.strokeDasharray=dash;
+       const angle=-Math.PI/2+current/100*Math.PI*2;
+       const tip=$('#'+item.id+'-tip');
+       tip.setAttribute('cx',(110+item.r*Math.cos(angle)).toFixed(3));
+       tip.setAttribute('cy',(110+item.r*Math.sin(angle)).toFixed(3));
+       tip.style.opacity=item.to>0?'1':'0';
+       rubyRingValues.set(item.id,current);
+     }
+   };
+   if(reduced||rows.every(x=>Math.abs(x.from-x.to)<.001)){paint(1);return;}
+   const start=performance.now(),duration=850;
+   const tick=now=>{
+     const t=Math.min(1,(now-start)/duration),eased=1-Math.pow(1-t,3);
+     paint(eased);
+     if(t<1)rubyRingFrame=requestAnimationFrame(tick);else rubyRingFrame=0;
+   };
+   rubyRingFrame=requestAnimationFrame(tick);
+ }
 function updateRing(data){
   const s=data?.state;const completed=s?Number(s.wins||0)+Number(s.losses||0):0;
   const pnl=Number(s?.pnl||0);const is26=s?.strategy==='等分倍盈歸本法';
@@ -1770,10 +1833,9 @@ function updateRing(data){
   const prof=s&&target>0?Math.min(100,Math.max(0,cyclePnL/target*100)):null;
   const hit=completed?Math.min(100,Math.max(0,Number(s.wins||0)/completed*100)):null;
   const pc=v=>v===null?'—':fmt(v,1)+'%';
-  [['ring-loss',96,loss],['ring-profit',76,prof],['ring-win',56,hit]].forEach(([id,r,pct])=>{
-    const circumference=2*Math.PI*r,shown=(pct===null?0:pct)/100*circumference;
-    $('#'+id).setAttribute('stroke-dasharray',`${shown} ${circumference}`);
-  });
+   // Inline SVG stroke values override the legacy .ring CSS zero-length dash.
+   // Tween progress, glow and endpoints together; reduced-motion paints immediately.
+   animateRingValues([['ring-loss',96,loss],['ring-profit',76,prof],['ring-win',56,hit]]);
   $('#loss-progress').textContent=pc(loss);$('#profit-progress').textContent=pc(prof);$('#win-progress').textContent=pc(hit);
   $('#profit-progress-label').textContent=is26?'本週期歸本':'收益目標進度';
   let title='尚未開始',value='—',detail='建立計畫後顯示';
@@ -2013,6 +2075,11 @@ function bindEvents(){
   $('#open-menu').addEventListener('click',e=>showDrawer('drawer-menu',e.currentTarget));
   $('#open-config').addEventListener('click',e=>showDrawer('drawer-config',e.currentTarget));
   $('#create-plan').addEventListener('click',e=>showDrawer('drawer-config',e.currentTarget));
+   $('#quick-amount').addEventListener('click',e=>{
+     showDrawer('drawer-config',e.currentTarget);
+     const amount=$('[name="operation"]');
+     if(amount){amount.focus({preventScroll:true});amount.select();}
+   });
   $('#open-strategies').addEventListener('click',e=>showDrawer('view-strategies',e.currentTarget));
   $('#open-history').addEventListener('click',e=>showDrawer('view-history',e.currentTarget));
   $('#recent-feed-more').addEventListener('click',e=>showDrawer('view-history',e.currentTarget));
@@ -2073,7 +2140,7 @@ function bindEvents(){
 }
 
 async function initialize(){
-  bindEvents();setFontSize(localStorage.getItem(FONT_KEY)||'medium');setRingMode(localStorage.getItem(RING_MODE_KEY)||'expanded');
+  bindEvents();setFontSize(localStorage.getItem(FONT_KEY)||'medium');setRingMode('compact');
   document.documentElement.style.setProperty('--ruby-bg-art',getComputedStyle($('.hero')).backgroundImage);
   try{
     strategies=JSON.parse(document.getElementById('ruby-strategies-json').textContent);
