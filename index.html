@@ -220,8 +220,9 @@ body[data-font-size="small"]{--font-multiplier:.90}body[data-font-size="medium"]
       <div id="notice" class="notice">請先建立一個計畫，才能計算下一局注碼。</div>
       <button type="button" id="create-plan" class="button primary full create-plan">＋ 建立計畫／設定參數</button>
       <div class="action-grid"><button id="win-button" type="button" class="button win" disabled>✓ 中</button><button id="loss-button" type="button" class="button loss" disabled>✕ 掛</button></div>
+      <button id="resume-button" type="button" class="button subtle full hidden" disabled>恢復操作／下一輪</button>
       <div class="secondary-actions"><button id="undo-button" type="button" class="button subtle" disabled>↶ 更正上一局</button><button id="open-history" type="button" class="button subtle">◷ 最近紀錄</button><button id="more-button" type="button" class="button subtle">⋯ 更多</button></div>
-      <div class="secondary-actions more-actions hidden" id="more-actions"><button id="resume-button" type="button" class="button subtle hidden" disabled>下一輪</button><button id="finish-button" type="button" class="button subtle" disabled>結算本次</button></div>
+      <div class="secondary-actions more-actions hidden" id="more-actions"><button id="finish-button" type="button" class="button subtle" disabled>結算本次</button></div>
       <div id="offer-actions" class="offer hidden"><div class="panel-title"><strong>獲利配置</strong><button class="info-btn" type="button" data-info="鎖利與滾利均為可選操作，不會阻止下一局；不可使用時按鈕會呈半透明。策略內建自動鎖利仍會執行。" aria-label="獲利配置說明">ⓘ</button></div><div class="offer-row"><button type="button" data-choice="lock" class="button subtle" disabled>鎖利</button><button type="button" data-choice="roll" class="button subtle" disabled>滾利</button><button type="button" data-choice="continue" class="button subtle" disabled>略過分配</button></div></div>
       <div id="kelly-action" class="offer hidden"><label>本期預估中獎率（%）<input id="kelly-probability" type="number" min="0.1" max="100" step="any" value="55"></label><button id="kelly-apply" type="button" class="button subtle">更新本期預估值</button></div>
       <section id="recent-feed" class="recent-feed neon-card" aria-label="即時中掛歷史清單">
@@ -231,7 +232,7 @@ body[data-font-size="small"]{--font-multiplier:.90}body[data-font-size="medium"]
       </section>
       <section class="summary-panel neon-card"><div class="panel-title"><strong>目前策略摘要</strong><button type="button" class="info-btn" id="summary-info" data-info="選擇策略後顯示規則。" aria-label="查看目前策略摘要">ⓘ</button><button id="read-strategy" type="button" class="text-btn">完整說明 ›</button></div><p id="current-summary" class="sr-only">選擇策略後顯示規則。</p></section>
     </section>
-    <footer class="app-footer">RUBY Smart Chip V0.1.2 · 本機試算 · 非自動下注</footer>
+    <footer class="app-footer">RUBY Smart Chip V0.1.3 · 本機試算 · 非自動下注</footer>
   </main>
 
   <aside id="drawer-config" class="drawer drawer-right" role="dialog" aria-modal="true" aria-label="計畫參數設定" aria-hidden="true"><div class="drawer-head"><div><strong>計畫參數</strong><button type="button" class="info-btn" data-info="輸入後請按確認，進行中的計畫不會被暗中修改。" aria-label="參數套用說明">ⓘ</button></div><button class="icon-btn close-drawer" type="button" aria-label="關閉參數設定">×</button></div>
@@ -973,7 +974,7 @@ def quote(s):
     # Do NOT demand a whole original portion in the wallet. The only valid
     # affordability test is the actual whole-number stake below.
     if s['pnl']<=-s['loss_limit']:return None,'已達停損'
-    if s.get('zero_wait'):return None,'基額為0，請使用獨立觀察中／掛回報'
+    if s.get('zero_wait'):return None,'基額為0，暫無觀察回報介面；請調整計畫參數'
     if p.get('exhausted'):
         return None,('全部等分關卡已掛完，計畫暫停；請結算或重新開始' if k=='equal_reset' else '本輪末階已用完；保留原版末階暫停，請恢復或結束')
     d=max(0,s.get('peak_pnl',0)-s['pnl'])
@@ -1016,7 +1017,7 @@ def quote(s):
     else:
         per=floor(precise*dec(mult))
     total=per*n
-    if per<1:return None,'調節後不足1元／碼，進入基額0觀察流程'
+    if per<1:return None,'調節後不足1元／碼，暫停試算；請調整計畫參數'
     if total > max(dec(0), dec(s['loss_limit']) + dec(s['pnl'])):
         return None,'下局總注超過剩餘停損額度，不得執行'
     if total>a+1e-8:return None,'本局總投入超過可用資金，不得執行'
@@ -1599,7 +1600,8 @@ def evaluate_state():
            'operationBudget':sizing.operation_budget(s),
            'position':progression.position(s) if progression.is_new(s) else '',
            'code':strategy_engine.BY_NAME[s['strategy']]['code'],
-           'canResume':bool(s.get('plan_state',{}).get('exhausted') or s.get('plan_state',{}).get('done')) and
+           'canResume':(bool(s.get('plan_state',{}).get('exhausted') or s.get('plan_state',{}).get('done')) or
+                        (s['strategy']=='連掛冷卻檢核法' and s.get('cooldown_losses',0)>=3)) and
                        s.get('session_status') not in ('settled','paused_loss','paused_profit') and
                        s['pnl']>-s['loss_limit'] and
                        (strategy26.active(s) or s['pnl']<s['profit_target']),
@@ -1671,6 +1673,9 @@ def settle(outcome, action_id=None):
     elif not strategy26.active(s) and s['pnl']>=s['profit_target']:
         s['session_status']='paused_profit'
         s['strategy_pause_reason']='已達設定停利'
+    elif s['strategy']=='連掛冷卻檢核法' and s.get('cooldown_losses',0)>=3:
+        s['session_status']='paused_cooldown'
+        s['strategy_pause_reason']='連掛3局冷卻，請按恢復操作後繼續'
     UNDO=before
     LAST_ACTION_ID=action_id
     return evaluate_state()
@@ -1701,8 +1706,15 @@ def resume():
     if not strategy26.active(STATE) and STATE['pnl']>=STATE['profit_target']:
         raise ValueError('已達停利，不允許恢復')
     if STATE.get('session_status')=='settled':raise ValueError('已結算，不允許恢復')
+    if STATE['strategy']=='連掛冷卻檢核法' and STATE.get('cooldown_losses',0)>=3:
+        STATE['cooldown_losses']=0
+        STATE['session_status']='active'
+        STATE['strategy_pause_reason']=''
+        STATE['round_notice']='冷卻已解除；保留局數、關卡與累計盈虧'
+        return evaluate_state()
     if not sizing.resume_exhausted(STATE):raise ValueError('這個策略不在末階暫停狀態')
     STATE['session_status']='active'
+    STATE['strategy_pause_reason']=''
     return evaluate_state()
 
 
@@ -1756,6 +1768,10 @@ def web_call(action, payload_json='{}'):
                         STATE['session_status']='paused_loss';STATE['strategy_pause_reason']='已達設定停損'
                     else:
                         STATE['session_status']='paused_profit';STATE['strategy_pause_reason']='已達設定停利'
+                if (STATE['strategy']=='連掛冷卻檢核法' and STATE.get('cooldown_losses',0)>=3 and
+                        STATE.get('session_status')=='active'):
+                    STATE['session_status']='paused_cooldown'
+                    STATE['strategy_pause_reason']='連掛3局冷卻，請按恢復操作後繼續'
             UNDO=p.get('undo') if isinstance(p.get('undo'),dict) else None
             LAST_ACTION_ID=None
             out=evaluate_state()
