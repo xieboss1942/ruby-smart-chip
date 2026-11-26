@@ -19,7 +19,7 @@ jobs:
         run: |
           python - <<'RUBY_REGRESSION_PY'
           from pathlib import Path
-          import re, sys, json, copy, traceback, py_compile
+          import re, sys, json, copy, traceback, py_compile, itertools
           html=Path('index.html').read_text(encoding='utf-8')
           modules=re.findall(r'<script type="text/plain" id="py-src-([^"]+)">([\s\S]*?)</script>',html)
           assert len(modules)==8, f"Expected 8 Python modules, found {len(modules)}"
@@ -32,6 +32,7 @@ jobs:
           assert len(codes)==26
           assert sorted(strategy_engine.BY_CODE)==sorted(codes)
           cases=0
+          action_seq=itertools.count(1)
           def ok(condition,message):
               global cases
               cases+=1
@@ -52,7 +53,7 @@ jobs:
           def settle(result):
               if web_engine.STATE and web_engine.STATE['strategy']=='凱利公式':
                   call('probability',{'value':90})
-              return call('settle',{'outcome':result,'actionId':'regression-'+str(cases)})
+              return call('settle',{'outcome':result,'actionId':'regression-'+str(next(action_seq))})
           summary=[]
           for code in codes:
               try:
@@ -72,6 +73,8 @@ jobs:
                   snapshot=copy.deepcopy(win['state'])
                   restored=call('load',{'state':snapshot,'undo':None})
                   ok(restored['state']['wins']==1 and restored['state']['pnl']==win['state']['pnl'],f"#{code} restore mismatch")
+                  if restored['state']['strategy']=='凱利公式':
+                      restored=call('probability',{'value':90})
                   if restored['quote']:
                       v=settle('loss')
                       ok(v['state']['losses']==1,f"#{code} loss not booked")
