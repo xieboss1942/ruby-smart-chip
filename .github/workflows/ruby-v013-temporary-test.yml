@@ -47,11 +47,11 @@ jobs:
                              66:{'layer_sequence':[1,2,3,4,5]},14:{'win_sequence':[1,2,3,4,5]},
                              20:{'attack_sequence':[1,2,3,4,5,6], 'retreat_sequence':[1,2,3,4,5,6]},
                              24:{'cancel_list':[1,1,1,1]}}.get(code,{}))
-              if code==23:config['probability']=55
+              if code==23:config['probability']=90
               return call('start',config)
           def settle(result):
               if web_engine.STATE and web_engine.STATE['strategy']=='凱利公式':
-                  call('probability',{'value':55})
+                  call('probability',{'value':90})
               return call('settle',{'outcome':result,'actionId':'regression-'+str(cases)})
           summary=[]
           for code in codes:
