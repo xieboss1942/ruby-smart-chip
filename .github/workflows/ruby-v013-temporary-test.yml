@@ -137,3 +137,70 @@ jobs:
           print("COOLDOWN RESUME PASS")
           print(f"ALL CHECKS PASSED: {cases}")
           RUBY_REGRESSION_PY
+
+      - name: Browser Playwright prerequisites
+        shell: bash
+        run: |
+          python -m pip install --quiet playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Mobile browser Pyodide roundtrip
+        shell: bash
+        run: |
+          python - <<'RUBY_BROWSER_PY'
+          from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
+          from threading import Thread
+          from playwright.sync_api import sync_playwright
+          server=ThreadingHTTPServer(('127.0.0.1',0),SimpleHTTPRequestHandler)
+          Thread(target=server.serve_forever,daemon=True).start()
+          url=f'http://127.0.0.1:{server.server_address[1]}/index.html'
+          with sync_playwright() as p:
+              browser=p.chromium.launch(headless=True,args=['--no-sandbox'])
+              context=browser.new_context(viewport={'width':390,'height':844},device_scale_factor=1)
+              page=context.new_page()
+              page.goto(url,wait_until='domcontentloaded')
+              page.wait_for_function("document.querySelector('#engine-status')?.textContent?.includes('計算核心已就緒')",timeout=120000)
+              page.locator('#create-plan').click()
+              page.locator('#strategy-select').select_option('18')
+              page.locator('[name=operation]').fill('5000000')
+              page.locator('[name=planned]').fill('35')
+              page.locator('details.advanced').evaluate('(el)=>{el.open=true;}')
+              page.locator('[name=profitPct]').fill('10000')
+              page.locator('#start-button').click()
+              page.wait_for_function("!document.querySelector('#win-button').disabled")
+              for i in range(35):
+                  page.locator('#win-button').click()
+              assert '#2' in page.locator('#round-count').inner_text(),page.locator('#round-count').inner_text()
+              assert '0 / 35' in page.locator('#round-count').inner_text()
+              assert not page.locator('#win-button').is_disabled()
+              assert not page.locator('#loss-button').is_disabled()
+              print('BROWSER 35/35 -> #2 and buttons PASS')
+              page.locator('#win-button').click()
+              assert '#2' in page.locator('#round-count').inner_text()
+              assert '1 / 35' in page.locator('#round-count').inner_text()
+              page.locator('#undo-button').click()
+              assert '0 / 35' in page.locator('#round-count').inner_text()
+              print('BROWSER #2 and undo PASS')
+              page.reload(wait_until='domcontentloaded')
+              page.wait_for_function("document.querySelector('#engine-status')?.textContent?.includes('計算核心已就緒')",timeout=120000)
+              assert '#2' in page.locator('#round-count').inner_text()
+              assert not page.locator('#win-button').is_disabled()
+              print('BROWSER localStorage restoration PASS')
+              # Start a new cooldown plan, requiring a confirmation for previous ledger.
+              page.locator('#create-plan').click()
+              page.on('dialog',lambda dialog:dialog.accept())
+              page.locator('#strategy-select').select_option('7')
+              page.locator('[name=operation]').fill('5000000')
+              page.locator('#start-button').click()
+              page.wait_for_function("!document.querySelector('#loss-button').disabled")
+              for i in range(3):
+                  page.locator('#loss-button').click()
+              assert page.locator('#win-button').is_disabled(), 'cooldown should disable settle'
+              assert page.locator('#resume-button').is_visible(), 'cooldown resume should show'
+              page.locator('#resume-button').click()
+              assert not page.locator('#loss-button').is_disabled(), 'cooldown resumed'
+              print('BROWSER cooldown pause/resume PASS')
+              context.close()
+              browser.close()
+          server.shutdown()
+          print('ALL BROWSER CHECKS PASSED')
+          RUBY_BROWSER_PY
