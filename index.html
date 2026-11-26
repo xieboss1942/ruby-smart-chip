@@ -220,8 +220,9 @@ body[data-font-size="small"]{--font-multiplier:.90}body[data-font-size="medium"]
       <div id="notice" class="notice">請先建立一個計畫，才能計算下一局注碼。</div>
       <button type="button" id="create-plan" class="button primary full create-plan">＋ 建立計畫／設定參數</button>
       <div class="action-grid"><button id="win-button" type="button" class="button win" disabled>✓ 中</button><button id="loss-button" type="button" class="button loss" disabled>✕ 掛</button></div>
+      <button id="resume-button" type="button" class="button subtle full hidden" disabled>恢復操作／下一輪</button>
       <div class="secondary-actions"><button id="undo-button" type="button" class="button subtle" disabled>↶ 更正上一局</button><button id="open-history" type="button" class="button subtle">◷ 最近紀錄</button><button id="more-button" type="button" class="button subtle">⋯ 更多</button></div>
-      <div class="secondary-actions more-actions hidden" id="more-actions"><button id="resume-button" type="button" class="button subtle hidden" disabled>下一輪</button><button id="finish-button" type="button" class="button subtle" disabled>結算本次</button></div>
+      <div class="secondary-actions more-actions hidden" id="more-actions"><button id="finish-button" type="button" class="button subtle" disabled>結算本次</button></div>
       <div id="offer-actions" class="offer hidden"><div class="panel-title"><strong>獲利配置</strong><button class="info-btn" type="button" data-info="鎖利與滾利均為可選操作，不會阻止下一局；不可使用時按鈕會呈半透明。策略內建自動鎖利仍會執行。" aria-label="獲利配置說明">ⓘ</button></div><div class="offer-row"><button type="button" data-choice="lock" class="button subtle" disabled>鎖利</button><button type="button" data-choice="roll" class="button subtle" disabled>滾利</button><button type="button" data-choice="continue" class="button subtle" disabled>略過分配</button></div></div>
       <div id="kelly-action" class="offer hidden"><label>本期預估中獎率（%）<input id="kelly-probability" type="number" min="0.1" max="100" step="any" value="55"></label><button id="kelly-apply" type="button" class="button subtle">更新本期預估值</button></div>
       <section id="recent-feed" class="recent-feed neon-card" aria-label="即時中掛歷史清單">
@@ -231,7 +232,7 @@ body[data-font-size="small"]{--font-multiplier:.90}body[data-font-size="medium"]
       </section>
       <section class="summary-panel neon-card"><div class="panel-title"><strong>目前策略摘要</strong><button type="button" class="info-btn" id="summary-info" data-info="選擇策略後顯示規則。" aria-label="查看目前策略摘要">ⓘ</button><button id="read-strategy" type="button" class="text-btn">完整說明 ›</button></div><p id="current-summary" class="sr-only">選擇策略後顯示規則。</p></section>
     </section>
-    <footer class="app-footer">RUBY Smart Chip V0.1.2 · 本機試算 · 非自動下注</footer>
+    <footer class="app-footer">RUBY Smart Chip V0.1.3 · 本機試算 · 非自動下注</footer>
   </main>
 
   <aside id="drawer-config" class="drawer drawer-right" role="dialog" aria-modal="true" aria-label="計畫參數設定" aria-hidden="true"><div class="drawer-head"><div><strong>計畫參數</strong><button type="button" class="info-btn" data-info="輸入後請按確認，進行中的計畫不會被暗中修改。" aria-label="參數套用說明">ⓘ</button></div><button class="icon-btn close-drawer" type="button" aria-label="關閉參數設定">×</button></div>
@@ -242,7 +243,7 @@ body[data-font-size="small"]{--font-multiplier:.90}body[data-font-size="medium"]
       <label class="field"><span>下注碼數</span><input name="count" type="number" min="1" max="8" value="6" required></label>
       <label class="field"><span>切分份數</span><input name="parts" type="number" min="2" max="50" value="6" required></label>
       <label class="field"><span>最大關卡</span><input name="maxSteps" type="number" min="1" max="50" value="6" required></label>
-      <label class="field"><span>計畫總局數</span><input name="planned" type="number" min="1" max="100000" value="35" required></label>
+      <label class="field"><span>每組計畫局數</span><input name="planned" type="number" min="1" max="100000" value="35" required></label>
       <details class="advanced field-full"><summary>進階設定 <span>停利、停損及策略專屬參數</span></summary><div class="fields">
         <label class="field"><span>停利比例（%）</span><input name="profitPct" type="number" min="1" max="10000" step="any" value="100" required></label>
         <label class="field"><span>停損比例（%）</span><input name="lossPct" type="number" min="1" max="100" step="any" value="100" required></label>
@@ -257,7 +258,7 @@ body[data-font-size="small"]{--font-multiplier:.90}body[data-font-size="medium"]
   </aside>
   <section class="view drawer drawer-left drawer-wide" id="view-strategies" role="dialog" aria-modal="true" aria-hidden="true" aria-label="策略中心"><div class="drawer-head"><div><strong>26 套策略中心</strong><button type="button" class="info-btn" data-info="可搜尋策略名稱與編號，點擊選用不會立即更改進行中的計畫。" aria-label="策略中心說明">ⓘ</button></div><button class="icon-btn close-drawer" type="button" aria-label="關閉策略中心">×</button></div><div class="drawer-scroll"><div class="search-wrap"><input id="strategy-search" type="search" placeholder="搜尋策略名稱或編號，例如 #26、馬丁"></div><div class="strategy-grid" id="strategy-grid"></div></div></section>
   <section class="view drawer drawer-bottom" id="view-history" role="dialog" aria-modal="true" aria-hidden="true" aria-label="結算紀錄"><div class="drawer-handle" aria-hidden="true"></div><div class="drawer-head"><div><strong>本次與歷史結算</strong><small id="history-count">0 筆</small></div><button class="icon-btn close-drawer" type="button" aria-label="關閉歷史紀錄">×</button></div><div class="drawer-scroll"><div class="history-summary"><div class="mini-panel"><small>累積投注</small><strong id="sum-cost">—</strong></div><div class="mini-panel"><small>累積盈虧</small><strong id="sum-pnl">—</strong></div><div class="mini-panel"><small>已鎖利</small><strong id="sum-locked">—</strong></div></div><div class="panel history-panel"><div class="panel-head"><h3>結算明細</h3><button id="export-csv" type="button" class="button subtle">匯出 CSV</button></div><div class="table-wrap"><table><thead><tr><th>局數</th><th>策略</th><th>中／掛</th><th>每碼</th><th>投注</th><th>本局損益</th></tr></thead><tbody id="history-rows"><tr><td colspan="6" class="empty">目前沒有紀錄</td></tr></tbody></table></div></div></div></section>
-  <section class="view drawer drawer-left drawer-wide" id="view-settings" role="dialog" aria-modal="true" aria-hidden="true" aria-label="網站設定"><div class="drawer-head"><div><strong>系統設定</strong><small>字體及本機資料管理</small></div><button class="icon-btn close-drawer" type="button" aria-label="關閉設定">×</button></div><div class="drawer-scroll"><div class="settings-grid"><section class="panel"><div class="panel-head"><h3>文字大小</h3><button type="button" class="info-btn" data-info="調整網站標題、卡片、按鈕、說明的字體大小；變更後會記住設定。" aria-label="文字大小說明">ⓘ</button></div><div class="font-controls" role="group" aria-label="文字大小"><button type="button" data-font="small">小</button><button type="button" data-font="medium">中</button><button type="button" data-font="large">大</button></div></section><section class="panel"><h3>本機資料備份</h3><button type="button" class="info-btn" data-info="歷史明細只顯示並保留近 72 小時；已結束計畫的過期紀錄會自動清除。進行中計畫的必要計算狀態會保留，以避免策略與帳務失準。資料僅儲存在目前瀏覽器，清除瀏覽資料可能遺失。" aria-label="歷史保存說明">ⓘ</button><div class="button-row"><button id="backup-button" type="button" class="button subtle">匯出 JSON</button><button id="restore-button" type="button" class="button subtle">還原 JSON</button><input id="restore-file" type="file" accept=".json,application/json" hidden></div></section><section class="panel"><h3>版本資訊</h3><p>RUBY Smart Chip V0.1.2 Neon Portrait · 26 套策略 Python 引擎沿用原版；只作本機籌碼試算，不會送出訂單或 Telegram 訊息。</p></section></div></div></section>
+  <section class="view drawer drawer-left drawer-wide" id="view-settings" role="dialog" aria-modal="true" aria-hidden="true" aria-label="網站設定"><div class="drawer-head"><div><strong>系統設定</strong><small>字體及本機資料管理</small></div><button class="icon-btn close-drawer" type="button" aria-label="關閉設定">×</button></div><div class="drawer-scroll"><div class="settings-grid"><section class="panel"><div class="panel-head"><h3>文字大小</h3><button type="button" class="info-btn" data-info="調整網站標題、卡片、按鈕、說明的字體大小；變更後會記住設定。" aria-label="文字大小說明">ⓘ</button></div><div class="font-controls" role="group" aria-label="文字大小"><button type="button" data-font="small">小</button><button type="button" data-font="medium">中</button><button type="button" data-font="large">大</button></div></section><section class="panel"><h3>本機資料備份</h3><button type="button" class="info-btn" data-info="歷史明細只顯示並保留近 72 小時；已結束計畫的過期紀錄會自動清除。進行中計畫的必要計算狀態會保留，以避免策略與帳務失準。資料僅儲存在目前瀏覽器，清除瀏覽資料可能遺失。" aria-label="歷史保存說明">ⓘ</button><div class="button-row"><button id="backup-button" type="button" class="button subtle">匯出 JSON</button><button id="restore-button" type="button" class="button subtle">還原 JSON</button><input id="restore-file" type="file" accept=".json,application/json" hidden></div></section><section class="panel"><h3>版本資訊</h3><p>RUBY Smart Chip V0.1.3 Neon Portrait · 26 套策略 Python 引擎沿用原版；只作本機籌碼試算，不會送出訂單或 Telegram 訊息。</p></section></div></div></section>
 </div>
 <div class="info-backdrop hidden" id="info-backdrop"><div class="info-modal" role="dialog" aria-modal="true" aria-label="功能說明"><div class="panel-title"><strong>ⓘ 操作說明</strong><button type="button" id="info-close" class="icon-btn" aria-label="關閉說明">×</button></div><p id="info-text"></p></div></div>
 <nav class="mobile-nav" aria-label="底部分頁"><button type="button" class="active" data-tab="calculator">▣<span>計算</span></button><button type="button" data-tab="strategies">▤<span>策略</span></button><button type="button" data-tab="history">◷<span>紀錄</span></button><button type="button" data-tab="settings">⚙<span>設定</span></button></nav>
@@ -346,7 +347,7 @@ body[data-font-size="small"]{--font-multiplier:.90}body[data-font-size="medium"]
     "name": "剩餘局數預算法",
     "code": 9,
     "kind": "中性",
-    "description": "每碼＝floor(max(0,本輪起始一份＋本輪淨盈虧)÷碼數÷(計畫總局數－本次已完成局數))。全計畫局數不因換輪歸零；達計畫局數即硬性停止，恢復不得延長；歷史盈虧不清除。"
+    "description": "每碼＝floor(max(0,本組起始一份＋本組淨盈虧)÷碼數÷本組剩餘局數)。網站每組局數完成後自動進下一組；保留累計盈虧，停損與資金不足仍會暫停。"
   },
   {
     "id": "consensus",
@@ -483,7 +484,7 @@ CATALOG = [
   'trigger':'預算再受(目前損益－保護底線)÷份數限制；低於最低單位即暫停。', 'limit':'不主動解鎖獲利；外部下注與平台費用不在模型內。'},
  {'id':'rounds','name':'剩餘局數預算法','principle':'先決定本次計畫局數，讓剩餘損失預算配合剩餘局數。',
   'formula':'預算＝剩餘停損額÷max(風險份數,計畫總局數－已完成局數)。',
-  'trigger':'計畫局數為硬性上限，達標停止；恢復不得延長原局數，歷史損益保留。', 'limit':'局數是操作上限，不是保證可玩完；輸後總投入仍不增加。'},
+  'trigger':'瀏覽器版本每組局數達標後自動切換下一組，歷史損益保留。', 'limit':'停損、資金不足與策略限制仍會暫停；不保證獲利。'},
  {'id':'consensus','name':'多因子防守共識法','principle':'同時看停利進度、資金回撤及近期損益波動，取最嚴格預算。',
   'formula':'同時計算進度法、回撤法、波動法的預算，取最小值；另外保護最高正獲利50%。',
   'trigger':'回撤20%亦暫停；任何一項收緊，就以較小金額執行。', 'limit':'多個限制不等於多重勝率優勢，仍可能虧損。'},
@@ -517,7 +518,7 @@ def rule_text(name):
             '凱利每期先回報本期預估中獎率；每次中掛後清空，沒有回報就不計算下注金額。回報值是預估機率，不是本期已開獎結果，也不是自動採用歷史勝率。',
             '凱利與回補估算使用循環最低賠率9.54；每局實際損益仍依9.59／9.54循環。V1.8.15 僅接受中／掛，舊和局紀錄保留。',
             '鎖利自當前操作預算扣除；不會因按滾利自動解鎖。關卡用完後手動恢復只重開該輪，不清掉帳面虧損。'])
-    trigger=('本次計畫局數為硬上限，達標後不可透過恢復延長；若舊圖卡仍寫可延長，以新版文字規則為準。' if d['id']=='rounds' else d['trigger'])
+    trigger=('此網站將計畫局數當作每組進度，達標後自動開始下一組；停損與資金限制仍優先。' if d['id']=='rounds' else d['trigger'])
     return '\n'.join([d['name'], '原理：'+d['principle'], '算法：'+d['formula'], '觸發：'+trigger, '限制：'+d['limit'], common_rules(),
                       'V1.6.4 規則優先：鎖利從可用操作金扣除，不保證獲利不回吐。有效中掛結算後，鎖利留在獨立保留金欄位，不因按滾利自動解除；不補錢、不動用保留本金。新計畫可指定操作金，圖中50%為預設示例。'])
 
@@ -537,7 +538,8 @@ def evaluate(s):
     """Return total stake budget and an optional hard pause reason."""
     # Legacy evaluator must obey the same strict plan ceiling as the current
     # sizing engine; do not bypass it through alternative strategy paths.
-    if s.get('wins',0)+s.get('losses',0) >= max(1,int(s.get('planned_rounds') or s.get('round_limit') or 12)):
+    cap=(s.get('web_batch_total_cap') if s.get('web_batch_mode') else None) or s.get('planned_rounds') or s.get('round_limit') or 12
+    if s.get('wins',0)+s.get('losses',0) >= max(1,int(cap)):
         return 0,'已達計畫局數，請結算後重新設定'
     if s['strategy'] not in BY_NAME:
         return 0,'舊版策略需重新設定'
@@ -566,7 +568,7 @@ def evaluate(s):
     if sid=='cooldown' and s.get('cooldown_losses',0)>=3:
         return 0,'連掛3局冷卻'
     completed=s.get('wins',0)+s.get('losses',0)
-    if sid=='rounds' and completed>=s.get('round_limit',s.get('planned_rounds',12)):
+    if sid=='rounds' and completed>=((s.get('web_batch_total_cap') if s.get('web_batch_mode') else None) or s.get('planned_rounds') or 12):
         return 0,'已達計畫局數'
     if sid=='peak': risk=min(available,headroom)/n
     elif sid in budgets: risk=budgets[sid]
@@ -580,7 +582,10 @@ def evaluate(s):
         risk=headroom/n
         if s.get('giveback_active'):
             risk=min(risk,max(0,s['pnl']-s['locked_profit'])/n)
-    elif sid=='rounds': risk=headroom/max(n,s.get('round_limit',12)-completed)
+    elif sid=='rounds':
+        batch=max(1,int(s.get('web_batch_size') or s.get('planned_rounds') or 12))
+        remaining=(batch-completed%batch if s.get('web_batch_mode') else max(1,int(s.get('planned_rounds') or batch)-completed))
+        risk=headroom/max(n,remaining)
     else: risk=min(budgets.values())
     risk=min(cap,max(0,risk))
     if s.get('last_result')=='loss' and s.get('last_total_bet') is not None:
@@ -652,7 +657,8 @@ def evaluate(s):
     p=_p(s);d=BY_NAME[s['strategy']];sid=d['id'];n=s['number_count'];base=s['base_stake']
     if p.get('exhausted'):return 0,'本輪關卡已用完；恢復會另開一輪，原損益保留'
     if p.get('done'):return 0,'清單已完成；恢復會重建原清單，原損益保留'
-    if s.get('wins',0)+s.get('losses',0)>=s.get('round_limit',s.get('planned_rounds',12)):
+    cap=(s.get('web_batch_total_cap') if s.get('web_batch_mode') else None) or s.get('planned_rounds') or s.get('round_limit') or 12
+    if s.get('wins',0)+s.get('losses',0)>=max(1,int(cap)):
         return 0,'已達計畫局數，請結算後重新設定'
     available=max(0,s['operation_base']+s['pnl']-s['locked_profit'])
     headroom=max(0,s['loss_limit']+s['pnl'])
@@ -878,8 +884,15 @@ def base_raw(s):
     code=s.get('_code')
     if s['strategy']=='本金獲利雙池法':return u/(2*f)/n
     if s['strategy']=='剩餘局數預算法':
-        remain=s['planned_rounds']-(s['wins']+s['losses'])
-        return dec(0) if remain<=0 else max(dec(0),u+dec(s['pnl'])-dec(s['round_start_pnl']))/n/remain
+        completed=s['wins']+s['losses']
+        if s.get('web_batch_mode'):
+            batch=max(1,int(s.get('web_batch_size') or s.get('planned_rounds') or 12))
+            remain=batch-completed%batch
+            origin=dec(s.get('web_batch_start_pnl',s['round_start_pnl']))
+        else:
+            remain=s['planned_rounds']-completed
+            origin=dec(s['round_start_pnl'])
+        return dec(0) if remain<=0 else max(dec(0),u+dec(s['pnl'])-origin)/n/remain
     return u/n/10
 
 def refresh_base(s):
@@ -961,7 +974,7 @@ def quote(s):
     # Do NOT demand a whole original portion in the wallet. The only valid
     # affordability test is the actual whole-number stake below.
     if s['pnl']<=-s['loss_limit']:return None,'已達停損'
-    if s.get('zero_wait'):return None,'基額為0，請使用獨立觀察中／掛回報'
+    if s.get('zero_wait'):return None,'基額為0，暫無觀察回報介面；請調整計畫參數'
     if p.get('exhausted'):
         return None,('全部等分關卡已掛完，計畫暫停；請結算或重新開始' if k=='equal_reset' else '本輪末階已用完；保留原版末階暫停，請恢復或結束')
     d=max(0,s.get('peak_pnl',0)-s['pnl'])
@@ -1004,7 +1017,7 @@ def quote(s):
     else:
         per=floor(precise*dec(mult))
     total=per*n
-    if per<1:return None,'調節後不足1元／碼，進入基額0觀察流程'
+    if per<1:return None,'調節後不足1元／碼，暫停試算；請調整計畫參數'
     if total > max(dec(0), dec(s['loss_limit']) + dec(s['pnl'])):
         return None,'下局總注超過剩餘停損額度，不得執行'
     if total>a+1e-8:return None,'本局總投入超過可用資金，不得執行'
@@ -1461,7 +1474,7 @@ FORMULAS={
 6:'起始基額＝floor(一份÷(2×份數)÷碼數)。本金池＝max(0,初始停損＋min(損益,0))；獲利池＝max(0,損益－最高正獲利70%)；調節倍數＝(本金池＋2×獲利池)÷初始停損。保留70%保護。',
 7:'起始基額＝floor(一份÷碼數÷10)。調節倍數＝剩餘停損÷初始停損×份數÷(份數＋近10局掛數)；連掛3局冷卻，手動恢復只重置冷卻計數。',
 8:'起始基額＝floor(一份÷碼數÷10)。保留原高點回吐底線；調節預算受目前損益與保護底線的差額限制。',
-9:'每碼＝floor(max(0,本輪起始一份＋本輪淨盈虧)÷碼數÷(計畫總局數－本次已完成局數))。全計畫局數不因換輪歸零；達計畫局數即硬性停止，恢復不得延長；歷史盈虧不清除。',
+9:'每碼＝floor(max(0,本組起始一份＋本組淨盈虧)÷碼數÷本組剩餘局數)。網站每組結束自動進下一組，保留累計盈虧；停損與資金限制照常執行。',
 10:'起始基額＝floor(一份÷碼數÷10)。進度、回撤、波動三個調節倍數取最小；高點50%保護，回撤20%暫停。',
 11:'動態固定注：每碼＝floor((當前操作預算＋本次尚未分配的損益)÷分割份數÷碼數÷5)，中掛後重算；鎖利扣操作預算，滾利加當次獲利，均不重複。',
 12:'每碼＝floor(一份÷碼數×投入比例)，新使用者預設20%；已存在的自訂比例保留。',
@@ -1543,7 +1556,7 @@ def new_state(config):
         strategy=name,market=market,number_count=count,risk_parts=parts,max_steps=max_steps,
         stop_profit_mode='percent',stop_profit_value=profit_pct,stop_loss_mode='percent',stop_loss_value=loss_pct,
         profit_target=cash(operation*profit_pct/100),loss_limit=cash(operation*loss_pct/100),
-        planned_rounds=planned,round_limit=planned,web_batch_mode=True,web_batch_size=planned,web_batch_total_cap=planned,payout_multiplier=payout,
+        planned_rounds=planned,round_limit=planned,web_batch_mode=True,web_batch_size=planned,web_batch_total_cap=planned,web_batch_start_pnl=0.0,payout_multiplier=payout,
         payout_cycle_enabled=(market=='單球'),payout_cycle_wins=0,
         stake=0,started=True,session_status='active',
         streak=0,loss_streak=0,last_result='start',last_total_bet=None,
@@ -1587,7 +1600,11 @@ def evaluate_state():
            'operationBudget':sizing.operation_budget(s),
            'position':progression.position(s) if progression.is_new(s) else '',
            'code':strategy_engine.BY_NAME[s['strategy']]['code'],
-           'canResume':bool(s.get('plan_state',{}).get('exhausted') or s.get('plan_state',{}).get('done')),
+           'canResume':(bool(s.get('plan_state',{}).get('exhausted') or s.get('plan_state',{}).get('done')) or
+                        (s['strategy']=='連掛冷卻檢核法' and s.get('cooldown_losses',0)>=3)) and
+                       s.get('session_status') not in ('settled','paused_loss','paused_profit') and
+                       s['pnl']>-s['loss_limit'] and
+                       (strategy26.active(s) or s['pnl']<s['profit_target']),
            'cycleProgress':strategy26.cycle_progress(s) if strategy26.active(s) else None,
            'allocatable':sizing.unallocated(s),
            'pendingRoll':s.get('auto_roll_pending',0),
@@ -1636,11 +1653,14 @@ def settle(outcome, action_id=None):
     if s.get('web_batch_mode'):
         count=sizing.plan_completed(s)
         batch=max(1,int(s.get('web_batch_size') or s.get('planned_rounds') or 35))
-        if count >= int(s.get('web_batch_total_cap') or batch):
+        if count%batch==0:
             new_cap=(count//batch+1)*batch
             s['web_batch_total_cap']=new_cap
             s['round_limit']=new_cap
+            s['web_batch_start_pnl']=s['pnl']
             s['round_notice']=f'進度 #{count//batch+1} 已開始；累計紀錄與資金保留'
+        elif (s.get('round_notice') or '').startswith('進度 #'):
+            s['round_notice']=''
     added=cash(max(0,s['locked_profit']-old_lock))
     if added>0:record['automatic_lock']=added
     if sizing.plan_limit_reached(s):
@@ -1653,6 +1673,9 @@ def settle(outcome, action_id=None):
     elif not strategy26.active(s) and s['pnl']>=s['profit_target']:
         s['session_status']='paused_profit'
         s['strategy_pause_reason']='已達設定停利'
+    elif s['strategy']=='連掛冷卻檢核法' and s.get('cooldown_losses',0)>=3:
+        s['session_status']='paused_cooldown'
+        s['strategy_pause_reason']='連掛3局冷卻，請按恢復操作後繼續'
     UNDO=before
     LAST_ACTION_ID=action_id
     return evaluate_state()
@@ -1680,8 +1703,18 @@ def resume():
     if STATE is None:raise ValueError('沒有計畫')
     if sizing.plan_limit_reached(STATE):raise ValueError('已達計畫局數，不允許恢復')
     if STATE['pnl']<=-STATE['loss_limit']:raise ValueError('已達停損，不允許恢復')
+    if not strategy26.active(STATE) and STATE['pnl']>=STATE['profit_target']:
+        raise ValueError('已達停利，不允許恢復')
+    if STATE.get('session_status')=='settled':raise ValueError('已結算，不允許恢復')
+    if STATE['strategy']=='連掛冷卻檢核法' and STATE.get('cooldown_losses',0)>=3:
+        STATE['cooldown_losses']=0
+        STATE['session_status']='active'
+        STATE['strategy_pause_reason']=''
+        STATE['round_notice']='冷卻已解除；保留局數、關卡與累計盈虧'
+        return evaluate_state()
     if not sizing.resume_exhausted(STATE):raise ValueError('這個策略不在末階暫停狀態')
     STATE['session_status']='active'
+    STATE['strategy_pause_reason']=''
     return evaluate_state()
 
 
@@ -1719,10 +1752,26 @@ def web_call(action, payload_json='{}'):
             if STATE is not None:
                 n=max(1,int(STATE.get('web_batch_size') or STATE.get('planned_rounds') or 35))
                 complete=int(STATE.get('wins',0))+int(STATE.get('losses',0))
-                STATE.update(web_batch_mode=True,web_batch_size=n,web_batch_total_cap=(complete//n+1)*n,round_limit=(complete//n+1)*n)
-                if STATE.get('session_status')=='paused_round_limit' and STATE.get('pnl',0)>-STATE.get('loss_limit',0):
-                    STATE['session_status']='active';STATE['strategy_pause_reason']=''
-                STATE['round_offer']=False
+                next_cap=(complete//n+1)*n
+                STATE.update(web_batch_mode=True,web_batch_size=n,web_batch_total_cap=next_cap,round_limit=next_cap)
+                if 'web_batch_start_pnl' not in STATE:
+                    completed_batch=(complete//n)*n
+                    origin=next((row.get('pnl') for row in reversed(STATE.get('ledger',[]))
+                                 if int(row.get('sequence') or 0)==completed_batch),None) if completed_batch else 0.0
+                    STATE['web_batch_start_pnl']=cash(origin if origin is not None else STATE.get('pnl',0))
+                can_continue=(STATE.get('pnl',0)>-STATE.get('loss_limit',0) and
+                              (strategy26.active(STATE) or STATE.get('pnl',0)<STATE.get('profit_target',float('inf'))))
+                if STATE.get('session_status')=='paused_round_limit':
+                    if can_continue:
+                        STATE['session_status']='active';STATE['strategy_pause_reason']=''
+                    elif STATE.get('pnl',0)<=-STATE.get('loss_limit',0):
+                        STATE['session_status']='paused_loss';STATE['strategy_pause_reason']='已達設定停損'
+                    else:
+                        STATE['session_status']='paused_profit';STATE['strategy_pause_reason']='已達設定停利'
+                if (STATE['strategy']=='連掛冷卻檢核法' and STATE.get('cooldown_losses',0)>=3 and
+                        STATE.get('session_status')=='active'):
+                    STATE['session_status']='paused_cooldown'
+                    STATE['strategy_pause_reason']='連掛3局冷卻，請按恢復操作後繼續'
             UNDO=p.get('undo') if isinstance(p.get('undo'),dict) else None
             LAST_ACTION_ID=None
             out=evaluate_state()
@@ -1991,7 +2040,7 @@ function render(){
   const batch=batchInfo(s||{planned_rounds:planned});$('#round-count').textContent=`${batch.count} / ${batch.size} · #${batch.index}`;
   const activeCode=on?(strategies.find(x=>x.name===s.strategy)?.code??'—'):getCode();
   $('#strategy-active-name').textContent='#'+String(activeCode).padStart(2,'0')+' '+(on?s.strategy:(strategies.find(x=>x.code===getCode())?.name||'尚未選擇'));
-  $('#strategy-active-meta').textContent=on?`${data.position||'計畫執行中'} · ${complete}/${planned} 局`:'尚未開始 · 點擊選擇策略';
+  $('#strategy-active-meta').textContent=on?`${data.position||'計畫執行中'} · 進度 #${batch.index} ${batch.count}/${batch.size} 局`:'尚未開始 · 點擊選擇策略';
   updateRing(data);
   $('#create-plan').classList.toggle('hidden',on&&s.session_status==='active');
   updateNumber('#pnl',s?.pnl||0,true);
